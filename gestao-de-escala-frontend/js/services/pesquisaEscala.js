@@ -198,7 +198,7 @@ function pesquisar(pautaJson){
 
 
     if(procurador.nomeProcurador){
-     // pautaDaPesquisa = pautaDaPesquisa.filter(item => item.procurador != null);
+      pautaDaPesquisa = pautaDaPesquisa.filter(item => item.procurador != null);
       pautaDaPesquisa = pautaDaPesquisa.filter(item =>  item.procurador.nomeProcurador == procurador.nomeProcurador);
       console.log(pautaDaPesquisa);
     }
