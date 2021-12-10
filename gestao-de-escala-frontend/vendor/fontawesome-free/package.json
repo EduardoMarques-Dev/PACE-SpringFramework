@@ -2,7 +2,7 @@
   "_args": [
     [
       "@fortawesome/fontawesome-free@5.13.1",
-      "C:\\Users\\55919\\projetos\\branch dev-bianca\\gerenciador-de-escala\\gestao-de-escala-frontend"
+      "C:\\Users\\bssilva1\\Repositorio\\gerenciador-de-escala\\gestao-de-escala-frontend"
     ]
   ],
   "_from": "@fortawesome/fontawesome-free@5.13.1",
@@ -27,7 +27,7 @@
   ],
   "_resolved": "https://registry.npmjs.org/@fortawesome/fontawesome-free/-/fontawesome-free-5.13.1.tgz",
   "_spec": "5.13.1",
-  "_where": "C:\\Users\\55919\\projetos\\branch dev-bianca\\gerenciador-de-escala\\gestao-de-escala-frontend",
+  "_where": "C:\\Users\\bssilva1\\Repositorio\\gerenciador-de-escala\\gestao-de-escala-frontend",
   "author": {
     "name": "Dave Gandy",
     "email": "dave@fontawesome.com",
