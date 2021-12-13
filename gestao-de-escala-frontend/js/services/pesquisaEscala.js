@@ -42,8 +42,8 @@ window.onload = function() {
     //console.log(pautas);
     pautas.forEach(listar);
     
-    verificarSeTemEscala(pautas);
-    getMutirao();
+    //verificarSeTemEscala(pautas);
+    //getMutirao();
     advogadoListar()
   }).catch(error => console.error(error));
 
@@ -159,48 +159,47 @@ function pesquisar(pautaJson){
   var tabela = $('#dataTablePesquisa').DataTable();
   var pautaDaPesquisa; 
   var procurador = pautaJson.procurador;
-  console.log(pautaJson);
   axios.get(baseURL + 'pautas/').then(response => {
     var pautas = response.data;
     pautaDaPesquisa = pautas;
-
     if(pautaJson.data2 && pautaJson.data) {
-     pautaDaPesquisa = pautaDaPesquisa.filter(item => {
-        let dataInicial = parseInt(pautaJson.data.split("-").join(''),10);
-        let dataFinal = parseInt(pautaJson.data2.split("-").join(''),10);
-        let data = parseInt(item.data.split("-").join(''),10);
-       return (data >= dataInicial && data <= dataFinal);
-     }
-       );
+      if( pautaJson.data <= pautaJson.data2){
+
+        pautaDaPesquisa = pautaDaPesquisa.filter(item => {
+          let dataInicial = parseInt(pautaJson.data.split("-").join(''),10);
+          let dataFinal = parseInt(pautaJson.data2.split("-").join(''),10);
+          let data = parseInt(item.data.split("-").join(''),10);
+          return (data >= dataInicial && data <= dataFinal);
+        }
+        );
+      } else {
+        alert("Data inicial é maior que data final. Verifique.");
+        return;
+      }
      
     }
 
     else if(pautaJson.data){
       pautaDaPesquisa = pautaDaPesquisa.filter(item =>  item.data == pautaJson.data);
-      console.log(pautaDaPesquisa);
     }
   
 
     if(pautaJson.hora){
       pautaDaPesquisa = pautaDaPesquisa.filter(item =>  item.hora == pautaJson.hora);
-      console.log(pautaDaPesquisa);
     }
     
     if(pautaJson.sala){
       pautaDaPesquisa = pautaDaPesquisa.filter(item =>  item.sala == pautaJson.sala);
-      console.log(pautaDaPesquisa);
     }
     
     if(pautaJson.vara){
       pautaDaPesquisa = pautaDaPesquisa.filter(item =>  item.vara == pautaJson.vara);
-      console.log(pautaDaPesquisa);
     }
 
 
     if(procurador.nomeProcurador){
       pautaDaPesquisa = pautaDaPesquisa.filter(item => item.procurador != null);
       pautaDaPesquisa = pautaDaPesquisa.filter(item =>  item.procurador.nomeProcurador == procurador.nomeProcurador);
-      console.log(pautaDaPesquisa);
     }
 
     if(pautaDaPesquisa){
@@ -225,34 +224,34 @@ function gerarPorVara(escala){
   }).catch(error => console.error(error));
 }
 
-function getMutirao(){
-  //$('#mensagem').html('<span class="mensagem">Aguarde,carregando ...</span>');
+// function getMutirao(){
+//   //$('#mensagem').html('<span class="mensagem">Aguarde,carregando ...</span>');
   
-  var vara = document.getElementById('vara');
-  vara = vara.options[vara.selectedIndex].value; 
-  selectVara = vara;
+//   var vara = document.getElementById('vara');
+//   vara = vara.options[vara.selectedIndex].value; 
+//   selectVara = vara;
 
-  axios.get(baseURL + 'mutiroes/').then(response => {
-    mutiroes = response.data;
-    mutiroes = mutiroes.filter(item =>  item.vara == vara);
+//   axios.get(baseURL + 'mutiroes/').then(response => {
+//     mutiroes = response.data;
+//     mutiroes = mutiroes.filter(item =>  item.vara == vara);
     
-    if(mutiroes){
-      listarMutirao(mutiroes);
-      exibirBtnGerar();
-    }
+//     if(mutiroes){
+//       listarMutirao(mutiroes);
+//       exibirBtnGerar();
+//     }
 
-  }).catch(error => console.error(error));
+//   }).catch(error => console.error(error));
 
-  // axios.get(baseURL + 'pautas/').then(response => {
-  //   pautas = response.data;
-  //   pautas = pautas.filter(item =>  item.vara == vara);
-  //   if(pautas.length < 1)
-  //     pautas = response.data;
-  //   listaEspecificaListar(pautas)
+//   // axios.get(baseURL + 'pautas/').then(response => {
+//   //   pautas = response.data;
+//   //   pautas = pautas.filter(item =>  item.vara == vara);
+//   //   if(pautas.length < 1)
+//   //     pautas = response.data;
+//   //   listaEspecificaListar(pautas)
     
-  // }).catch(error => console.error(error));
+//   // }).catch(error => console.error(error));
     
-}
+// }
 
 function selectPautistas(procuradores){
 
@@ -311,7 +310,7 @@ function exibirPorMutirao(){
 
 function muti(mutiroes){
   console.log(mutiroes)
-  var option = '';
+  var option = '<option></option>';
   
   var naoTem =  true;
   varasComMutirao[0] = mutiroes[0].vara;
@@ -336,27 +335,27 @@ function muti(mutiroes){
   $('#vara').html(option).show(); 
 }
 
-function listarMutirao(mutiroes){
-  if (mutiroes.length > 0){
-    var option='';
-    $.each(mutiroes, function(i, obj){
-      option += '<option value="'+obj.id+'">'+ formatarData(obj.dataInicial, "/") +' a '+ formatarData(obj.dataFinal, "/") +'</option>';
-    })
-    //mutiroes.forEach(exibirMutirao);
+// function listarMutirao(mutiroes){
+//   if (mutiroes.length > 0){
+//     var option='';
+//     $.each(mutiroes, function(i, obj){
+//       option += '<option value="'+obj.id+'">'+ formatarData(obj.dataInicial, "/") +' a '+ formatarData(obj.dataFinal, "/") +'</option>';
+//     })
+//     //mutiroes.forEach(exibirMutirao);
     
-  }else{
-    option = '<option selected>Vara selecionada sem Mutirão</option>';
-  }
-       // $('#mensagem').html('<span class="mensagem">Total de paises encontrados.: '+dados.length+'</span>');
-  $('#mutirao').html(option).show();
+//   }else{
+//     option = '<option selected>Vara selecionada sem Mutirão</option>';
+//   }
+//        // $('#mensagem').html('<span class="mensagem">Total de paises encontrados.: '+dados.length+'</span>');
+//   $('#mutirao').html(option).show();
 
-  var mutirao = document.getElementById('mutirao');
-  if(mutirao){  
-    mutirao = mutirao.options[mutirao.selectedIndex].value; 
-    selectVara = mutirao;
-    //listarMutirao(mutirao);
-  }
-}
+//   var mutirao = document.getElementById('mutirao');
+//   if(mutirao){  
+//     mutirao = mutirao.options[mutirao.selectedIndex].value; 
+//     selectVara = mutirao;
+//     //listarMutirao(mutirao);
+//   }
+// }
 
 function listarVaraComPauta(mutiroes){
   if (mutiroes.length > 0){
@@ -384,11 +383,11 @@ function formatarData(LocalDate, char){
   if(LocalDate !== null){
     if(LocalDate.indexOf("-") == 4 && LocalDate.length == 10){
       LocalDate= LocalDate.substring(8, 10)+char+LocalDate.substring(5, 7)+char+LocalDate.substring(0, 4);
-      console.log("- posi 4: "+ LocalDate);
+      //console.log("- posi 4: "+ LocalDate);
     }else{
       if(LocalDate.indexOf("-") == 2 && LocalDate.length == 10){
         LocalDate= LocalDate.substring(6, 10)+char+LocalDate.substring(3, 5)+char+LocalDate.substring(0, 2);
-        console.log("- posi 4")
+        //console.log("- posi 4")
       }
     }
   }
@@ -396,67 +395,68 @@ function formatarData(LocalDate, char){
   return LocalDate;
 }
 
-function exibirBtnGerar(){
-  //var btnEditar = document.querySelector('.btnEditar');
-  var btnGerar = document.querySelector('.btnGerar');
-  var idMutirao = document.getElementById('mutirao');
-  if(idMutirao){  
-    idMutirao = idMutirao.options[idMutirao.selectedIndex].value;
+// function exibirBtnGerar(){
+//   //var btnEditar = document.querySelector('.btnEditar');
+//   var btnGerar = document.querySelector('.btnGerar');
+//   var idMutirao = document.getElementById('mutirao');
+//   if(idMutirao){  
+//     idMutirao = idMutirao.options[idMutirao.selectedIndex].value;
    
-    axios.get(baseURL + 'mutiroes/').then(response => {
-      var mutirao = response.data;
+//     axios.get(baseURL + 'mutiroes/').then(response => {
+//       var mutirao = response.data;
 
-      mutirao =  mutirao.filter(item =>  item.id == idMutirao);
-      mutirao = mutirao[0];
-      if(mutirao){
-        if(mutirao.status == "COM_ESCALA")
-          btnGerar.style.display = 'none';
-        else{
-          btnGerar.style.display = 'inline';
-          //btnEditar.style.display = 'none';
-        }
-      }
+//       mutirao =  mutirao.filter(item =>  item.id == idMutirao);
+//       mutirao = mutirao[0];
+//       if(mutirao){
+//         if(mutirao.status == "COM_ESCALA")
+//           btnGerar.style.display = 'none';
+//         else{
+//           btnGerar.style.display = 'inline';
+//           //btnEditar.style.display = 'none';
+//         }
+//       }
   
-    }).catch(error => console.error(error));
-  }
-}
+//     }).catch(error => console.error(error));
+//   }
+// }
 
-function verificarSeTemEscala(pautas){
-  var vara = document.getElementById('vara');
-  vara = vara.options[vara.selectedIndex].value;
+// function verificarSeTemEscala(pautas){
+//   var vara = document.getElementById('vara');
+//   vara = vara.options[vara.selectedIndex].value;
 
-  axios.get(baseURL + 'pautas/').then(response => {
-    pautas = response.data;
-    pautas = pautas.filter(item =>  item.vara == vara);
-    //console.log(pautas);
-    if(pautas.length < 1){
-      pautas = response.data;
-    }
-    else{   
-      pautas.forEach(function(pauta){
-        if(!pauta.mutirao){
-          console.log("pauta sem mutirão");
-        }else{
-          if(!pauta.procurador){
-            // console.log("pauta sem pautista")
+//   axios.get(baseURL + 'pautas/').then(response => {
+//     pautas = response.data;
+//     pautas = pautas.filter(item =>  item.vara == vara);
+//     console.log(pautas.length);
+//     if(pautas.length < 1){
+//       pautas = response.data;
+//     }
+//     else{   
+//       pautas.forEach(function(pauta){
+//         if(!pauta.mutirao){
+//           console.log("pauta sem mutirão");
+//         }else{
+//           if(!pauta.procurador){
+//             console.log("pauta sem pautista")
 
-            var btnGerar = document.querySelector('.btnGerar');
-            btnGerar.style.display = 'inline';
-          }
-        }
-      });
+//             var btnGerar = document.querySelector('.btnGerar');
+//             console.log(btnGerar)
+//             btnGerar.style.display = 'inline';
+//           }
+//         }
+//       });
       
-    }
+//     }
 
     
-  }).catch(error => console.error(error));
-}
+//   }).catch(error => console.error(error));
+// }
 
-function listaEspecificaListar(pautasEspecificas){
-  var tabela = $('#dataTablePesquisa').DataTable();
-  tabela.rows().remove().draw(); 
-  pautasEspecificas.forEach(listar);
-}
+// function listaEspecificaListar(pautasEspecificas){
+//   var tabela = $('#dataTablePesquisa').DataTable();
+//   tabela.rows().remove().draw(); 
+//   pautasEspecificas.forEach(listar);
+// }
 
 function limparCampos(){
   document.getElementById("vara").value = "1ª Vara Federal";
@@ -504,55 +504,55 @@ $('#gerar').on( 'click', function () {
 
 });
 
-$('#vara').on( 'click', function () {
-  var vara = document.getElementById('vara');
-  vara = vara.options[vara.selectedIndex].value;
+// $('#vara').on( 'click', function () {
+//   var vara = document.getElementById('vara');
+//   vara = vara.options[vara.selectedIndex].value;
 
-  axios.get(baseURL + 'pautas/').then(response => {
-    pautas = response.data;
-    pautas = pautas.filter(item =>  item.vara == vara);
-    //console.log(pautas);
-    if(pautas.length < 1)
-      pautas = response.data;
-    listaEspecificaListar(pautas);
-    verificarSeTemEscala(pautas);
-  }).catch(error => console.error(error));
+//   axios.get(baseURL + 'pautas/').then(response => {
+//     pautas = response.data;
+//     pautas = pautas.filter(item =>  item.vara == vara);
+//     //console.log(pautas);
+//     if(pautas.length < 1)
+//       pautas = response.data;
+//     listaEspecificaListar(pautas);
+//     verificarSeTemEscala(pautas);
+//   }).catch(error => console.error(error));
 
-  getMutirao();
-});
+//   //getMutirao();
+// });
 
-$('#mutirao').on( 'click', function () {
-  var tabela = $('#dataTablePesquisa').DataTable();
-  var idMutirao = document.getElementById('mutirao');
+// $('#mutirao').on( 'click', function () {
+//   var tabela = $('#dataTablePesquisa').DataTable();
+//   var idMutirao = document.getElementById('mutirao');
 
-  idMutirao = idMutirao.options[idMutirao.selectedIndex].value;
+//   idMutirao = idMutirao.options[idMutirao.selectedIndex].value;
   
-  exibirBtnGerar();
-   // pautas = pautas.filter(item =>  item.vara == vara); 
-    var pautasPorMutirao =[];
-    pautas.forEach(function(pauta){
-      var mutirao = pauta.mutirao;
-      pautaJson.data = pauta.data;
-      pautaJson.hora = pauta.hora;
-      pautaJson.sala = pauta.sala;
-      pautaJson.processo = pauta.processo;
-      pautaJson.nomeParte = pauta.nomeParte;
-      pautaJson.cpf = pauta.cpf;
-      pautaJson.nomeAdvogado = pauta.nomeAdvogado;
-      pautaJson.objeto = pauta.objeto;
-      pautaJson.procurador = pauta.procurador;
-      if(mutirao.id == idMutirao)
-         pautasPorMutirao.push(pauta);
-    });
-    //console.log(pautasPorMutirao)
-    if(idMutirao != "Vara selecionada sem Mutirão"){
+//   exibirBtnGerar();
+//    // pautas = pautas.filter(item =>  item.vara == vara); 
+//     var pautasPorMutirao =[];
+//     pautas.forEach(function(pauta){
+//       var mutirao = pauta.mutirao;
+//       pautaJson.data = pauta.data;
+//       pautaJson.hora = pauta.hora;
+//       pautaJson.sala = pauta.sala;
+//       pautaJson.processo = pauta.processo;
+//       pautaJson.nomeParte = pauta.nomeParte;
+//       pautaJson.cpf = pauta.cpf;
+//       pautaJson.nomeAdvogado = pauta.nomeAdvogado;
+//       pautaJson.objeto = pauta.objeto;
+//       pautaJson.procurador = pauta.procurador;
+//       if(mutirao.id == idMutirao)
+//          pautasPorMutirao.push(pauta);
+//     });
+//     //console.log(pautasPorMutirao)
+//     if(idMutirao != "Vara selecionada sem Mutirão"){
       
-      tabela.rows().remove().draw(); 
-      pautasPorMutirao.forEach(listar);
-    }
-   // 
+//       tabela.rows().remove().draw(); 
+//       pautasPorMutirao.forEach(listar);
+//     }
+//    // 
   
-});
+// });
 
 $('#editarMutirao').click( function () {
 
