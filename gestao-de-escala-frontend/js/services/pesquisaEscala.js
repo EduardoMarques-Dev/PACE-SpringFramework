@@ -192,13 +192,13 @@ function pesquisar(pautaJson){
       pautaDaPesquisa = pautaDaPesquisa.filter(item =>  item.sala == pautaJson.sala);
     }
     
-    if(pautaJson.vara){
+    if(pautaJson.vara && !(pautaJson.vara === "Todas as varas")){
       pautaDaPesquisa = pautaDaPesquisa.filter(item =>  item.vara == pautaJson.vara);
     }
 
+    pautaDaPesquisa = pautaDaPesquisa.filter(item => item.procurador != null);
 
-    if(procurador.nomeProcurador){
-      pautaDaPesquisa = pautaDaPesquisa.filter(item => item.procurador != null);
+    if(procurador.nomeProcurador && !(procurador.nomeProcurador === "Todos os pautistas")){
       pautaDaPesquisa = pautaDaPesquisa.filter(item =>  item.procurador.nomeProcurador == procurador.nomeProcurador);
     }
 
@@ -256,7 +256,7 @@ function gerarPorVara(escala){
 function selectPautistas(procuradores){
 
   if (procuradores){
-    var option = '<option></option>';
+    var option = '<option>Todos os pautistas</option>';
     $.each(procuradores, function(i, obj){
       option += '<option value="'+obj.nomeProcurador+'">'+obj.nomeProcurador+'</option>';
     })
@@ -310,7 +310,7 @@ function exibirPorMutirao(){
 
 function muti(mutiroes){
   console.log(mutiroes)
-  var option = '<option></option>';
+  var option = '<option>Todas as varas</option>';
   
   var naoTem =  true;
   varasComMutirao[0] = mutiroes[0].vara;
