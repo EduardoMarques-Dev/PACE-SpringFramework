@@ -39,6 +39,7 @@ window.onload = function() {
 
   axios.get(baseURL + 'pautas/').then(response => {
     pautas = response.data;
+    pautas = pautas.filter(item => item.procurador != null);
     //console.log(pautas);
     pautas.forEach(listar);
     
