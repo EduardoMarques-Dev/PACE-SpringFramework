@@ -29,6 +29,12 @@ public class ProcuradorController {
 		return ResponseEntity.ok(list);
 	}
 
+	@GetMapping("/status")
+	public ResponseEntity<List<ProcuradorDTO>> pesquisarPorStatus(@RequestBody List<String> status) {
+		List<ProcuradorDTO> list = service.pesquisarPorStatus(status);
+		return ResponseEntity.ok(list);
+	}
+
 	@PostMapping
 	public ResponseEntity<ProcuradorDTO> salvar(@RequestBody ProcuradorDTO procuradorDto) {
 		procuradorDto = service.salvar(procuradorDto);

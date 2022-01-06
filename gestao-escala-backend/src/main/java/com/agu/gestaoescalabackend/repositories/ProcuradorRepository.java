@@ -9,21 +9,18 @@ import com.agu.gestaoescalabackend.entities.Procurador;
 
 @Repository
 public interface ProcuradorRepository extends JpaRepository<Procurador, Long> {
+
+	List<Procurador> findAllByStatusInOrderByNomeProcuradorAsc(List<String> status);
+
 	List<Procurador> findAllByOrderByIdAsc();
 
 	List<Procurador> findAllByOrderBySaldoPesoAsc();
-	List<Procurador> findAllByOrderBySaldoPesoDesc();
-
-	boolean existsByNomeProcurador(String nomeProcurador);
 
 	Procurador findByNomeProcurador(String nomeProcurador);
-
-	//List<Procurador> findAllByGrupoByOrderBySaldoAsc(String grupo);
-	List<Procurador> findAllByGrupo(String Grupo);
 	
 	List<Procurador> findAllByStatusOrderBySaldoPesoAsc(String status);
-
-	List<Procurador> findAllByGrupoOrderBySaldoPesoAsc(String grupo);
 	
 	List<Procurador> findAllByGrupoAndStatusOrderBySaldoPesoAsc(String string, String status);
+
+	boolean existsByNomeProcurador(String nomeProcurador);
 }

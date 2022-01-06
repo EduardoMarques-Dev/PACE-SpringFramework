@@ -24,6 +24,12 @@ public class ProcuradorService {
 		return list.stream().map(x -> new ProcuradorDTO(x)).collect(Collectors.toList());
 	}
 
+	@Transactional(readOnly = true)
+	public List<ProcuradorDTO> pesquisarPorStatus(List<String> status) {
+		List<Procurador> list = repository.findAllByStatusInOrderByNomeProcuradorAsc(status);
+		return list.stream().map(x -> new ProcuradorDTO(x)).collect(Collectors.toList());
+	}
+
 	@Transactional
 	public ProcuradorDTO salvar(ProcuradorDTO procuradorDto) {
 
