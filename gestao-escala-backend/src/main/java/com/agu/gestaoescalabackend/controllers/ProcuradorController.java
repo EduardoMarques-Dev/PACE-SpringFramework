@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.agu.gestaoescalabackend.dto.ProcuradorDTO;
@@ -26,6 +27,12 @@ public class ProcuradorController {
 	@GetMapping
 	public ResponseEntity<List<ProcuradorDTO>> pesquisarTodos() {
 		List<ProcuradorDTO> list = service.pesquisarTodos();
+		return ResponseEntity.ok(list);
+	}
+
+	@GetMapping("/status")
+	public ResponseEntity<List<ProcuradorDTO>> pesquisarPorStatus(@RequestParam List<String> status) {
+		List<ProcuradorDTO> list = service.pesquisarPorStatus(status);
 		return ResponseEntity.ok(list);
 	}
 
