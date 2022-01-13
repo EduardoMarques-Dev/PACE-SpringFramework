@@ -323,7 +323,7 @@ $('#cadastrar-pauta').on('click', function () {
   var data = formatar("data", document.querySelector('#data-pauta').value);
   var hora = formatar("hora", document.querySelector('#hora-pauta').value);
   if (typeof hora === "undefined") {
-    alert("Algum valor de hora está no formato incorreto. Por favor, verifique se todos se encontram no formato HH:MM.");
+    alert("Algum valor de hora está no formato incorreto. Por favor, verifique se todas se encontram no formato HH:MM.");
     return;
   }
   var turno = formatar("turno", document.querySelector('#turno-pauta').value);
