@@ -64,6 +64,8 @@ window.onload = function() {
   }).catch(error => console.error(error));
 };
 
+
+
 function listarVaras(){
   axios.get(baseURL + 'mutiroes/').then(response => {
     var mutirao = response.data;
@@ -586,6 +588,35 @@ $('#pesquisar').click( function () {
 
   pesquisar(pautaJson);
 });
+
+
+$('#excluir').click(() => {
+  var table = $('#dataTablePesquisa').DataTable();
+  var pauta = table.row('.selected').data();
+  if (pauta){
+    $('#popupExcluir').modal();
+  }
+})
+
+$('#excluirEscala').click(() => {
+  var table = $('#dataTablePesquisa').DataTable();
+  var pauta = table.row('.selected').data();
+  var processo = pauta[3];
+  pautaJson = pautas.filter(item => item.processo == processo);
+  var id = pautaJson[0].id;// primeira pauta com o processo pesquisado
+  deletar(id);
+})
+
+function deletar(id) {
+  var table = $('#dataTablePesquisa').DataTable();
+  axios.delete(baseURL + "pautas/" + id).then(response => {
+    console.log("Status ", response.status);
+    table.row('.selected').remove().draw(false);
+  }).catch(error => {
+    console.error(error);
+    location.reload();
+  });
+}
 
 $('#print-escala').click( function () {
   // var conteudo = document.getElementById('card-escala').innerHTML;
