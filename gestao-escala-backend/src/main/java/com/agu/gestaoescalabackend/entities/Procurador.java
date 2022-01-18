@@ -30,23 +30,28 @@ import lombok.ToString;
 public class Procurador implements Serializable, Comparable<Procurador> {
 	private static final long serialVersionUID = 1L;
 
+	// ATRIBUTOS DE IDENTIFICAÇÃO
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@EqualsAndHashCode.Include
 	private Long id;
 	@Column(name = "nome_procurador")
 	private String nomeProcurador;
+
+	// ATRIBUTOS DE ESCALA
+	private String grupo;
+	private Integer saldo;
+	private Integer peso;
+	private Integer saldoPeso;
+
+	// ATRIBUTOS DE ESTADO
 	private String status;
 	@Column(name = "data_inicial")
 	private LocalDate dataInicial;
 	@Column(name = "data_final")
 	private LocalDate dataFinal;
-	private String grupo;
-	private Integer saldo;
-	private Integer peso;
-	private Integer saldoPeso;
-	
 
+	// ATRIBUTOS DE RELACIONAMENTO
 	// @OneToMany(mappedBy = "procurador")
 	// private List<PautaDeAudiencia> pautas = new ArrayList<>();
 
