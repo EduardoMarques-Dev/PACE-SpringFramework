@@ -31,7 +31,7 @@ public class ProcuradorController {
 	}
 
 	@GetMapping("/status")
-	public ResponseEntity<List<ProcuradorDTO>> pesquisarPorStatus(@RequestParam List<String> status) {
+	public ResponseEntity<List<ProcuradorDTO>> pesquisarPorStatus(@RequestBody List<String> status) {
 		List<ProcuradorDTO> list = service.pesquisarPorStatus(status);
 		return ResponseEntity.ok(list);
 	}
