@@ -101,10 +101,8 @@ public class EscalaService {
 				pautaDeAudiencia.setProcurador(null);
 			}
 
-			
 			// Salva e retorna um DTO com as informações persistidas no banco
-			pautaDeAudiencia = repository.save(pautaDeAudiencia);
-			return new PautaDeAudienciaDTO(pautaDeAudiencia);
+			return repository.save(pautaDeAudiencia).toDto();
 		} else
 			return null;
 	}

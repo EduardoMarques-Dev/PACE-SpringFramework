@@ -52,7 +52,7 @@ public class MutiraoService {
 	@Transactional(readOnly = true)
 	public List<PautaDeAudienciaDTO> pesquisarPautasDoMutirao(Long mutiraoId) {
 		List<PautaDeAudiencia> list = pautaRepository.findAllByMutiraoId(mutiraoId);
-		return list.stream().map(x -> new PautaDeAudienciaDTO(x)).collect(Collectors.toList());
+		return list.stream().map(PautaDeAudiencia::toDto).collect(Collectors.toList());
 	}
 
 	@Transactional
@@ -125,7 +125,7 @@ public class MutiraoService {
 			pautaDeAudiencia = pautaRepository.save(pautaDeAudiencia);
 		}
 
-		return new PautaDeAudienciaDTO(pautaDeAudiencia);
+		return pautaDeAudiencia.toDto();
 
 	}
 

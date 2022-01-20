@@ -24,27 +24,24 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public class PautaDeAudienciaService {
 
-	private PautaDeAudienciaRepository repository;
+	private PautaDeAudienciaRepository pautaDeAudienciaRepository;
 	private ProcuradorRepository procuradorRepository;
 	private MutiraoRepository mutiraoRepository;
 	private MutiraoService mutiraoService;
 
 //////////////////////////////////   SERVIÇOS   ///////////////////////////////////
 
-	@Transactional(readOnly = true)
 	public List<PautaDeAudienciaDTO> pesquisarTodos() {
-		List<PautaDeAudiencia> list = repository.findAllByOrderByIdAsc();
-		return list.stream().map(x -> new PautaDeAudienciaDTO(x)).collect(Collectors.toList());
+		List<PautaDeAudiencia> list = pautaDeAudienciaRepository.findAllByOrderByIdAsc();
+		return list.stream().map(PautaDeAudiencia::toDto).collect(Collectors.toList());
 	}
 
-	@Transactional(readOnly = true)
 	public PautaDeAudienciaDTO pesquisarEspecifico(Long pautaDeAudienciaId) {
 
-		if (!repository.existsById(pautaDeAudienciaId))
+		if (!pautaDeAudienciaRepository.existsById(pautaDeAudienciaId))
 			return null;
 
-		PautaDeAudienciaDTO pautaDto = new PautaDeAudienciaDTO(repository.getOne(pautaDeAudienciaId));
-		return pautaDto;
+		return pautaDeAudienciaRepository.findById(pautaDeAudienciaId).get().toDto();
 	}
 
 	@Transactional
@@ -64,8 +61,8 @@ public class PautaDeAudienciaService {
 			if (validarCriacao(listaPautaDto.get(pautaAtual), pautaDeAudiencia)) {
 				
 				mutirao.setQuantidaDePautas(mutirao.getQuantidaDePautas() + 1);
-				pautaDeAudiencia = repository.save(pautaDeAudiencia);
-				PautaDeAudienciaDTO pautaDeAudienciaDto = new PautaDeAudienciaDTO(pautaDeAudiencia);
+				pautaDeAudiencia = pautaDeAudienciaRepository.save(pautaDeAudiencia);
+				PautaDeAudienciaDTO pautaDeAudienciaDto = pautaDeAudiencia.toDto();
 				listaRetorno.add(pautaDeAudienciaDto);
 			}
 		}
@@ -79,22 +76,22 @@ public class PautaDeAudienciaService {
 
 		List<Mutirao> mutirao = mutiraoRepository.findByVara(pautaDeAudienciaDto.getVara());
 
-		if (!repository.existsById(pautaDeAudienciaId))
+		if (!pautaDeAudienciaRepository.existsById(pautaDeAudienciaId))
 			return null;
 		
 		PautaDeAudiencia pautaDeAudiencia = new PautaDeAudiencia(pautaDeAudienciaId, pautaDeAudienciaDto);
 		inserirMutirao(pautaDeAudienciaDto, mutirao, pautaDeAudiencia);
 		inserirProcurador(pautaDeAudienciaDto, pautaDeAudiencia);
 
-		pautaDeAudiencia = repository.save(pautaDeAudiencia);
-		return new PautaDeAudienciaDTO(pautaDeAudiencia);
+		pautaDeAudiencia = pautaDeAudienciaRepository.save(pautaDeAudiencia);
+		return pautaDeAudiencia.toDto();
 
 	}
 
 	@Transactional
 	public void excluir(Long pautaDeAudienciaId) {
-		if (repository.existsById(pautaDeAudienciaId))
-			repository.deleteById(pautaDeAudienciaId);
+		if (pautaDeAudienciaRepository.existsById(pautaDeAudienciaId))
+			pautaDeAudienciaRepository.deleteById(pautaDeAudienciaId);
 	}
 
 //////////////////////////////////    MÉTODOS    ///////////////////////////////////
@@ -138,7 +135,7 @@ public class PautaDeAudienciaService {
 	private boolean validarCriacao(PautaDeAudienciaDTO pautaDeAudienciaDto, PautaDeAudiencia pautaDeAudiencia) {
 		// Instancia um objeto base para verificar se já existe um registro 'nome'
 		// no banco igual ao do DTO | OU | se não há algum multirão válido para a pauta
-		PautaDeAudiencia pautaExistente = repository.findByProcessoAndTipo(pautaDeAudienciaDto.getProcesso(),
+		PautaDeAudiencia pautaExistente = pautaDeAudienciaRepository.findByProcessoAndTipo(pautaDeAudienciaDto.getProcesso(),
 				pautaDeAudienciaDto.getTipo());
 		if ((pautaExistente != null && !pautaExistente.equals(pautaDeAudiencia))
 				|| (pautaDeAudiencia.getMutirao() == null)) {

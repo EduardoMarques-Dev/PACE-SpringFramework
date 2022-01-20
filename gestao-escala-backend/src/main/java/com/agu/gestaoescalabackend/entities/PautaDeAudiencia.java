@@ -14,6 +14,7 @@ import javax.persistence.Table;
 
 import com.agu.gestaoescalabackend.dto.PautaDeAudienciaDTO;
 
+import com.agu.gestaoescalabackend.util.Conversor;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -93,5 +94,9 @@ public class PautaDeAudiencia implements Serializable {
 		vara = dto.getVara();
 		procurador = null;
 		tipo = dto.getTipo();
+	}
+
+	public PautaDeAudienciaDTO toDto(){
+		return Conversor.converter(this, PautaDeAudienciaDTO.class);
 	}
 }

@@ -5,6 +5,7 @@ import java.time.LocalDate;
 
 import com.agu.gestaoescalabackend.entities.PautaDeAudiencia;
 
+import com.agu.gestaoescalabackend.util.Conversor;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -61,6 +62,9 @@ public class PautaDeAudienciaDTO implements Serializable {
 		} else {
 			mutirao = null;
 		}
+	}
 
+	public PautaDeAudiencia toEntity(){
+		return Conversor.converter(this, PautaDeAudiencia.class);
 	}
 }
