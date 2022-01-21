@@ -8,11 +8,11 @@ import com.agu.gestaoescalabackend.dto.MutiraoDTO;
 import com.agu.gestaoescalabackend.dto.PautaDeAudienciaDTO;
 import com.agu.gestaoescalabackend.entities.Mutirao;
 import com.agu.gestaoescalabackend.entities.PautaDeAudiencia;
-import com.agu.gestaoescalabackend.entities.Procurador;
+import com.agu.gestaoescalabackend.entities.Pautista;
 import com.agu.gestaoescalabackend.entities.TipoStatus;
 import com.agu.gestaoescalabackend.repositories.MutiraoRepository;
 import com.agu.gestaoescalabackend.repositories.PautaDeAudienciaRepository;
-import com.agu.gestaoescalabackend.repositories.ProcuradorRepository;
+import com.agu.gestaoescalabackend.repositories.PautistaRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -28,7 +28,7 @@ public class MutiraoService {
 
 	private MutiraoRepository repository;
 	private PautaDeAudienciaRepository pautaRepository;
-	private ProcuradorRepository procuradorRepository;
+	private PautistaRepository pautistaRepository;
 
 //////////////////////////////////   SERVIÇOS   ///////////////////////////////////
 
@@ -100,26 +100,26 @@ public class MutiraoService {
 	@Transactional
 	public PautaDeAudienciaDTO atualizarProcurador(Long pautaDeAudienciaId, Long procuradorId) {
 
-		if ((!pautaRepository.existsById(pautaDeAudienciaId)) || (!procuradorRepository.existsById(procuradorId)))
+		if ((!pautaRepository.existsById(pautaDeAudienciaId)) || (!pautistaRepository.existsById(procuradorId)))
 			return null;
 
 		PautaDeAudiencia pautaDeAudiencia = pautaRepository.getOne(pautaDeAudienciaId);
 		List<PautaDeAudiencia> listaPautaDoProcurador = 
 				pautaRepository.findByDataAndSalaAndTurno(pautaDeAudiencia.getData(), pautaDeAudiencia.getSala(), 
 						pautaDeAudiencia.getTurno().toString());
-		Procurador procuradorAntigo = procuradorRepository.getOne(pautaDeAudiencia.getProcurador().getId());
-		Procurador procuradorNovo = procuradorRepository.getOne(procuradorId);
+		Pautista pautistaAntigo = pautistaRepository.getOne(pautaDeAudiencia.getPautista().getId());
+		Pautista pautistaNovo = pautistaRepository.getOne(procuradorId);
 
 		for(int i = 0; i < listaPautaDoProcurador.size() ; i++) {
 			pautaDeAudiencia = pautaRepository.getOne(listaPautaDoProcurador.get(i).getId());
-			procuradorAntigo.setSaldo(procuradorAntigo.getSaldo() - 1);
-			procuradorAntigo.setSaldoPeso(procuradorAntigo.getSaldo() * procuradorAntigo.getPeso());
-			procuradorNovo.setSaldo(procuradorNovo.getSaldo() + 1);
-			procuradorNovo.setSaldoPeso(procuradorNovo.getSaldo() * procuradorNovo.getPeso());
-			pautaDeAudiencia.setProcurador(procuradorNovo);
+			pautistaAntigo.setSaldo(pautistaAntigo.getSaldo() - 1);
+			pautistaAntigo.setSaldoPeso(pautistaAntigo.getSaldo() * pautistaAntigo.getPeso());
+			pautistaNovo.setSaldo(pautistaNovo.getSaldo() + 1);
+			pautistaNovo.setSaldoPeso(pautistaNovo.getSaldo() * pautistaNovo.getPeso());
+			pautaDeAudiencia.setPautista(pautistaNovo);
 
-			procuradorRepository.save(procuradorNovo);
-			procuradorRepository.save(procuradorAntigo);
+			pautistaRepository.save(pautistaNovo);
+			pautistaRepository.save(pautistaAntigo);
 			pautaDeAudiencia = pautaRepository.save(pautaDeAudiencia);
 		}
 
@@ -133,9 +133,9 @@ public class MutiraoService {
 	public List<PautaDeAudiencia> gerarEscala(Long mutiraoId, String grupo) { // 24 linhas
 
 		List<PautaDeAudiencia> listaPauta = pautaRepository.findAllByMutiraoId(mutiraoId);
-		List<Procurador> listaProcurador = retornarListaDe("Procurador", "Ativo");
-		List<Procurador> listaPreposto = retornarListaDe("Preposto", "Ativo");
-		List<Procurador> listaPautista = procuradorRepository.findAllByStatusOrderBySaldoPesoAsc("Ativo");
+		List<Pautista> listaProcurador = retornarListaDe("Procurador", "Ativo");
+		List<Pautista> listaPreposto = retornarListaDe("Preposto", "Ativo");
+		List<Pautista> listaPautista = pautistaRepository.findAllByStatusOrderBySaldoPesoAsc("Ativo");
 		String salaAtual = listaPauta.get(0).getSala();
 		LocalDate diaAtual = listaPauta.get(0).getData();
 		String turnoAtual = listaPauta.get(0).getTurno().toString();
@@ -145,8 +145,8 @@ public class MutiraoService {
 		String tipoDoUltimoPautistaInserido = "Nenhum";
 		boolean repetiuPautista = false;
 		
-		for(Procurador lista : listaPautista) {
-			System.out.println(lista.getNomeProcurador()+": "+lista.getSaldoPeso());
+		for(Pautista lista : listaPautista) {
+			System.out.println(lista.getNome()+": "+lista.getSaldoPeso());
 		}
 
 		definirStatusMutiraoParaSemEscala(mutiraoId);
@@ -212,7 +212,7 @@ public class MutiraoService {
 
 //////////////////////////////////    MÉTODOS    ///////////////////////////////////
 
-	private boolean reordenarPautista(List<Procurador> listaProcurador, boolean repetiuPautista, String grupo) {
+	private boolean reordenarPautista(List<Pautista> listaPautista, boolean repetiuPautista, String grupo) {
 		String nomeAntigo;
 		int marcador = 0;
 
@@ -220,23 +220,23 @@ public class MutiraoService {
 			marcador = 1;
 		}
 
-		nomeAntigo = listaProcurador.get(marcador).getNomeProcurador();
-		for(int i=0; i <listaProcurador.size(); i++) {
-			System.out.println("Antigo: "+listaProcurador.get(i).getNomeProcurador()+": "+listaProcurador.get(i).getSaldoPeso());
+		nomeAntigo = listaPautista.get(marcador).getNome();
+		for(int i = 0; i < listaPautista.size(); i++) {
+			System.out.println("Antigo: "+ listaPautista.get(i).getNome()+": "+ listaPautista.get(i).getSaldoPeso());
 		}
 
 		// Reordena a lista
-		Collections.sort(listaProcurador);
-		for(int i=0; i <listaProcurador.size(); i++) {
-			System.out.println("Novo: "+listaProcurador.get(i).getNomeProcurador()+": "+listaProcurador.get(i).getSaldoPeso());
+		Collections.sort(listaPautista);
+		for(int i = 0; i < listaPautista.size(); i++) {
+			System.out.println("Novo: "+ listaPautista.get(i).getNome()+": "+ listaPautista.get(i).getSaldoPeso());
 		}
 
 		// Verifica se o novo pautista é igual ao último antes da reordenação
-		return (nomeAntigo.equals(listaProcurador.get(0).getNomeProcurador()));
+		return (nomeAntigo.equals(listaPautista.get(0).getNome()));
 	}
 
-	private String validarInserçãoDePautista(PautaDeAudiencia pautaAtual, List<Procurador> listaProcurador,
-			List<Procurador> listaPreposto,List<Procurador> listaPautista, boolean repetiuPautista, String grupo) {
+	private String validarInserçãoDePautista(PautaDeAudiencia pautaAtual, List<Pautista> listaProcurador,
+											 List<Pautista> listaPreposto, List<Pautista> listaPautista, boolean repetiuPautista, String grupo) {
 		System.out.println("Validar");
 		int marcador = 0;
 		if (repetiuPautista) {
@@ -276,8 +276,8 @@ public class MutiraoService {
 
 	}
 
-	private List<Procurador> retornarListaDe(String grupo, String status) {
-		return procuradorRepository.findAllByGrupoAndStatusOrderBySaldoPesoAsc(grupo, status);
+	private List<Pautista> retornarListaDe(String grupo, String status) {
+		return pautistaRepository.findAllByGrupoAndStatusOrderBySaldoPesoAsc(grupo, status);
 	}
 
 	private void definirStatusMutiraoParaSemEscala(Long mutiraoId) {
@@ -286,16 +286,16 @@ public class MutiraoService {
 		repository.save(mutirao);
 	}
 
-	private void definirPautista(Procurador pautistaAtual, PautaDeAudiencia pautaAtual) {
+	private void definirPautista(Pautista pautistaAtual, PautaDeAudiencia pautaAtual) {
 		// Seta na pauta o procurador na posição especificada e incrementa seu saldo
 		System.out.println("Definir Pautista");
-		pautaAtual.setProcurador(pautistaAtual);
+		pautaAtual.setPautista(pautistaAtual);
 		pautistaAtual.setSaldo(pautistaAtual.getSaldo() + 1);
 		pautistaAtual.setSaldoPeso(pautistaAtual.getSaldo() * pautistaAtual.getPeso());
-		System.out.println(pautistaAtual.getNomeProcurador()+"= "+pautistaAtual.getSaldo()+"  "+ 
+		System.out.println(pautistaAtual.getNome()+"= "+pautistaAtual.getSaldo()+"  "+
 				pautistaAtual.getSaldoPeso());
 		// Salva a pauta e o procurador com o saldo atualizado no banco
-		procuradorRepository.save(pautistaAtual);
+		pautistaRepository.save(pautistaAtual);
 		pautaRepository.save(pautaAtual);
 	}
 	

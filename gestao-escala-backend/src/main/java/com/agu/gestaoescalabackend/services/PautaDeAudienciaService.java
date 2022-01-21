@@ -4,11 +4,11 @@ import com.agu.gestaoescalabackend.dto.MutiraoDTO;
 import com.agu.gestaoescalabackend.dto.PautaDeAudienciaDTO;
 import com.agu.gestaoescalabackend.entities.Mutirao;
 import com.agu.gestaoescalabackend.entities.PautaDeAudiencia;
-import com.agu.gestaoescalabackend.entities.Procurador;
+import com.agu.gestaoescalabackend.entities.Pautista;
 import com.agu.gestaoescalabackend.entities.TipoStatus;
 import com.agu.gestaoescalabackend.repositories.MutiraoRepository;
 import com.agu.gestaoescalabackend.repositories.PautaDeAudienciaRepository;
-import com.agu.gestaoescalabackend.repositories.ProcuradorRepository;
+import com.agu.gestaoescalabackend.repositories.PautistaRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,7 +23,7 @@ import java.util.stream.Collectors;
 public class PautaDeAudienciaService {
 
 	private PautaDeAudienciaRepository pautaDeAudienciaRepository;
-	private ProcuradorRepository procuradorRepository;
+	private PautistaRepository pautistaRepository;
 	private MutiraoRepository mutiraoRepository;
 	private MutiraoService mutiraoService;
 
@@ -96,15 +96,15 @@ public class PautaDeAudienciaService {
 
 	private void inserirProcurador(PautaDeAudienciaDTO pautaDeAudienciaDto, PautaDeAudiencia pautaDeAudiencia) {
 		// Verifica se no Repositório há um procurador com o nome passado pelo DTO
-		if (procuradorRepository.existsByNomeProcurador(pautaDeAudienciaDto.getProcurador().getNomeProcurador())) {
+		if (pautistaRepository.existsByNome(pautaDeAudienciaDto.getProcurador().getNome())) {
 			// Atribui ao objeto o procurador encontrado anteriormente
-			Procurador procurador = procuradorRepository
-					.findByNomeProcurador(pautaDeAudienciaDto.getProcurador().getNomeProcurador());
+			Pautista pautista = pautistaRepository
+					.findByNome(pautaDeAudienciaDto.getProcurador().getNome());
 			// Seta na pauta o procurador
-			pautaDeAudiencia.setProcurador(procurador);
+			pautaDeAudiencia.setPautista(pautista);
 		} else {
 			// Seta nulo se não for encontrado referência para o nome do dto
-			pautaDeAudiencia.setProcurador(null);
+			pautaDeAudiencia.setPautista(null);
 		}
 
 	}

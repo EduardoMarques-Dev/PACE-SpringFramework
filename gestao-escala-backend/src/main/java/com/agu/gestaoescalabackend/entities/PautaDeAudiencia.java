@@ -50,7 +50,7 @@ public class PautaDeAudiencia implements Serializable {
 	// ATRIBUTOS DE RELACIONAMENTO
 	@ManyToOne
 	@JoinColumn(name = "procurador_id")
-	private Procurador procurador;
+	private Pautista pautista;
 	@ManyToOne
 	@JoinColumn(name = "mutirao_id")
 	private Mutirao mutirao;
@@ -72,7 +72,7 @@ public class PautaDeAudiencia implements Serializable {
 		nomeAdvogado = dto.getNomeAdvogado();
 		objeto = dto.getObjeto();
 		vara = dto.getVara();
-		procurador = null;
+		pautista = null;
 		tipo = dto.getTipo();
 	}
 

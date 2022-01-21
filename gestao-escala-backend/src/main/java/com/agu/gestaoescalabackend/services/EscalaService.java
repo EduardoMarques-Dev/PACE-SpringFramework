@@ -4,10 +4,10 @@ import com.agu.gestaoescalabackend.dto.EscalaDTO;
 import com.agu.gestaoescalabackend.dto.PautaDeAudienciaDTO;
 import com.agu.gestaoescalabackend.entities.Mutirao;
 import com.agu.gestaoescalabackend.entities.PautaDeAudiencia;
-import com.agu.gestaoescalabackend.entities.Procurador;
+import com.agu.gestaoescalabackend.entities.Pautista;
 import com.agu.gestaoescalabackend.enums.Tipo;
 import com.agu.gestaoescalabackend.repositories.PautaDeAudienciaRepository;
-import com.agu.gestaoescalabackend.repositories.ProcuradorRepository;
+import com.agu.gestaoescalabackend.repositories.PautistaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,7 +20,7 @@ public class EscalaService {
 	private PautaDeAudienciaRepository repository;
 
 	@Autowired
-	private ProcuradorRepository procuradorRepository;
+	private PautistaRepository pautistaRepository;
 
 //	@Transactional
 //	public PautaDeAudienciaDTO editarProcurador(Long pautaDeAudienciaId, PautaDeAudienciaDTO pautaDeAudienciaDto) {
@@ -62,43 +62,43 @@ public class EscalaService {
 		if (repository.existsById(pautaDeAudienciaId)) {
 			int saldoExistente;
 			String nomeProcurador;
-			List<Procurador> listaProcurador = procuradorRepository.findAll();
-			Procurador procurador = new Procurador();
+			List<Pautista> listaPautista = pautistaRepository.findAll();
+			Pautista pautista = new Pautista();
 
-			for (Procurador procuradorEscala : listaProcurador) {
-				if (procuradorEscala.getId().equals(procuradorId)) {
-					procurador = procuradorRepository.findByNomeProcurador(procuradorEscala.getNomeProcurador());
+			for (Pautista pautistaEscala : listaPautista) {
+				if (pautistaEscala.getId().equals(procuradorId)) {
+					pautista = pautistaRepository.findByNome(pautistaEscala.getNome());
 				}
 			}
 
-			saldoExistente = procurador.getSaldo();
+			saldoExistente = pautista.getSaldo();
 			System.out.println("O Saldo é: " + saldoExistente);
 			saldoExistente--;
 			System.out.println("O Saldo diminuido é: " + saldoExistente);
-			procurador.setSaldo(saldoExistente);
-			procuradorRepository.save(procurador);
+			pautista.setSaldo(saldoExistente);
+			pautistaRepository.save(pautista);
 
 			// Instancia um objeto base que irá receber o argumento do DTO + ID e insere
 			// um procurador na pauta se for passado o nome pelo DTO
 			PautaDeAudiencia pautaDeAudiencia = new PautaDeAudiencia(pautaDeAudienciaId, pautaDeAudienciaDto);
 			int saldo;
 			// Verifica se no Repositório há um procurador com o nome passado pelo DTO
-			if (procuradorRepository.existsByNomeProcurador(pautaDeAudienciaDto.getProcurador().getNomeProcurador())) {
+			if (pautistaRepository.existsByNome(pautaDeAudienciaDto.getProcurador().getNome())) {
 				// Atribui ao objeto o procurador encontrado anteriormente
-				procurador = procuradorRepository
-						.findByNomeProcurador(pautaDeAudienciaDto.getProcurador().getNomeProcurador());
+				pautista = pautistaRepository
+						.findByNome(pautaDeAudienciaDto.getProcurador().getNome());
 				// Seta na pauta o procurador
-				pautaDeAudiencia.setProcurador(procurador);
+				pautaDeAudiencia.setPautista(pautista);
 
-				saldo = procurador.getSaldo();
+				saldo = pautista.getSaldo();
 				saldo++;
 				System.out.println("O Saldo é: " + saldo);
-				procurador.setSaldo(saldo);
-				procuradorRepository.save(procurador);
+				pautista.setSaldo(saldo);
+				pautistaRepository.save(pautista);
 
 			} else {
 				// Seta nulo se não for encontrado referência para o nome do dto
-				pautaDeAudiencia.setProcurador(null);
+				pautaDeAudiencia.setPautista(null);
 			}
 
 			// Salva e retorna um DTO com as informações persistidas no banco
@@ -110,22 +110,22 @@ public class EscalaService {
 	private void inserirProcurador(PautaDeAudienciaDTO pautaDeAudienciaDto, PautaDeAudiencia pautaDeAudiencia) {
 		int saldo;
 		// Verifica se no Repositório há um procurador com o nome passado pelo DTO
-		if (procuradorRepository.existsByNomeProcurador(pautaDeAudienciaDto.getProcurador().getNomeProcurador())) {
+		if (pautistaRepository.existsByNome(pautaDeAudienciaDto.getProcurador().getNome())) {
 			// Atribui ao objeto o procurador encontrado anteriormente
-			Procurador procurador = procuradorRepository
-					.findByNomeProcurador(pautaDeAudienciaDto.getProcurador().getNomeProcurador());
+			Pautista pautista = pautistaRepository
+					.findByNome(pautaDeAudienciaDto.getProcurador().getNome());
 			// Seta na pauta o procurador
-			pautaDeAudiencia.setProcurador(procurador);
+			pautaDeAudiencia.setPautista(pautista);
 
-			saldo = procurador.getSaldo();
+			saldo = pautista.getSaldo();
 			saldo++;
 			System.out.println("O Saldo é: " + saldo);
-			procurador.setSaldo(saldo);
-			procuradorRepository.save(procurador);
+			pautista.setSaldo(saldo);
+			pautistaRepository.save(pautista);
 
 		} else {
 			// Seta nulo se não for encontrado referência para o nome do dto
-			pautaDeAudiencia.setProcurador(null);
+			pautaDeAudiencia.setPautista(null);
 		}
 
 	}
@@ -133,32 +133,32 @@ public class EscalaService {
 	private void diminuirSaldo(Long procuradorId) {
 		int saldoExistente;
 		String nomeProcurador;
-		List<Procurador> listaProcurador = procuradorRepository.findAll();
-		Procurador procurador = new Procurador();
+		List<Pautista> listaPautista = pautistaRepository.findAll();
+		Pautista pautista = new Pautista();
 
-		for (Procurador procuradorEscala : listaProcurador) {
-			if (procuradorEscala.getId().equals(procuradorId)) {
-				procurador = procuradorRepository.findByNomeProcurador(procuradorEscala.getNomeProcurador());
+		for (Pautista pautistaEscala : listaPautista) {
+			if (pautistaEscala.getId().equals(procuradorId)) {
+				pautista = pautistaRepository.findByNome(pautistaEscala.getNome());
 			}
 		}
 
-		saldoExistente = procurador.getSaldo();
+		saldoExistente = pautista.getSaldo();
 		System.out.println("O Saldo é: " + saldoExistente);
 		saldoExistente--;
 		System.out.println("O Saldo diminuido é: " + saldoExistente);
-		procurador.setSaldo(saldoExistente);
-		procuradorRepository.save(procurador);
+		pautista.setSaldo(saldoExistente);
+		pautistaRepository.save(pautista);
 
 	}
 
 	public List adicionarEscala(EscalaDTO escalaDto) {
 
 		// Contém todos os procuradores por ordem de saldo
-		List<Procurador> listaProcurador = procuradorRepository.findAllByOrderBySaldoPesoAsc();
+		List<Pautista> listaPautista = pautistaRepository.findAllByOrderBySaldoPesoAsc();
 		// Armazenará todas as pautas por ordem de id
 		List<PautaDeAudiencia> listaPauta = repository.findAllByOrderByIdAsc();
 		// Armazenará todos os procuradores em uma lista.
-		List<Procurador> listaProcuradorEscala = new ArrayList<Procurador>();
+		List<Pautista> listaPautistaEscala = new ArrayList<Pautista>();
 		// Armazenará todas as pautas de mesma vara
 		List<PautaDeAudiencia> listaPautaEscala = new ArrayList<PautaDeAudiencia>();
 
@@ -177,15 +177,15 @@ public class EscalaService {
 		// insere na lista todos os procuradores
 		// int cont = 0;
 		if (tipo.equals(Tipo.INSTRUÇÃO)) {
-			for (Procurador pEscala : listaProcurador) {
+			for (Pautista pEscala : listaPautista) {
 				if ((pEscala.getGrupo().toString().equalsIgnoreCase("procurador"))
 						&& (pEscala.getStatus().toString().equalsIgnoreCase("ativo")))
-					listaProcuradorEscala.add(pEscala);
+					listaPautistaEscala.add(pEscala);
 			}
 		} else {
-			for (Procurador pEscala : listaProcurador) {
+			for (Pautista pEscala : listaPautista) {
 				if (pEscala.getStatus().toString().equalsIgnoreCase("ativo"))
-					listaProcuradorEscala.add(pEscala);
+					listaPautistaEscala.add(pEscala);
 			}
 		}
 
@@ -199,17 +199,17 @@ public class EscalaService {
 			// compara se a sala da lista que foi pego inicialmente é igual a sala da lista
 			if (salaLista.equals(listaPautaEscala.get(pautaAtual).getSala()))
 
-				definirProcurador(listaProcuradorEscala, listaPautaEscala, procuradorAtual, pautaAtual);
+				definirProcurador(listaPautistaEscala, listaPautaEscala, procuradorAtual, pautaAtual);
 
 			else {
-				if (procuradorAtual < (listaProcuradorEscala.size() - 1))
+				if (procuradorAtual < (listaPautistaEscala.size() - 1))
 					procuradorAtual++;
 				else
 					procuradorAtual = 0;
 				// Atribui para a salaLista a sala corrente
 				salaLista = listaPautaEscala.get(pautaAtual).getSala();
 
-				definirProcurador(listaProcuradorEscala, listaPautaEscala, procuradorAtual, pautaAtual);
+				definirProcurador(listaPautistaEscala, listaPautaEscala, procuradorAtual, pautaAtual);
 			}
 		}
 
@@ -217,15 +217,15 @@ public class EscalaService {
 
 	}
 
-	private void definirProcurador(List<Procurador> listaProcuradorEscala, List<PautaDeAudiencia> listaPautaEscala,
-			int procuradorAtual, int pautaAtual) {
+	private void definirProcurador(List<Pautista> listaPautistaEscala, List<PautaDeAudiencia> listaPautaEscala,
+                                   int procuradorAtual, int pautaAtual) {
 		// seta na pauta o procurador na posição especificada
-		listaPautaEscala.get(pautaAtual).setProcurador(listaProcuradorEscala.get(procuradorAtual));
+		listaPautaEscala.get(pautaAtual).setPautista(listaPautistaEscala.get(procuradorAtual));
 		// Incrementa o saldo do procurador
-		listaProcuradorEscala.get(procuradorAtual).setSaldo(listaProcuradorEscala.get(procuradorAtual).getSaldo() + 1);
+		listaPautistaEscala.get(procuradorAtual).setSaldo(listaPautistaEscala.get(procuradorAtual).getSaldo() + 1);
 		// Salva o procurador com o saldo atualizado no banco
-		Procurador procuradorSaldo = listaProcuradorEscala.get(procuradorAtual);
-		procuradorRepository.save(procuradorSaldo);
+		Pautista pautistaSaldo = listaPautistaEscala.get(procuradorAtual);
+		pautistaRepository.save(pautistaSaldo);
 		// salva a pauta no banco
 		PautaDeAudiencia pauta = listaPautaEscala.get(pautaAtual);
 		repository.save(pauta);

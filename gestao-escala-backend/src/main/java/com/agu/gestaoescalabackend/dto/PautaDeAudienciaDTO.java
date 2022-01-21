@@ -58,7 +58,7 @@ public class PautaDeAudienciaDTO implements Serializable {
 	private Turno turno;
 
 	// ATRIBUTOS DE RELACIONAMENTO
-	private ProcuradorDTO procurador;
+	private PautistaDto procurador;
 	private MutiraoDTO mutirao;
 
 /////////////////  CONSTRUTOR  //////////////////
