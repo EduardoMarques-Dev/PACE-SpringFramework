@@ -326,7 +326,7 @@ $('#cadastrar-pauta').on('click', function () {
     alert("Algum valor de hora está no formato incorreto. Por favor, verifique se todas se encontram no formato HH:MM.");
     return;
   }
-  var turno = formatar("turno", document.querySelector('#turno-pauta').value);
+  var turno = formatar("turno", document.querySelector('#turno-pauta').value.toUpperCase());
   var sala = formatar("sala", document.querySelector('#sala-pauta').value);
   var processo = formatar("processo", document.querySelector('#processo').value);
   var nomeParte = formatar("nomeParte", document.querySelector('#nome-parte').value);
@@ -338,7 +338,7 @@ $('#cadastrar-pauta').on('click', function () {
   vara = vara.options[vara.selectedIndex].value;
 
   var tipo = document.getElementById('tipo');
-  tipo = tipo.options[tipo.selectedIndex].value;
+  tipo = tipo.options[tipo.selectedIndex].value.toUpperCase();
 
   var listaDePautas = [];
   var i = 0;

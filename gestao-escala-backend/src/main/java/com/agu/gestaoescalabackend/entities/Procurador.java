@@ -5,12 +5,16 @@ import java.time.LocalDate;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
 import com.agu.gestaoescalabackend.dto.ProcuradorDTO;
+import com.agu.gestaoescalabackend.enums.GrupoProcurador;
+import com.agu.gestaoescalabackend.enums.Statusprocurador;
 
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
@@ -36,12 +40,14 @@ public class Procurador implements Serializable, Comparable<Procurador> {
 	private Long id;
 	@Column(name = "nome_procurador")
 	private String nomeProcurador;
-	private String status;
+	@Enumerated(value = EnumType.STRING)
+	private Statusprocurador status;
 	@Column(name = "data_inicial")
 	private LocalDate dataInicial;
 	@Column(name = "data_final")
 	private LocalDate dataFinal;
-	private String grupo;
+	@Enumerated(value = EnumType.STRING)
+	private GrupoProcurador grupo;
 	private Integer saldo;
 	private Integer peso;
 	private Integer saldoPeso;

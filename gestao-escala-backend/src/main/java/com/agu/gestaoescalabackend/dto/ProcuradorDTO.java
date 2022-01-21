@@ -3,17 +3,29 @@ package com.agu.gestaoescalabackend.dto;
 import java.io.Serializable;
 import java.time.LocalDate;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+
 import com.agu.gestaoescalabackend.entities.Procurador;
+import com.agu.gestaoescalabackend.enums.GrupoProcurador;
+import com.agu.gestaoescalabackend.enums.Statusprocurador;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 
 public class ProcuradorDTO implements Serializable {
 	private static final long serialVersionUID = 1L;
+	@JsonProperty(access = JsonProperty.Access.READ_ONLY)
 	private Long id;
+	@NotBlank
 	private String nomeProcurador;
-	private String status;
+	@NotNull
+	private Statusprocurador status;
 	private LocalDate dataInicial;
 	private LocalDate dataFinal;
-	private String grupo;
+	@NotNull
+	private GrupoProcurador grupo;
 	private Integer saldo;
+	@NotNull
 	private Integer peso;
 	private Integer saldoPeso;
 
@@ -23,8 +35,8 @@ public class ProcuradorDTO implements Serializable {
 	}
 
 	// Todos os Campos
-	public ProcuradorDTO(Long id, String nomeProcurador, String status, LocalDate dataInicial, LocalDate dataFinal,
-			String grupo, Integer saldo, Integer peso, Integer saldoPeso) {
+	public ProcuradorDTO(Long id, String nomeProcurador, Statusprocurador status, LocalDate dataInicial, LocalDate dataFinal,
+	GrupoProcurador grupo, Integer saldo, Integer peso, Integer saldoPeso) {
 		super();
 		this.id = id;
 		this.nomeProcurador = nomeProcurador;
@@ -69,11 +81,11 @@ public class ProcuradorDTO implements Serializable {
 		this.nomeProcurador = nomeProcurador;
 	}
 
-	public String getStatus() {
+	public Statusprocurador getStatus() {
 		return status;
 	}
 
-	public void setStatus(String status) {
+	public void setStatus(Statusprocurador status) {
 		this.status = status;
 	}
 
@@ -93,11 +105,11 @@ public class ProcuradorDTO implements Serializable {
 		this.dataFinal = dataFinal;
 	}
 
-	public String getGrupo() {
+	public GrupoProcurador getGrupo() {
 		return grupo;
 	}
 
-	public void setGrupo(String grupo) {
+	public void setGrupo(GrupoProcurador grupo) {
 		this.grupo = grupo;
 	}
 

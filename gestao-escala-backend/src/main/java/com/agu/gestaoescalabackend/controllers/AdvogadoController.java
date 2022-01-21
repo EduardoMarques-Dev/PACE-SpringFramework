@@ -2,6 +2,8 @@ package com.agu.gestaoescalabackend.controllers;
 
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -30,7 +32,7 @@ public class AdvogadoController {
 	}
 
 	@PostMapping
-	public ResponseEntity<AdvogadoDTO> salvar(@RequestBody AdvogadoDTO advogadoDto) {
+	public ResponseEntity<AdvogadoDTO> salvar(@Valid @RequestBody AdvogadoDTO advogadoDto) {
 		advogadoDto = service.salvar(advogadoDto);
 		if (advogadoDto != null)
 			return ResponseEntity.ok().body(advogadoDto);
@@ -39,7 +41,7 @@ public class AdvogadoController {
 	}
 
 	@PutMapping("/{advogadoId}")
-	public ResponseEntity<AdvogadoDTO> editar(@PathVariable Long advogadoId, @RequestBody AdvogadoDTO advogadoDto) {
+	public ResponseEntity<AdvogadoDTO> editar(@PathVariable Long advogadoId, @Valid @RequestBody AdvogadoDTO advogadoDto) {
 		advogadoDto = service.editar(advogadoId, advogadoDto);
 		if (advogadoDto != null)
 			return ResponseEntity.ok().body(advogadoDto);

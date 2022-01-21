@@ -38,10 +38,10 @@ window.onload = function() {
 $('#salvar').on( 'click', function () {
   
     pautistaJson.nomeProcurador= document.querySelector('#nome-pautista').value;
-    pautistaJson.status = document.querySelector('#status').value;
+    pautistaJson.status = document.querySelector('#status').value.toUpperCase();
     pautistaJson.dataInicial = document.querySelector('#data-inicial').value;
     pautistaJson.dataFinal = document.querySelector('#data-final').value;
-    pautistaJson.grupo = document.querySelector('#grupo').value;
+    pautistaJson.grupo = document.querySelector('#grupo').value.toUpperCase();
     pautistaJson.peso = document.querySelector('#peso').value;
    
     if(pautistaJson.nomeProcurador != ""){
