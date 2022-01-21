@@ -3,6 +3,7 @@ package com.agu.gestaoescalabackend.services;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.agu.gestaoescalabackend.enums.Tipo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -172,11 +173,11 @@ public class EscalaService {
 			}
 		}
 
-		String tipo = listaPautaEscala.get(0).getTipo();
+		Tipo tipo = listaPautaEscala.get(0).getTipo();
 
 		// insere na lista todos os procuradores
 		// int cont = 0;
-		if (tipo.equalsIgnoreCase("instrução")) {
+		if (tipo.equals(Tipo.INSTRUÇÃO)) {
 			for (Procurador pEscala : listaProcurador) {
 				if ((pEscala.getGrupo().equalsIgnoreCase("procurador"))
 						&& (pEscala.getStatus().equalsIgnoreCase("ativo")))

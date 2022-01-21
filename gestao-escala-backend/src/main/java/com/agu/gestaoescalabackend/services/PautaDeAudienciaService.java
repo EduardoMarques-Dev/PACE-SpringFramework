@@ -136,7 +136,7 @@ public class PautaDeAudienciaService {
 		// Instancia um objeto base para verificar se já existe um registro 'nome'
 		// no banco igual ao do DTO | OU | se não há algum multirão válido para a pauta
 		PautaDeAudiencia pautaExistente = pautaDeAudienciaRepository.findByProcessoAndTipo(pautaDeAudienciaDto.getProcesso(),
-				pautaDeAudienciaDto.getTipo());
+				pautaDeAudienciaDto.getTipo().toString());
 		if ((pautaExistente != null && !pautaExistente.equals(pautaDeAudiencia))
 				|| (pautaDeAudiencia.getMutirao() == null)) {
 			return false;

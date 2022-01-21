@@ -108,7 +108,7 @@ public class MutiraoService {
 		PautaDeAudiencia pautaDeAudiencia = pautaRepository.getOne(pautaDeAudienciaId);
 		List<PautaDeAudiencia> listaPautaDoProcurador = 
 				pautaRepository.findByDataAndSalaAndTurno(pautaDeAudiencia.getData(), pautaDeAudiencia.getSala(), 
-						pautaDeAudiencia.getTurno());
+						pautaDeAudiencia.getTurno().toString());
 		Procurador procuradorAntigo = procuradorRepository.getOne(pautaDeAudiencia.getProcurador().getId());
 		Procurador procuradorNovo = procuradorRepository.getOne(procuradorId);
 
@@ -140,10 +140,10 @@ public class MutiraoService {
 		List<Procurador> listaPautista = procuradorRepository.findAllByStatusOrderBySaldoPesoAsc("Ativo");
 		String salaAtual = listaPauta.get(0).getSala();
 		LocalDate diaAtual = listaPauta.get(0).getData();
-		String turnoAtual = listaPauta.get(0).getTurno();
+		String turnoAtual = listaPauta.get(0).getTurno().toString();
 		String salaDaPautaAtual = listaPauta.get(0).getSala();
 		LocalDate diaDaPautaAtual = listaPauta.get(0).getData();
-		String turnoDaPautaAtual = listaPauta.get(0).getTurno();
+		String turnoDaPautaAtual = listaPauta.get(0).getTurno().toString();
 		String tipoDoUltimoPautistaInserido = "Nenhum";
 		boolean repetiuPautista = false;
 		
@@ -158,7 +158,7 @@ public class MutiraoService {
 			// Atribuição para facilitar a legibilidade da condicional
 			salaDaPautaAtual = listaPauta.get(pautaAtual).getSala();
 			diaDaPautaAtual = listaPauta.get(pautaAtual).getData();
-			turnoDaPautaAtual = listaPauta.get(pautaAtual).getTurno();
+			turnoDaPautaAtual = listaPauta.get(pautaAtual).getTurno().toString();
 
 			// compara se a sala da lista que foi pego inicialmente é igual a sala da lista
 			if ((salaAtual.equals(salaDaPautaAtual)) && (diaAtual.equals(diaDaPautaAtual)) 
@@ -193,7 +193,7 @@ public class MutiraoService {
 				// Atribui para a salaLista a sala corrente
 				salaAtual = listaPauta.get(pautaAtual).getSala();
 				diaAtual = listaPauta.get(pautaAtual).getData();
-				turnoAtual = listaPauta.get(pautaAtual).getTurno();
+				turnoAtual = listaPauta.get(pautaAtual).getTurno().toString();
 
 
 				validarInserçãoDePautista(listaPauta.get(pautaAtual), listaProcurador, listaPreposto,listaPautista, repetiuPautista,grupo);
