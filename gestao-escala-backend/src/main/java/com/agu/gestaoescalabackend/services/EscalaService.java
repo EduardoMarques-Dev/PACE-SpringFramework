@@ -1,19 +1,18 @@
 package com.agu.gestaoescalabackend.services;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import com.agu.gestaoescalabackend.enums.Tipo;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 import com.agu.gestaoescalabackend.dto.EscalaDTO;
 import com.agu.gestaoescalabackend.dto.PautaDeAudienciaDTO;
 import com.agu.gestaoescalabackend.entities.Mutirao;
 import com.agu.gestaoescalabackend.entities.PautaDeAudiencia;
 import com.agu.gestaoescalabackend.entities.Procurador;
+import com.agu.gestaoescalabackend.enums.Tipo;
 import com.agu.gestaoescalabackend.repositories.PautaDeAudienciaRepository;
 import com.agu.gestaoescalabackend.repositories.ProcuradorRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class EscalaService {

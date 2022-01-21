@@ -1,13 +1,5 @@
 package com.agu.gestaoescalabackend.services;
 
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
-
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import com.agu.gestaoescalabackend.dto.MutiraoDTO;
 import com.agu.gestaoescalabackend.dto.PautaDeAudienciaDTO;
 import com.agu.gestaoescalabackend.entities.Mutirao;
@@ -17,8 +9,14 @@ import com.agu.gestaoescalabackend.entities.TipoStatus;
 import com.agu.gestaoescalabackend.repositories.MutiraoRepository;
 import com.agu.gestaoescalabackend.repositories.PautaDeAudienciaRepository;
 import com.agu.gestaoescalabackend.repositories.ProcuradorRepository;
-
 import lombok.AllArgsConstructor;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor

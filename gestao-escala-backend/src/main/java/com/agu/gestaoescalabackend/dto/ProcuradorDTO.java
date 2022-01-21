@@ -1,15 +1,14 @@
 package com.agu.gestaoescalabackend.dto;
 
-import java.io.Serializable;
-import java.time.LocalDate;
-
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
-
 import com.agu.gestaoescalabackend.entities.Procurador;
 import com.agu.gestaoescalabackend.enums.GrupoProcurador;
 import com.agu.gestaoescalabackend.enums.Statusprocurador;
 import com.fasterxml.jackson.annotation.JsonProperty;
+
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import java.io.Serializable;
+import java.time.LocalDate;
 
 
 public class ProcuradorDTO implements Serializable {

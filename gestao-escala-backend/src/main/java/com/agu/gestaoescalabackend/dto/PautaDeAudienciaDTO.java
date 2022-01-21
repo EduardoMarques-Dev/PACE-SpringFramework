@@ -1,10 +1,6 @@
 package com.agu.gestaoescalabackend.dto;
 
-import java.io.Serializable;
-import java.time.LocalDate;
-
 import com.agu.gestaoescalabackend.entities.PautaDeAudiencia;
-
 import com.agu.gestaoescalabackend.enums.Tipo;
 import com.agu.gestaoescalabackend.enums.Turno;
 import com.agu.gestaoescalabackend.util.Conversor;
@@ -17,6 +13,8 @@ import org.hibernate.validator.constraints.br.CPF;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import java.io.Serializable;
+import java.time.LocalDate;
 
 @Getter
 @Setter

@@ -1,20 +1,14 @@
 package com.agu.gestaoescalabackend.entities;
 
-import java.io.Serializable;
-import java.time.LocalDate;
-
-import javax.persistence.*;
-
 import com.agu.gestaoescalabackend.dto.PautaDeAudienciaDTO;
-
 import com.agu.gestaoescalabackend.enums.Tipo;
 import com.agu.gestaoescalabackend.enums.Turno;
 import com.agu.gestaoescalabackend.util.Conversor;
-import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
+
+import javax.persistence.*;
+import java.io.Serializable;
+import java.time.LocalDate;
 
 @Entity
 @Table(name = "tb_pauta")

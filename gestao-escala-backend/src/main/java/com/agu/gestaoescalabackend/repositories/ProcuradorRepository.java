@@ -1,11 +1,10 @@
 package com.agu.gestaoescalabackend.repositories;
 
-import java.util.List;
-
+import com.agu.gestaoescalabackend.entities.Procurador;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import com.agu.gestaoescalabackend.entities.Procurador;
+import java.util.List;
 
 @Repository
 public interface ProcuradorRepository extends JpaRepository<Procurador, Long> {

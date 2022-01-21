@@ -1,27 +1,13 @@
 package com.agu.gestaoescalabackend.entities;
 
-import java.io.Serializable;
-import java.time.LocalDate;
-
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
-
 import com.agu.gestaoescalabackend.dto.ProcuradorDTO;
 import com.agu.gestaoescalabackend.enums.GrupoProcurador;
 import com.agu.gestaoescalabackend.enums.Statusprocurador;
+import lombok.*;
 
-import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
+import javax.persistence.*;
+import java.io.Serializable;
+import java.time.LocalDate;
 
 @Entity
 @Table(name = "tb_procuradores")

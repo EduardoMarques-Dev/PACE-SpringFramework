@@ -1,16 +1,15 @@
 package com.agu.gestaoescalabackend.dto;
 
-import java.io.Serializable;
-import java.time.LocalDate;
-import java.util.List;
-
 import com.agu.gestaoescalabackend.entities.Mutirao;
 import com.agu.gestaoescalabackend.entities.TipoStatus;
-
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import java.io.Serializable;
+import java.time.LocalDate;
+import java.util.List;
 
 @Getter
 @Setter
