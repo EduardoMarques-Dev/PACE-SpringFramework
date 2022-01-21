@@ -129,8 +129,9 @@ $('#cadastrar-pautista').on( 'click', function () {
   // pautistaJson.status = document.querySelector('#status').value;
   // pautistaJson.dataInicial = document.querySelector('#data-inicial').value;
   // pautistaJson.dataFinal = document.querySelector('#data-final').value;
-  pautistaJson.grupo = document.querySelector('#grupo').value;
+  pautistaJson.grupo = document.querySelector('#grupo').value.toUpperCase();
   pautistaJson.peso = document.querySelector('#peso').value;
+  pautistaJson.status = "ATIVO";
  
   if(pautistaJson.nomeProcurador != ""){
     cadastrar(pautistaJson);

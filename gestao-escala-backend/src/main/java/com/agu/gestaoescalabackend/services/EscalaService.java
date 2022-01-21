@@ -179,13 +179,13 @@ public class EscalaService {
 		// int cont = 0;
 		if (tipo.equals(Tipo.INSTRUÇÃO)) {
 			for (Procurador pEscala : listaProcurador) {
-				if ((pEscala.getGrupo().equalsIgnoreCase("procurador"))
-						&& (pEscala.getStatus().equalsIgnoreCase("ativo")))
+				if ((pEscala.getGrupo().toString().equalsIgnoreCase("procurador"))
+						&& (pEscala.getStatus().toString().equalsIgnoreCase("ativo")))
 					listaProcuradorEscala.add(pEscala);
 			}
 		} else {
 			for (Procurador pEscala : listaProcurador) {
-				if (pEscala.getStatus().equalsIgnoreCase("ativo"))
+				if (pEscala.getStatus().toString().equalsIgnoreCase("ativo"))
 					listaProcuradorEscala.add(pEscala);
 			}
 		}

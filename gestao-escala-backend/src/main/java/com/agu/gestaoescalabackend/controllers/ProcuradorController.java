@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -37,7 +38,7 @@ public class ProcuradorController {
 	}
 
 	@PostMapping
-	public ResponseEntity<ProcuradorDTO> salvar(@RequestBody ProcuradorDTO procuradorDto) {
+	public ResponseEntity<ProcuradorDTO> salvar(@Validated @RequestBody ProcuradorDTO procuradorDto) {
 		procuradorDto = service.salvar(procuradorDto);
 		if (procuradorDto != null)
 			return ResponseEntity.ok().body(procuradorDto);
@@ -46,8 +47,8 @@ public class ProcuradorController {
 	}
 
 	@PutMapping("/{procuradorId}")
-	public ResponseEntity<ProcuradorDTO> editar(@PathVariable Long procuradorId,
-			@RequestBody ProcuradorDTO procuradorDto) {
+	public ResponseEntity<ProcuradorDTO> editar( @PathVariable Long procuradorId,
+	@Validated @RequestBody ProcuradorDTO procuradorDto) {
 		procuradorDto = service.editar(procuradorId, procuradorDto);
 		if (procuradorDto != null)
 			return ResponseEntity.ok().body(procuradorDto);
