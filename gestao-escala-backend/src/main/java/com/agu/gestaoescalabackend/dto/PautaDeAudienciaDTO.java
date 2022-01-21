@@ -5,11 +5,18 @@ import java.time.LocalDate;
 
 import com.agu.gestaoescalabackend.entities.PautaDeAudiencia;
 
+import com.agu.gestaoescalabackend.enums.Tipo;
+import com.agu.gestaoescalabackend.enums.Turno;
 import com.agu.gestaoescalabackend.util.Conversor;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.validator.constraints.br.CPF;
+
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 @Getter
 @Setter
@@ -18,51 +25,45 @@ import lombok.Setter;
 public class PautaDeAudienciaDTO implements Serializable {
 	private static final long serialVersionUID = 1L;
 
+	// ATRIBUTOS DE IDENTIFICAÇÃO
+	@JsonProperty(access = JsonProperty.Access.READ_ONLY)
 	private Long id;
-	private LocalDate data;
-	private String hora;
-	private String turno;
-	private String sala;
-	private String processo;
-	private String nomeParte;
-	private String cpf;
-	private String nomeAdvogado;
-	private String objeto;
-	private String vara;
-	private String tipo;
 
+	// ATRIBUTOS DE PERÍODO
+	@NotNull
+	private LocalDate data;
+	@NotBlank
+	private String hora;
+
+	@NotBlank
+	private String sala;
+	@NotBlank
+	private String processo;
+
+	// ATRIBUTOS DE ENVOLVIDOS
+	@NotBlank
+	private String nomeParte;
+	@CPF
+	@NotNull
+	private String cpf;
+	@NotBlank
+	private String nomeAdvogado;
+	@NotBlank
+	private String objeto;
+
+	//  ATRIBUTOS DE MUTIRAO
+	@NotBlank
+	private String vara;
+	@NotNull
+	private Tipo tipo;
+	@NotNull
+	private Turno turno;
+
+	// ATRIBUTOS DE RELACIONAMENTO
 	private ProcuradorDTO procurador;
 	private MutiraoDTO mutirao;
 
-/////////////////  CONSTRUTOR  //////////////////		
-
-	// BACK para FRONT (listar)
-	public PautaDeAudienciaDTO(PautaDeAudiencia entity) {
-		id = entity.getId();
-		data = entity.getData();
-		hora = entity.getHora();
-		turno = entity.getTurno();
-		sala = entity.getSala();
-		processo = entity.getProcesso();
-		nomeParte = entity.getNomeParte();
-		cpf = entity.getCpf();
-		nomeAdvogado = entity.getNomeAdvogado();
-		objeto = entity.getObjeto();
-		vara = entity.getVara();
-		tipo = entity.getTipo();
-
-		if (entity.getProcurador() != null) {
-			procurador = new ProcuradorDTO(entity.getProcurador());
-		} else {
-			procurador = null;
-		}
-
-		if (entity.getMutirao() != null) {
-			mutirao = new MutiraoDTO(entity.getMutirao());
-		} else {
-			mutirao = null;
-		}
-	}
+/////////////////  CONSTRUTOR  //////////////////
 
 	public PautaDeAudiencia toEntity(){
 		return Conversor.converter(this, PautaDeAudiencia.class);

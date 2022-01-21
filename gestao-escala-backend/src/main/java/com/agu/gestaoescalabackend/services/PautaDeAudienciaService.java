@@ -53,7 +53,7 @@ public class PautaDeAudienciaService {
 
 		for (int pautaAtual = 0; pautaAtual < listaPautaDto.size(); pautaAtual++) {
 
-			PautaDeAudiencia pautaDeAudiencia = new PautaDeAudiencia(listaPautaDto.get(pautaAtual));
+			PautaDeAudiencia pautaDeAudiencia = listaPautaDto.get(pautaAtual).toEntity();
 
 			pautaDeAudiencia.setMutirao(mutirao);
 			inserirProcurador(listaPautaDto.get(pautaAtual), pautaDeAudiencia);
