@@ -39,10 +39,9 @@ public class PautaService {
 
 	public PautaDto findById(Long id) {
 
-		if (!pautaRepository.existsById(id))
-			return null;
-
-		return pautaRepository.findById(id).get().toDto();
+		return pautaRepository.findById(id)
+				.map(Pauta::toDto)
+				.orElse(null);
 	}
 
 	@Transactional
@@ -52,22 +51,23 @@ public class PautaService {
 		
 		List<PautaDto> listaRetorno = new ArrayList<>();
 
-		for (int pautaAtual = 0; pautaAtual < listaPautaDto.size(); pautaAtual++) {
+		for (PautaDto dto : listaPautaDto) {
 
-			Pauta pauta = listaPautaDto.get(pautaAtual).toEntity();
+			Pauta pauta = dto.toEntity();
 
 			pauta.setMutirao(mutirao);
-			inserirProcurador(listaPautaDto.get(pautaAtual), pauta);
 
-			if (validarCriacao(listaPautaDto.get(pautaAtual), pauta)) {
-				
+			if (dto.getProcurador() != null)
+				inserirProcurador(dto, pauta);
+
+			if (validarCriacao(dto, pauta)) {
+
 				mutirao.setQuantidaDePautas(mutirao.getQuantidaDePautas() + 1);
-				pauta = pautaRepository.save(pauta);
-				PautaDto pautaDto = pauta.toDto();
+				PautaDto pautaDto =pautaRepository.save(pauta).toDto();
 				listaRetorno.add(pautaDto);
 			}
 		}
-		mutiraoService.editar(mutirao);
+		mutiraoService.update(mutirao.getId(),mutirao.toDto());
 		return listaRetorno;
 
 	}
@@ -99,37 +99,60 @@ public class PautaService {
      METODOS DO MUTIRAO
     ------------------------------------------------*/
 
+	public boolean validarCriacaoMutirao(List<PautaDto> pautaDtoList) {
+		// O objetivo deste método é verificar se alguma das datas passadas pelo DTO se
+		// encaixam em algum multirão, e se encaixarem, retorna falso para que não seja
+		// criado um novo multirão
+		LocalDate dataInicialPauta = pautaDtoList.get(0).getData();
+		LocalDate dataFinalPauta = pautaDtoList.get(pautaDtoList.size() - 1).getData();
+		List<Mutirao> mutiraoList = mutiraoRepository.findByVara(pautaDtoList.get(0).getVara());
+
+		for (Mutirao mutirao : mutiraoList) {
+
+			LocalDate dataInicialMutirao = mutirao.getDataInicial().minusDays(1);
+			LocalDate dataFinalMutirao = mutirao.getDataFinal().plusDays(1);
+
+			if (dataInicialMutirao.isBefore(dataInicialPauta) && dataFinalMutirao.isAfter(dataInicialPauta)
+					|| dataInicialMutirao.isBefore(dataFinalPauta) && dataFinalMutirao.isAfter(dataFinalPauta))
+				return false;
+		}
+		return true;
+	}
+
 	private Mutirao retornarMutirao(List<PautaDto> listaPautaDto) {
 
-		MutiraoDTO mutiraoDto;
+		MutiraoDTO mutiraoDto = new MutiraoDTO();
 
 		// Se a criação do mutirão for válida, retornará o mutirao criado.
 		if (validarCriacaoMutirao(listaPautaDto)) {
-			mutiraoDto = new MutiraoDTO(listaPautaDto);
+
+			mutiraoDto = mutiraoDto.forSave(listaPautaDto);
 			mutiraoDto.setStatus(TipoStatus.SEM_ESCALA);
 			mutiraoDto.setQuantidaDePautas(0);
-			return new Mutirao(mutiraoService.salvar(mutiraoDto));
+
+			return mutiraoService.save(mutiraoDto).toEntity();
+
 		} else {
 			// Se a criação do mutirão não for válida, buscará dentre os mutirões qual o
 			// adequado
-			List<Mutirao> listaMutirao = mutiraoRepository.findByVara(listaPautaDto.get(0).getVara());
+			List<Mutirao> mutiraoList = mutiraoRepository.findByVara(listaPautaDto.get(0).getVara());
 			LocalDate dataInicialPauta = listaPautaDto.get(0).getData();
 			LocalDate dataFinalPauta = listaPautaDto.get(listaPautaDto.size() - 1).getData();
 			int x = 0;
 
-			while ((x < listaMutirao.size())) {
+			for (Mutirao mutirao : mutiraoList) {
 
-				LocalDate dataInicialMutirao = listaMutirao.get(x).getDataInicial().minusDays(1);
-				LocalDate dataFinalMutirao = listaMutirao.get(x).getDataFinal().plusDays(1);
+				LocalDate dataInicialMutirao = mutirao.getDataInicial().minusDays(1);
+				LocalDate dataFinalMutirao = mutirao.getDataFinal().plusDays(1);
 
 				if (dataInicialMutirao.isBefore(dataInicialPauta) && dataFinalMutirao.isAfter(dataFinalPauta)) {
 					// Se a condição das datas for verdadeira, retorna o mutirao encontrado
-					mutiraoDto = new MutiraoDTO(listaMutirao.get(x));
-					if (listaMutirao.get(x).getStatus() == TipoStatus.COM_ESCALA)
-						mutiraoDto.setStatus(TipoStatus.PARCIAL_ESCALA);
-					return new Mutirao(mutiraoService.editar(listaMutirao.get(x).getId(), mutiraoDto));
+
+					if (mutirao.getStatus() == TipoStatus.COM_ESCALA)
+						mutirao.setStatus(TipoStatus.PARCIAL_ESCALA);
+
+					return mutiraoService.update(mutirao.getId(), mutirao.toDto()).toEntity();
 				}
-				x++;
 			}
 		}
 		return null;
@@ -176,34 +199,10 @@ public class PautaService {
 		// no banco igual ao do DTO | OU | se não há algum multirão válido para a pauta
 		Pauta pautaExistente = pautaRepository.findByProcessoAndTipo(pautaDto.getProcesso(),
 				pautaDto.getTipo());
-		if ((pautaExistente != null && !pautaExistente.equals(pauta))
-				|| (pauta.getMutirao() == null)) {
-			return false;
-		} else
-			return true;
+		return (pautaExistente == null || pautaExistente.equals(pauta))
+				&& (pauta.getMutirao() != null);
 	}
 
-	public boolean validarCriacaoMutirao(List<PautaDto> dto) {
-		// O objetivo deste método é verificar se alguma das datas passadas pelo DTO se
-		// encaixam em algum multirão, e se encaixarem, retorna falso para que não seja
-		// criado um novo multirão
-		LocalDate dataInicialPauta = dto.get(0).getData();
-		LocalDate dataFinalPauta = dto.get(dto.size() - 1).getData();
-		List<Mutirao> mutirao = mutiraoRepository.findByVara(dto.get(0).getVara());
-		int x = 0;
-
-		while ((x < mutirao.size())) {
-
-			LocalDate dataInicialMutirao = mutirao.get(x).getDataInicial().minusDays(1);
-			LocalDate dataFinalMutirao = mutirao.get(x).getDataFinal().plusDays(1);
-
-			if (((dataInicialMutirao.isBefore(dataInicialPauta)) && (dataFinalMutirao.isAfter(dataInicialPauta)))
-					|| ((dataInicialMutirao.isBefore(dataFinalPauta)) && (dataFinalMutirao.isAfter(dataFinalPauta))))
-				return false;
-			x++;
-		}
-		return true;
-	}
 
 
 

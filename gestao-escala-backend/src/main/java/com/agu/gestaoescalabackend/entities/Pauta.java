@@ -52,6 +52,7 @@ public class Pauta implements Serializable {
 	@ManyToOne
 	@JoinColumn(name = "mutirao_id")
 	private Mutirao mutirao;
+
 	/*------------------------------------------------
      METODOS DE CONVERSÃO
     ------------------------------------------------*/
