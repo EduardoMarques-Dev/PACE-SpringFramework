@@ -8,7 +8,9 @@ import java.util.List;
 
 @Repository
 public interface AdvogadoRepository extends JpaRepository<Advogado, Long>{
-	List<Advogado> findAllByOrderByNomeAdvogadoAsc();
-	Advogado findByNomeAdvogado(String nomeAdvogado);
-	
+
+	List<Advogado> findAllByOrderByNomeAsc();
+
+	Advogado findByNome(String nome);
+
 }
