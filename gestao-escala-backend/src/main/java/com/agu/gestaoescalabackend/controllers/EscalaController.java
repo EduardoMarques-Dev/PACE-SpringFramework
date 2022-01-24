@@ -1,8 +1,8 @@
 package com.agu.gestaoescalabackend.controllers;
 
 import com.agu.gestaoescalabackend.dto.EscalaDTO;
-import com.agu.gestaoescalabackend.dto.PautaDeAudienciaDTO;
-import com.agu.gestaoescalabackend.repositories.PautaDeAudienciaRepository;
+import com.agu.gestaoescalabackend.dto.PautaDto;
+import com.agu.gestaoescalabackend.repositories.PautaRepository;
 import com.agu.gestaoescalabackend.services.EscalaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -17,18 +17,18 @@ public class EscalaController {
 	private EscalaService service;
 
 	@Autowired
-	private PautaDeAudienciaRepository repository;
+	private PautaRepository repository;
 
 	@PutMapping("/{pautaDeAudienciaId}/{procuradorId}")
-	public ResponseEntity<PautaDeAudienciaDTO> atualizarProcurador(@PathVariable Long pautaDeAudienciaId,
-			@PathVariable Long procuradorId, @RequestBody PautaDeAudienciaDTO pautaDeAudienciaDto) {
+	public ResponseEntity<PautaDto> atualizarProcurador(@PathVariable Long pautaDeAudienciaId,
+														@PathVariable Long procuradorId, @RequestBody PautaDto pautaDto) {
 
 		if (!repository.existsById(pautaDeAudienciaId)) {
 			return ResponseEntity.notFound().build();
 		}
-		pautaDeAudienciaDto = service.editarProcurador(pautaDeAudienciaId, procuradorId, pautaDeAudienciaDto);
+		pautaDto = service.editarProcurador(pautaDeAudienciaId, procuradorId, pautaDto);
 
-		return ResponseEntity.ok().body(pautaDeAudienciaDto);
+		return ResponseEntity.ok().body(pautaDto);
 	}
 
 	@PostMapping

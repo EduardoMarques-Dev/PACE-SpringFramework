@@ -1,12 +1,12 @@
 package com.agu.gestaoescalabackend.services;
 
 import com.agu.gestaoescalabackend.dto.EscalaDTO;
-import com.agu.gestaoescalabackend.dto.PautaDeAudienciaDTO;
+import com.agu.gestaoescalabackend.dto.PautaDto;
 import com.agu.gestaoescalabackend.entities.Mutirao;
-import com.agu.gestaoescalabackend.entities.PautaDeAudiencia;
+import com.agu.gestaoescalabackend.entities.Pauta;
 import com.agu.gestaoescalabackend.entities.Pautista;
 import com.agu.gestaoescalabackend.enums.Tipo;
-import com.agu.gestaoescalabackend.repositories.PautaDeAudienciaRepository;
+import com.agu.gestaoescalabackend.repositories.PautaRepository;
 import com.agu.gestaoescalabackend.repositories.PautistaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,7 +17,7 @@ import java.util.List;
 @Service
 public class EscalaService {
 	@Autowired
-	private PautaDeAudienciaRepository repository;
+	private PautaRepository repository;
 
 	@Autowired
 	private PautistaRepository pautistaRepository;
@@ -55,8 +55,8 @@ public class EscalaService {
 //	}
 	
 
-	public PautaDeAudienciaDTO editarProcurador(Long pautaDeAudienciaId, Long procuradorId,
-			PautaDeAudienciaDTO pautaDeAudienciaDto) {
+	public PautaDto editarProcurador(Long pautaDeAudienciaId, Long procuradorId,
+									 PautaDto pautaDto) {
 
 		// Verifica se o Id existe no banco
 		if (repository.existsById(pautaDeAudienciaId)) {
@@ -80,15 +80,15 @@ public class EscalaService {
 
 			// Instancia um objeto base que irá receber o argumento do DTO + ID e insere
 			// um procurador na pauta se for passado o nome pelo DTO
-			PautaDeAudiencia pautaDeAudiencia = new PautaDeAudiencia(pautaDeAudienciaId, pautaDeAudienciaDto);
+			Pauta pauta = new Pauta(pautaDeAudienciaId, pautaDto);
 			int saldo;
 			// Verifica se no Repositório há um procurador com o nome passado pelo DTO
-			if (pautistaRepository.existsByNome(pautaDeAudienciaDto.getProcurador().getNome())) {
+			if (pautistaRepository.existsByNome(pautaDto.getProcurador().getNome())) {
 				// Atribui ao objeto o procurador encontrado anteriormente
 				pautista = pautistaRepository
-						.findByNome(pautaDeAudienciaDto.getProcurador().getNome());
+						.findByNome(pautaDto.getProcurador().getNome());
 				// Seta na pauta o procurador
-				pautaDeAudiencia.setPautista(pautista);
+				pauta.setPautista(pautista);
 
 				saldo = pautista.getSaldo();
 				saldo++;
@@ -98,24 +98,24 @@ public class EscalaService {
 
 			} else {
 				// Seta nulo se não for encontrado referência para o nome do dto
-				pautaDeAudiencia.setPautista(null);
+				pauta.setPautista(null);
 			}
 
 			// Salva e retorna um DTO com as informações persistidas no banco
-			return repository.save(pautaDeAudiencia).toDto();
+			return repository.save(pauta).toDto();
 		} else
 			return null;
 	}
 
-	private void inserirProcurador(PautaDeAudienciaDTO pautaDeAudienciaDto, PautaDeAudiencia pautaDeAudiencia) {
+	private void inserirProcurador(PautaDto pautaDto, Pauta pauta) {
 		int saldo;
 		// Verifica se no Repositório há um procurador com o nome passado pelo DTO
-		if (pautistaRepository.existsByNome(pautaDeAudienciaDto.getProcurador().getNome())) {
+		if (pautistaRepository.existsByNome(pautaDto.getProcurador().getNome())) {
 			// Atribui ao objeto o procurador encontrado anteriormente
 			Pautista pautista = pautistaRepository
-					.findByNome(pautaDeAudienciaDto.getProcurador().getNome());
+					.findByNome(pautaDto.getProcurador().getNome());
 			// Seta na pauta o procurador
-			pautaDeAudiencia.setPautista(pautista);
+			pauta.setPautista(pautista);
 
 			saldo = pautista.getSaldo();
 			saldo++;
@@ -125,7 +125,7 @@ public class EscalaService {
 
 		} else {
 			// Seta nulo se não for encontrado referência para o nome do dto
-			pautaDeAudiencia.setPautista(null);
+			pauta.setPautista(null);
 		}
 
 	}
@@ -156,15 +156,15 @@ public class EscalaService {
 		// Contém todos os procuradores por ordem de saldo
 		List<Pautista> listaPautista = pautistaRepository.findAllByOrderBySaldoPesoAsc();
 		// Armazenará todas as pautas por ordem de id
-		List<PautaDeAudiencia> listaPauta = repository.findAllByOrderByIdAsc();
+		List<Pauta> listaPauta = repository.findAllByOrderByIdAsc();
 		// Armazenará todos os procuradores em uma lista.
 		List<Pautista> listaPautistaEscala = new ArrayList<Pautista>();
 		// Armazenará todas as pautas de mesma vara
-		List<PautaDeAudiencia> listaPautaEscala = new ArrayList<PautaDeAudiencia>();
+		List<Pauta> listaPautaEscala = new ArrayList<Pauta>();
 
 		// insere na lista todas as pautas da mesma vara
 		int c = 0;
-		for (PautaDeAudiencia p : listaPauta) {
+		for (Pauta p : listaPauta) {
 			if (p.getVara().equals(escalaDto.getVara())) {
 				listaPautaEscala.add(p);
 				System.out.println("Pauta:" + listaPautaEscala.get(c).getId());
@@ -217,7 +217,7 @@ public class EscalaService {
 
 	}
 
-	private void definirProcurador(List<Pautista> listaPautistaEscala, List<PautaDeAudiencia> listaPautaEscala,
+	private void definirProcurador(List<Pautista> listaPautistaEscala, List<Pauta> listaPautaEscala,
                                    int procuradorAtual, int pautaAtual) {
 		// seta na pauta o procurador na posição especificada
 		listaPautaEscala.get(pautaAtual).setPautista(listaPautistaEscala.get(procuradorAtual));
@@ -227,12 +227,12 @@ public class EscalaService {
 		Pautista pautistaSaldo = listaPautistaEscala.get(procuradorAtual);
 		pautistaRepository.save(pautistaSaldo);
 		// salva a pauta no banco
-		PautaDeAudiencia pauta = listaPautaEscala.get(pautaAtual);
+		Pauta pauta = listaPautaEscala.get(pautaAtual);
 		repository.save(pauta);
 	}
 
-	public void inserirMutirao(PautaDeAudienciaDTO pautaDeAudienciaDto, List<Mutirao> mutirao,
-			PautaDeAudiencia pautaDeAudiencia) {
+	public void inserirMutirao(PautaDto pautaDto, List<Mutirao> mutirao,
+							   Pauta pauta) {
 		int x = 0;
 		// Faça enquanto estiver dentro do tamanho do multirão (OU) enquanto o multirão
 		// for nulo
@@ -240,10 +240,10 @@ public class EscalaService {
 			// Se a data que está sendo comparada for anterior à data passada como
 			// argumento, um valor menor que zero será retornado. Se o contrário acontecer,
 			// o valor retornado será maior que zero.
-			if ((mutirao.get(x).getDataInicial().compareTo(pautaDeAudienciaDto.getData()) <= 0)
-					&& (mutirao.get(x).getDataFinal().compareTo(pautaDeAudienciaDto.getData()) >= 0)) {
+			if ((mutirao.get(x).getDataInicial().compareTo(pautaDto.getData()) <= 0)
+					&& (mutirao.get(x).getDataFinal().compareTo(pautaDto.getData()) >= 0)) {
 				// Se a condição das datas for verdadeira, seta na pauta o multirão corrente
-				pautaDeAudiencia.setMutirao(mutirao.get(x));
+				pauta.setMutirao(mutirao.get(x));
 				break;
 			}
 			x++;

@@ -1,7 +1,7 @@
 package com.agu.gestaoescalabackend.controllers;
 
-import com.agu.gestaoescalabackend.dto.PautaDeAudienciaDTO;
-import com.agu.gestaoescalabackend.services.PautaDeAudienciaService;
+import com.agu.gestaoescalabackend.dto.PautaDto;
+import com.agu.gestaoescalabackend.services.PautaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -13,24 +13,24 @@ import java.util.List;
 public class PautaDeAudienciaController {
 
 	@Autowired
-	private PautaDeAudienciaService service;
+	private PautaService service;
 
 	@GetMapping
-	public ResponseEntity<List<PautaDeAudienciaDTO>> pesquisarTodos() {
-		List<PautaDeAudienciaDTO> list = service.pesquisarTodos();
+	public ResponseEntity<List<PautaDto>> pesquisarTodos() {
+		List<PautaDto> list = service.findAll();
 		return ResponseEntity.ok(list);
 	}
 
 	@GetMapping("/{pautaDeAudienciaId}")
-	public ResponseEntity<PautaDeAudienciaDTO> pesquisarEspecifico (@PathVariable Long pautaDeAudienciaId) {
-		PautaDeAudienciaDTO pautaDto = service.pesquisarEspecifico(pautaDeAudienciaId);
+	public ResponseEntity<PautaDto> pesquisarEspecifico (@PathVariable Long pautaDeAudienciaId) {
+		PautaDto pautaDto = service.findById(pautaDeAudienciaId);
 		return ResponseEntity.ok(pautaDto);
 	}
 	
 	@PostMapping
-	public ResponseEntity<List<PautaDeAudienciaDTO>> salvar(
-			@RequestBody List<PautaDeAudienciaDTO> PautaDeAudienciaDTO) {
-		List<PautaDeAudienciaDTO> listaPautaDto = service.salvar(PautaDeAudienciaDTO);
+	public ResponseEntity<List<PautaDto>> salvar(
+			@RequestBody List<PautaDto> PautaDto) {
+		List<PautaDto> listaPautaDto = service.save(PautaDto);
 		if (listaPautaDto != null)
 			return ResponseEntity.ok().body(listaPautaDto);
 		else
@@ -38,10 +38,10 @@ public class PautaDeAudienciaController {
 	}
 
 	@PutMapping("/{pautaDeAudienciaId}")
-	public ResponseEntity<PautaDeAudienciaDTO> editar(@PathVariable Long pautaDeAudienciaId,
-			@RequestBody PautaDeAudienciaDTO pautaDeAudienciaDto) {
-		pautaDeAudienciaDto = service.editar(pautaDeAudienciaId, pautaDeAudienciaDto);
-		return ResponseEntity.ok().body(pautaDeAudienciaDto);
+	public ResponseEntity<PautaDto> editar(@PathVariable Long pautaDeAudienciaId,
+										   @RequestBody PautaDto pautaDto) {
+		pautaDto = service.editar(pautaDeAudienciaId, pautaDto);
+		return ResponseEntity.ok().body(pautaDto);
 	}
 
 	@DeleteMapping("/{pautaDeAudienciaId}")

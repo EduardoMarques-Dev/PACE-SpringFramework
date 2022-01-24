@@ -1,6 +1,6 @@
 package com.agu.gestaoescalabackend.dto;
 
-import com.agu.gestaoescalabackend.entities.PautaDeAudiencia;
+import com.agu.gestaoescalabackend.entities.Pauta;
 import com.agu.gestaoescalabackend.enums.Tipo;
 import com.agu.gestaoescalabackend.enums.Turno;
 import com.agu.gestaoescalabackend.util.Conversor;
@@ -20,7 +20,7 @@ import java.time.LocalDate;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class PautaDeAudienciaDTO implements Serializable {
+public class PautaDto implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	// ATRIBUTOS DE IDENTIFICAÇÃO
@@ -61,9 +61,11 @@ public class PautaDeAudienciaDTO implements Serializable {
 	private PautistaDto procurador;
 	private MutiraoDTO mutirao;
 
-/////////////////  CONSTRUTOR  //////////////////
+	/*------------------------------------------------
+     METODOS DE CONVERSÃO
+    ------------------------------------------------*/
 
-	public PautaDeAudiencia toEntity(){
-		return Conversor.converter(this, PautaDeAudiencia.class);
+	public Pauta toEntity(){
+		return Conversor.converter(this, Pauta.class);
 	}
 }

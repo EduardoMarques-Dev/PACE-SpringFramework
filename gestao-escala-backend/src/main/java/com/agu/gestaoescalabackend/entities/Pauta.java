@@ -1,6 +1,6 @@
 package com.agu.gestaoescalabackend.entities;
 
-import com.agu.gestaoescalabackend.dto.PautaDeAudienciaDTO;
+import com.agu.gestaoescalabackend.dto.PautaDto;
 import com.agu.gestaoescalabackend.enums.Tipo;
 import com.agu.gestaoescalabackend.enums.Turno;
 import com.agu.gestaoescalabackend.util.Conversor;
@@ -11,13 +11,11 @@ import java.io.Serializable;
 import java.time.LocalDate;
 
 @Entity
-@Table(name = "tb_pauta")
+@Table(name = "tb_pautas")
 @Getter
 @Setter
 @NoArgsConstructor
-@AllArgsConstructor
-@EqualsAndHashCode(onlyExplicitlyIncluded = true)
-public class PautaDeAudiencia implements Serializable {
+public class Pauta implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	// ATRIBUTOS DE IDENTIFICAÇÃO
@@ -54,13 +52,21 @@ public class PautaDeAudiencia implements Serializable {
 	@ManyToOne
 	@JoinColumn(name = "mutirao_id")
 	private Mutirao mutirao;
+	/*------------------------------------------------
+     METODOS DE CONVERSÃO
+    ------------------------------------------------*/
+
+
+	public PautaDto toDto(){
+		return Conversor.converter(this, PautaDto.class);
+	}
 
 /////////////////  CONSTRUTOR  //////////////////
 
 	// FRONT PARA O BACK (Salvar)
 
 	// FRONT PARA O BACK + ID (Editar)
-	public PautaDeAudiencia(Long id, PautaDeAudienciaDTO dto) {
+	public Pauta(Long id, PautaDto dto) {
 		this.id = id;
 		data = dto.getData();
 		hora = dto.getHora();
@@ -76,7 +82,5 @@ public class PautaDeAudiencia implements Serializable {
 		tipo = dto.getTipo();
 	}
 
-	public PautaDeAudienciaDTO toDto(){
-		return Conversor.converter(this, PautaDeAudienciaDTO.class);
-	}
+
 }

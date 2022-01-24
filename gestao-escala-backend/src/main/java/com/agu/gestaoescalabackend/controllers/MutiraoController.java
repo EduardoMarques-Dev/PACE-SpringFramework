@@ -1,8 +1,8 @@
 package com.agu.gestaoescalabackend.controllers;
 
 import com.agu.gestaoescalabackend.dto.MutiraoDTO;
-import com.agu.gestaoescalabackend.dto.PautaDeAudienciaDTO;
-import com.agu.gestaoescalabackend.entities.PautaDeAudiencia;
+import com.agu.gestaoescalabackend.dto.PautaDto;
+import com.agu.gestaoescalabackend.entities.Pauta;
 import com.agu.gestaoescalabackend.services.MutiraoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -30,8 +30,8 @@ public class MutiraoController {
 //	}
 	
 	@GetMapping("/{mutiraoId}/pautas")
-	public ResponseEntity<List<PautaDeAudienciaDTO>> pesquisarPautasDoMutirao(@PathVariable Long mutiraoId) {
-		List<PautaDeAudienciaDTO> list = service.pesquisarPautasDoMutirao(mutiraoId);
+	public ResponseEntity<List<PautaDto>> pesquisarPautasDoMutirao(@PathVariable Long mutiraoId) {
+		List<PautaDto> list = service.pesquisarPautasDoMutirao(mutiraoId);
 		return ResponseEntity.ok(list);
 	}
 
@@ -60,11 +60,11 @@ public class MutiraoController {
 	}
 
 	@PutMapping("/{pautaDeAudienciaId}/{procuradorId}")
-	public ResponseEntity<PautaDeAudienciaDTO> atualizarProcurador(@PathVariable Long pautaDeAudienciaId,
-			@PathVariable Long procuradorId) {
-		PautaDeAudienciaDTO pautaDeAudienciaDto = service.atualizarProcurador(pautaDeAudienciaId, procuradorId);
-		if (pautaDeAudienciaDto != null)
-			return ResponseEntity.ok().body(pautaDeAudienciaDto);
+	public ResponseEntity<PautaDto> atualizarProcurador(@PathVariable Long pautaDeAudienciaId,
+														@PathVariable Long procuradorId) {
+		PautaDto pautaDto = service.atualizarProcurador(pautaDeAudienciaId, procuradorId);
+		if (pautaDto != null)
+			return ResponseEntity.ok().body(pautaDto);
 		else
 			return ResponseEntity.notFound().build();
 	}
@@ -72,7 +72,7 @@ public class MutiraoController {
 
 	//@PostMapping("/{mutiraoId}/escala")
 	@PostMapping("/{mutiraoId}/{grupo}")
-	public List<PautaDeAudiencia> gerarEscala(@PathVariable Long mutiraoId, @PathVariable String grupo) {
+	public List<Pauta> gerarEscala(@PathVariable Long mutiraoId, @PathVariable String grupo) {
 		return service.gerarEscala(mutiraoId, grupo);
 	}
 

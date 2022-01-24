@@ -38,7 +38,7 @@ public class MutiraoDTO implements Serializable {
 	}
 
 	// CRIAÇÃO AUTOMÁTICA Mutirao
-	public MutiraoDTO(List<PautaDeAudienciaDTO> listDto) {
+	public MutiraoDTO(List<PautaDto> listDto) {
 		this.id = null;
 		this.vara = listDto.get(0).getVara();
 		this.dataInicial = listDto.get(0).getData();
