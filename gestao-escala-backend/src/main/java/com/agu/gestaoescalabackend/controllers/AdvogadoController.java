@@ -1,10 +1,13 @@
 package com.agu.gestaoescalabackend.controllers;
 
 import com.agu.gestaoescalabackend.dto.AdvogadoDto;
+import com.agu.gestaoescalabackend.repositories.AdvogadoRepository;
 import com.agu.gestaoescalabackend.services.AdvogadoService;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
@@ -16,10 +19,11 @@ import java.util.Map;
 
 @RestController
 @RequestMapping(value = "/advogado")
+@AllArgsConstructor
 public class AdvogadoController {
 
-	@Autowired
 	private AdvogadoService advogadoService;
+	private AdvogadoRepository advogadoRepository;
 
 	@GetMapping
 	public ResponseEntity<List<AdvogadoDto>> findAll() {
@@ -65,5 +69,16 @@ public class AdvogadoController {
 			errors.put(fieldName, errorMessage);
 		});
 		return errors;
+	}
+
+	/*------------------------------------------------
+    ACTIONS DE DESENVOLVIMENTO
+    ------------------------------------------------*/
+
+	@PutMapping("/truncate")
+	@Transactional
+	public ResponseEntity<Void> truncatePautistaTable() {
+		advogadoRepository.truncateTable();
+		return ResponseEntity.noContent().build();
 	}
 }

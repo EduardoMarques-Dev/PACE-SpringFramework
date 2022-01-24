@@ -22,6 +22,7 @@ public interface PautistaRepository extends JpaRepository<Pautista, Long> {
     List<Pautista> findAllByStatusOrderBySaldoPesoAsc(String status);
 
     List<Pautista> findAllByGrupoAndStatusOrderBySaldoPesoAsc(String string, String status);
+
     @Modifying
     @Query(
             value = "TRUNCATE TABLE tb_pautistas RESTART IDENTITY CASCADE;",
