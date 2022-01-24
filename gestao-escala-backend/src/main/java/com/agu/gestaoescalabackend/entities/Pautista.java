@@ -4,7 +4,10 @@ import com.agu.gestaoescalabackend.dto.PautistaDto;
 import com.agu.gestaoescalabackend.enums.Grupo;
 import com.agu.gestaoescalabackend.enums.Status;
 import com.agu.gestaoescalabackend.util.Conversor;
-import lombok.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
 import javax.persistence.*;
 import java.io.Serializable;

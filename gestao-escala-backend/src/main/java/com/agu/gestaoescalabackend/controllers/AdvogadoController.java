@@ -4,7 +4,6 @@ import com.agu.gestaoescalabackend.dto.AdvogadoDto;
 import com.agu.gestaoescalabackend.repositories.AdvogadoRepository;
 import com.agu.gestaoescalabackend.services.AdvogadoService;
 import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
