@@ -14,67 +14,57 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 public class PautistaService {
 
-    private PautistaRepository repository;
+    private PautistaRepository pautistaRepository;
 
     @Transactional(readOnly = true)
-    public List<PautistaDto> pesquisarTodos() {
-        List<Pautista> list = repository.findAllByOrderByIdAsc();
-        return list.stream().map(x -> new PautistaDto(x)).collect(Collectors.toList());
+    public List<PautistaDto> findAll() {
+        return pautistaRepository.findAll()
+                .stream()
+                .map(Pautista::toDto)
+                .collect(Collectors.toList());
     }
 
     @Transactional(readOnly = true)
-    public List<PautistaDto> pesquisarPorStatus(List<String> status) {
-        List<Pautista> list = repository.findAllByStatusInOrderByNomeAsc(status);
-        return list.stream().map(x -> new PautistaDto(x)).collect(Collectors.toList());
+    public List<PautistaDto> findByStatus(List<String> status) {
+        return pautistaRepository.findAllByStatusInOrderByNomeAsc(status)
+                .stream()
+                .map(Pautista::toDto)
+                .collect(Collectors.toList());
     }
 
     @Transactional
-    public PautistaDto salvar(PautistaDto pautistaDto) {
+    public PautistaDto save(PautistaDto pautistaDto) {
 
-        Pautista pautista = new Pautista(pautistaDto);
-
-        if (!validarCriacao(pautista))
-            return null;
-
+        Pautista pautista = pautistaDto.toEntity();
         definirSaldo(pautista);
-
-        pautista = repository.save(pautista);
-        return new PautistaDto(pautista);
+        return pautistaRepository.save(pautista).toDto();
     }
 
     @Transactional
-    public PautistaDto editar(Long procuradorId, PautistaDto pautistaDto) {
+    public PautistaDto update(Long id, PautistaDto pautistaDto) {
 
-        if (!repository.existsById(procuradorId))
+        if (!pautistaRepository.existsById(id))
             return null;
-
-        Pautista pautista = new Pautista(procuradorId, pautistaDto);
-        pautista = repository.save(pautista);
-        return new PautistaDto(pautista);
+        Pautista pautista = pautistaDto.toEntity().forUpdate(id);
+        return pautistaRepository.save(pautista).toDto();
 
     }
 
     @Transactional
-    public void excluir(Long procuradorId) {
-        if (repository.existsById(procuradorId))
-            repository.deleteById(procuradorId);
+    public void delete(Long procuradorId) {
+        if (pautistaRepository.existsById(procuradorId))
+            pautistaRepository.deleteById(procuradorId);
     }
 
-//////////////////////////////////	  MÉTODOS    ///////////////////////////////////
-
-    private boolean validarCriacao(Pautista pautista) {
-        Pautista pautistaExistente = repository.findByNome(pautista.getNome());
-        if (pautistaExistente != null && !pautistaExistente.equals(pautista)) {
-            return false;
-        }
-        return true;
-    }
+    /*------------------------------------------------
+    METODOS DE NEGÓCIO
+    ------------------------------------------------*/
 
     private void definirSaldo(Pautista pautista) {
         int media = 0;
-        List<Pautista> listPautista = repository.findAll();
-        for (int x = 0; x < listPautista.size(); x++) {
-            media += listPautista.get(x).getSaldo();
+        List<Pautista> pautistas = pautistaRepository.findAll();
+        for (Pautista pautistaFor : pautistas) {
+            media += pautistaFor.getSaldo();
         }
         pautista.setSaldo(media);
     }
