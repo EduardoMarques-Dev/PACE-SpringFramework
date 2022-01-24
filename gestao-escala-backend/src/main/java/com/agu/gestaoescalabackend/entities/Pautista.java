@@ -1,8 +1,9 @@
 package com.agu.gestaoescalabackend.entities;
 
 import com.agu.gestaoescalabackend.dto.PautistaDto;
-import com.agu.gestaoescalabackend.enums.GrupoProcurador;
+import com.agu.gestaoescalabackend.enums.Grupo;
 import com.agu.gestaoescalabackend.enums.Status;
+import com.agu.gestaoescalabackend.util.Conversor;
 import lombok.*;
 
 import javax.persistence.*;
@@ -18,16 +19,22 @@ import java.time.LocalDate;
 public class Pautista implements Serializable, Comparable<Pautista> {
     private static final long serialVersionUID = 1L;
 
+    // ATRIBUTOS DE IDENTIFICAÇÃO
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @Column(unique = true)
     private String nome;
+    @Enumerated(value = EnumType.STRING)
+    private Grupo grupo;
+
+    // ATRIBUTOS DE ESTADO
     @Enumerated(value = EnumType.STRING)
     private Status status;
     private LocalDate dataInicial;
     private LocalDate dataFinal;
-    @Enumerated(value = EnumType.STRING)
-    private GrupoProcurador grupo;
+
+    // ATRIBUTOS DE ESCALA
     private Integer saldo;
     private Integer peso;
     private Integer saldoPeso;
@@ -37,37 +44,30 @@ public class Pautista implements Serializable, Comparable<Pautista> {
     // @OneToMany(mappedBy = "procurador")
     // private List<PautaDeAudiencia> pautas = new ArrayList<>();
 
-/////////////////  CONSTRUTOR  //////////////////
+    /*------------------------------------------------
+     METODOS DE CONVERSÃO
+    ------------------------------------------------*/
 
-    // FRONT para BACK (Salvar)
-    public Pautista(PautistaDto dto) {
-        super();
-        id = dto.getId();
-        nome = dto.getNome();
-        status = dto.getStatus();
-        dataInicial = dto.getDataInicial();
-        dataFinal = dto.getDataFinal();
-        grupo = dto.getGrupo();
-        saldo = dto.getSaldo();
-        peso = dto.getPeso();
-        saldoPeso = dto.getSaldoPeso();
+    public PautistaDto toDto(){
+        return Conversor.converter(this, PautistaDto.class);
     }
 
-    // FRONT para BACK com ID (Editar)
-    public Pautista(Long id, PautistaDto dto) {
-        super();
-        this.id = id;
-        nome = dto.getNome();
-        status = dto.getStatus();
-        dataInicial = dto.getDataInicial();
-        dataFinal = dto.getDataFinal();
-        grupo = dto.getGrupo();
-        saldo = dto.getSaldo();
-        peso = dto.getPeso();
-        saldoPeso = dto.getSaldoPeso();
+    /*------------------------------------------------
+    METODOS DE CRUD
+    ------------------------------------------------*/
+
+    public Pautista forSave(){
+        return this;
     }
 
-/////////////////  MÉTODOS  //////////////////
+    public Pautista forUpdate(Long pautistaId){
+        id = pautistaId;
+        return this;
+    }
+
+    /*------------------------------------------------
+    METODOS DE NEGÓCIO
+    ------------------------------------------------*/
 
     @Override
     public int compareTo(Pautista outroPautista) {
