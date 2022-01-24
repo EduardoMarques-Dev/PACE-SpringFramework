@@ -202,42 +202,4 @@ public class PautaService {
 		return (pautaExistente == null || pautaExistente.equals(pauta))
 				&& (pauta.getMutirao() != null);
 	}
-
-
-
-
-//	@Transactional
-//	public List<PautaDeAudienciaDTO> salvar(List<PautaDeAudienciaDTO> listaPautaDto) {
-//		
-//		boolean mutiraoCriado = false;
-//		
-//		if (validarCriacaoMutirao(listaPautaDto)) {
-//			MutiraoDTO mutiraoDto = new MutiraoDTO(listaPautaDto);
-//			mutiraoService.salvar(mutiraoDto);
-//			mutiraoCriado = true;
-//		}
-//		
-//		List<Mutirao> mutirao = mutiraoRepository.findByVara(listaPautaDto.get(0).getVara());
-//		List<PautaDeAudienciaDTO> listaRetorno = new ArrayList<>();
-//		
-//		if (!mutirao.isEmpty()) {
-//			
-//			for (int pautaAtual = 0; pautaAtual < listaPautaDto.size(); pautaAtual++) {
-//				
-//				PautaDeAudiencia pautaDeAudiencia = new PautaDeAudiencia(listaPautaDto.get(pautaAtual));
-//				inserirMutirao(listaPautaDto.get(pautaAtual), mutirao, pautaDeAudiencia);
-//				inserirProcurador(listaPautaDto.get(pautaAtual), pautaDeAudiencia);
-//				
-//				if (validarCriacaoPauta(listaPautaDto.get(pautaAtual), pautaDeAudiencia)) {
-//					pautaDeAudiencia = repository.save(pautaDeAudiencia);
-//					PautaDeAudienciaDTO pautaDeAudienciaDto = new PautaDeAudienciaDTO(pautaDeAudiencia);
-//					listaRetorno.add(pautaDeAudienciaDto);
-//				}
-//			}
-//			return listaRetorno;
-//		}
-//		return null;
-//		
-//	}
-
 }
