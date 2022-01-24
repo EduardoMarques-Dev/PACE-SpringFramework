@@ -39,11 +39,6 @@ public class Pautista implements Serializable, Comparable<Pautista> {
     private Integer peso;
     private Integer saldoPeso;
 
-
-    // ATRIBUTOS DE RELACIONAMENTO
-    // @OneToMany(mappedBy = "procurador")
-    // private List<PautaDeAudiencia> pautas = new ArrayList<>();
-
     /*------------------------------------------------
      METODOS DE CONVERSÃO
     ------------------------------------------------*/
@@ -60,8 +55,8 @@ public class Pautista implements Serializable, Comparable<Pautista> {
         return this;
     }
 
-    public Pautista forUpdate(Long pautistaId){
-        id = pautistaId;
+    public Pautista forUpdate(Long id){
+        this.id = id;
         return this;
     }
 

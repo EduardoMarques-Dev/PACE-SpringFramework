@@ -64,7 +64,10 @@ public class PautistaController {
 		return ResponseEntity.noContent().build();
 	}
 
-	//Exception Handling
+	/*------------------------------------------------
+    MANIPULADOR DE EXCESSÕES
+    ------------------------------------------------*/
+
 	@ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
 	@ExceptionHandler(MethodArgumentNotValidException.class)
 	public Map<String, String> handleValidationExceptio(MethodArgumentNotValidException ex){
