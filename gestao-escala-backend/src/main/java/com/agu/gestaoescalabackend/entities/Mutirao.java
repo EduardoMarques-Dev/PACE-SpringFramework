@@ -1,6 +1,7 @@
 package com.agu.gestaoescalabackend.entities;
 
 import com.agu.gestaoescalabackend.dto.MutiraoDTO;
+import com.agu.gestaoescalabackend.util.Conversor;
 import lombok.*;
 
 import javax.persistence.*;
@@ -13,46 +14,47 @@ import java.time.LocalDate;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class Mutirao implements Serializable {
 	private static final long serialVersionUID = 1L;
 
+	// ATRIBUTOS DE IDENTIFICAÇÃO
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	private Integer quantidaDePautas;
-	private String vara;
-
-	@Column(name = "data_inicial")
-	private LocalDate dataInicial;
-
-	@Column(name = "data_final")
-	private LocalDate dataFinal;
-
 	@Enumerated(value = EnumType.STRING)
 	private TipoStatus status;
 
-/////////////////  CONSTRUTOR  //////////////////
+	// ATRIBUTOS DE REGISTRO
+	private Integer quantidaDePautas;
 
-	// FRONT para BACK (Salvar)
-	public Mutirao(MutiraoDTO dto) {
-		this.id = dto.getId();
-		this.vara = dto.getVara();
-		this.dataInicial = dto.getDataInicial();
-		this.dataFinal = dto.getDataFinal();
-		this.status = dto.getStatus();
-		this.quantidaDePautas = dto.getQuantidaDePautas();
+	// ATRIBUTOS PADRÃO
+	private String vara;
+	@Column(name = "data_inicial")
+	private LocalDate dataInicial;
+	@Column(name = "data_final")
+	private LocalDate dataFinal;
 
+
+
+	/*------------------------------------------------
+     METODOS DE CONVERSÃO
+    ------------------------------------------------*/
+
+	public MutiraoDTO toDto(){
+		return Conversor.converter(this, MutiraoDTO.class);
 	}
 
-	// FRONT para BACK com ID (Editar)
-	public Mutirao(Long id, MutiraoDTO dto) {
+	/*------------------------------------------------
+    METODOS DE CRUD
+    ------------------------------------------------*/
+
+	public Mutirao forSave(){
+		return this;
+	}
+
+	public Mutirao forUpdate(Long id){
 		this.id = id;
-		this.vara = dto.getVara();
-		this.dataInicial = dto.getDataInicial();
-		this.dataFinal = dto.getDataFinal();
-		this.status = dto.getStatus();
-		this.quantidaDePautas = dto.getQuantidaDePautas();
+		return this;
 	}
 
 }

@@ -19,7 +19,7 @@ public class MutiraoController {
 
 	@GetMapping
 	public ResponseEntity<List<MutiraoDTO>> pesquisarTodos() {
-		List<MutiraoDTO> list = service.pesquisarTodos();
+		List<MutiraoDTO> list = service.findAll();
 		return ResponseEntity.ok(list);
 	}
 	
@@ -31,13 +31,13 @@ public class MutiraoController {
 	
 	@GetMapping("/{mutiraoId}/pautas")
 	public ResponseEntity<List<PautaDto>> pesquisarPautasDoMutirao(@PathVariable Long mutiraoId) {
-		List<PautaDto> list = service.pesquisarPautasDoMutirao(mutiraoId);
+		List<PautaDto> list = service.findPautas(mutiraoId);
 		return ResponseEntity.ok(list);
 	}
 
 	@PostMapping
 	public ResponseEntity<MutiraoDTO> salvar(@RequestBody MutiraoDTO mutiraoDto) {
-		mutiraoDto = service.salvar(mutiraoDto);
+		mutiraoDto = service.save(mutiraoDto);
 		if (mutiraoDto != null)
 			return ResponseEntity.ok().body(mutiraoDto);
 		else
@@ -46,7 +46,7 @@ public class MutiraoController {
 
 	@PutMapping("/{mutiraoId}")
 	public ResponseEntity<MutiraoDTO> editar(@PathVariable Long mutiraoId, @RequestBody MutiraoDTO mutiraoDto) {
-		mutiraoDto = service.editar(mutiraoId, mutiraoDto);
+		mutiraoDto = service.update(mutiraoId, mutiraoDto);
 		if (mutiraoDto != null)
 			return ResponseEntity.ok().body(mutiraoDto);
 		else
