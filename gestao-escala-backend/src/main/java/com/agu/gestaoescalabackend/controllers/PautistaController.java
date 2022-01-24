@@ -1,11 +1,13 @@
 package com.agu.gestaoescalabackend.controllers;
 
 import com.agu.gestaoescalabackend.dto.PautistaDto;
+import com.agu.gestaoescalabackend.repositories.PautistaRepository;
 import com.agu.gestaoescalabackend.services.PautistaService;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.FieldError;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -21,6 +23,7 @@ import java.util.Map;
 public class PautistaController {
 
 	private PautistaService pautistaService;
+	private PautistaRepository pautistaRepository;
 
 	@GetMapping
 	public ResponseEntity<List<PautistaDto>> findAll() {
@@ -74,5 +77,16 @@ public class PautistaController {
 			errors.put(fieldName, errorMessage);
 		});
 		return errors;
+	}
+
+	/*------------------------------------------------
+    ACTIONS DE DESENVOLVIMENTO
+    ------------------------------------------------*/
+
+	@PutMapping("/truncate")
+	@Transactional
+	public ResponseEntity<Void> truncatePautistaTable() {
+		pautistaRepository.truncateTable();
+		return ResponseEntity.noContent().build();
 	}
 }
