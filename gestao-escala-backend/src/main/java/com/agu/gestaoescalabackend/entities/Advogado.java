@@ -1,42 +1,56 @@
 package com.agu.gestaoescalabackend.entities;
 
-import com.agu.gestaoescalabackend.dto.AdvogadoDTO;
+import com.agu.gestaoescalabackend.dto.AdvogadoDto;
+import com.agu.gestaoescalabackend.util.Conversor;
 import lombok.*;
 
 import javax.persistence.*;
 import java.io.Serializable;
 
 @Entity
-@Table(name = "tb_advogado")
-@Getter @Setter
-@NoArgsConstructor @AllArgsConstructor
-@EqualsAndHashCode(onlyExplicitlyIncluded = true)
+@Table(name = "tb_advogados")
+@Getter
+@Setter
+@NoArgsConstructor
 public class Advogado implements Serializable {
 	private static final long serialVersionUID = 1L;
 
+	// ATRIBUTOS DE IDENTIFICAÇÃO
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@EqualsAndHashCode.Include
 	private Long id;
-	private String nomeAdvogado;
+	private String nome;
 	private String numeroOAB;
-	
+
+ 	/*------------------------------------------------
+     METODOS DE CONVERSÃO
+    ------------------------------------------------*/
+
+	public AdvogadoDto toDto(){
+		return Conversor.converter(this, AdvogadoDto.class);
+	}
+
+	/*------------------------------------------------
+    METODOS DE CRUD
+    ------------------------------------------------*/
+
+	public Advogado forSave(){
+		return this;
+	}
+
+	public Advogado forUpdate(Long id){
+		this.id = id;
+		return this;
+	}
+
 
 /////////////////  CONSTRUTOR  //////////////////
 
-	// FRONT para BACK (Salvar)
-	public Advogado(AdvogadoDTO dto) {
-		super();
-		id = dto.getId();
-		nomeAdvogado = dto.getNomeAdvogado();
-		numeroOAB = dto.getNumeroOAB();
-	}
-
 	// FRONT para BACK com ID (Editar)
-	public Advogado(Long id, AdvogadoDTO dto) {
+	public Advogado(Long id, AdvogadoDto dto) {
 		super();
 		this.id = id;
-		nomeAdvogado = dto.getNomeAdvogado();
+		nome = dto.getNomeAdvogado();
 		numeroOAB = dto.getNumeroOAB();
 	}
 

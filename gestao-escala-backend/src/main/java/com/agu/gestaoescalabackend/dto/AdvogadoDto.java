@@ -1,8 +1,8 @@
 package com.agu.gestaoescalabackend.dto;
 
 import com.agu.gestaoescalabackend.entities.Advogado;
+import com.agu.gestaoescalabackend.util.Conversor;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -13,9 +13,10 @@ import java.io.Serializable;
 @Getter
 @Setter
 @NoArgsConstructor
-@AllArgsConstructor
-public class AdvogadoDTO implements Serializable {
+public class AdvogadoDto implements Serializable {
 	private static final long serialVersionUID = 1L;
+
+	// ATRIBUTOS DE IDENTIFICAÇÃO
 	@JsonProperty(access = JsonProperty.Access.READ_ONLY)
 	private Long id;
 	@NotBlank
@@ -23,14 +24,12 @@ public class AdvogadoDTO implements Serializable {
 	@NotBlank
 	private String numeroOAB;
 
-/////////////////  CONSTRUTOR  //////////////////
+	 /*------------------------------------------------
+     METODOS DE CONVERSÃO
+    ------------------------------------------------*/
 
-	// BACK para FRONT (listar)
-	public AdvogadoDTO(Advogado entity) {
-		super();
-		id = entity.getId();
-		nomeAdvogado = entity.getNomeAdvogado();
-		numeroOAB = entity.getNumeroOAB();
+	public Advogado toEntity(){
+		return Conversor.converter(this, Advogado.class);
 	}
 
 }
