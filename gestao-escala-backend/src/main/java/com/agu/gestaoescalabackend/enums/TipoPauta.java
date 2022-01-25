@@ -1,6 +1,6 @@
 package com.agu.gestaoescalabackend.enums;
 
-public enum Tipo {
+public enum TipoPauta {
     CONCILIAÇÃO,
     INSTRUÇÃO
 }

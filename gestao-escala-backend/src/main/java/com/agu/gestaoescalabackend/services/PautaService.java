@@ -5,7 +5,7 @@ import com.agu.gestaoescalabackend.dto.PautaDto;
 import com.agu.gestaoescalabackend.entities.Mutirao;
 import com.agu.gestaoescalabackend.entities.Pauta;
 import com.agu.gestaoescalabackend.entities.Pautista;
-import com.agu.gestaoescalabackend.entities.TipoStatus;
+import com.agu.gestaoescalabackend.enums.StatusPauta;
 import com.agu.gestaoescalabackend.repositories.MutiraoRepository;
 import com.agu.gestaoescalabackend.repositories.PautaRepository;
 import com.agu.gestaoescalabackend.repositories.PautistaRepository;
@@ -127,7 +127,7 @@ public class PautaService {
 		if (validarCriacaoMutirao(listaPautaDto)) {
 
 			mutiraoDto = mutiraoDto.forSave(listaPautaDto);
-			mutiraoDto.setStatus(TipoStatus.SEM_ESCALA);
+			mutiraoDto.setStatusPauta(StatusPauta.SEM_ESCALA);
 			mutiraoDto.setQuantidaDePautas(0);
 
 			return mutiraoService.save(mutiraoDto).toEntity();
@@ -148,8 +148,8 @@ public class PautaService {
 				if (dataInicialMutirao.isBefore(dataInicialPauta) && dataFinalMutirao.isAfter(dataFinalPauta)) {
 					// Se a condição das datas for verdadeira, retorna o mutirao encontrado
 
-					if (mutirao.getStatus() == TipoStatus.COM_ESCALA)
-						mutirao.setStatus(TipoStatus.PARCIAL_ESCALA);
+					if (mutirao.getStatusPauta() == StatusPauta.COM_ESCALA)
+						mutirao.setStatusPauta(StatusPauta.PARCIAL_ESCALA);
 
 					return mutiraoService.update(mutirao.getId(), mutirao.toDto()).toEntity();
 				}
@@ -197,8 +197,8 @@ public class PautaService {
 	private boolean validarCriacao(PautaDto pautaDto, Pauta pauta) {
 		// Instancia um objeto base para verificar se já existe um registro 'nome'
 		// no banco igual ao do DTO | OU | se não há algum multirão válido para a pauta
-		Pauta pautaExistente = pautaRepository.findByProcessoAndTipo(pautaDto.getProcesso(),
-				pautaDto.getTipo());
+		Pauta pautaExistente = pautaRepository.findByProcessoAndTipoPauta(pautaDto.getProcesso(),
+				pautaDto.getTipoPauta());
 		return (pautaExistente == null || pautaExistente.equals(pauta))
 				&& (pauta.getMutirao() != null);
 	}

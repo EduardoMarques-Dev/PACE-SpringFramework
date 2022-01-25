@@ -1,8 +1,8 @@
 package com.agu.gestaoescalabackend.entities;
 
 import com.agu.gestaoescalabackend.dto.PautaDto;
-import com.agu.gestaoescalabackend.enums.Tipo;
-import com.agu.gestaoescalabackend.enums.Turno;
+import com.agu.gestaoescalabackend.enums.TipoPauta;
+import com.agu.gestaoescalabackend.enums.TurnoPauta;
 import com.agu.gestaoescalabackend.util.Conversor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -14,7 +14,7 @@ import java.io.Serializable;
 import java.time.LocalDate;
 
 @Entity
-@Table(name = "tb_pautas")
+@Table(name = "tb_pauta")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -44,9 +44,9 @@ public class Pauta implements Serializable {
 	//  ATRIBUTOS DE MUTIRAO
 	private String vara;
 	@Enumerated(value = EnumType.STRING)
-	private Tipo tipo;
+	private TipoPauta tipoPauta;
 	@Enumerated(value = EnumType.STRING)
-	private Turno turno;
+	private TurnoPauta turnoPauta;
 
 	// ATRIBUTOS DE RELACIONAMENTO
 	@ManyToOne
@@ -60,9 +60,20 @@ public class Pauta implements Serializable {
      METODOS DE CONVERSÃO
     ------------------------------------------------*/
 
-
 	public PautaDto toDto(){
 		return Conversor.converter(this, PautaDto.class);
+	}
+
+	/*------------------------------------------------
+     METODOS DE NEGÓCIO
+    ------------------------------------------------*/
+
+	public boolean isTheSame(Pauta pauta){
+		if (this.sala == pauta.getSala()
+			&& this.data == pauta.getData()
+			&& this.turnoPauta == pauta.getTurnoPauta())
+			return true;
+		return false;
 	}
 
 /////////////////  CONSTRUTOR  //////////////////
@@ -74,7 +85,7 @@ public class Pauta implements Serializable {
 		this.id = id;
 		data = dto.getData();
 		hora = dto.getHora();
-		turno = dto.getTurno();
+		turnoPauta = dto.getTurnoPauta();
 		sala = dto.getSala();
 		processo = dto.getProcesso();
 		nomeParte = dto.getNomeParte();
@@ -83,7 +94,7 @@ public class Pauta implements Serializable {
 		objeto = dto.getObjeto();
 		vara = dto.getVara();
 		pautista = null;
-		tipo = dto.getTipo();
+		tipoPauta = dto.getTipoPauta();
 	}
 
 

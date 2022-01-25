@@ -3,6 +3,7 @@ package com.agu.gestaoescalabackend.controllers;
 import com.agu.gestaoescalabackend.dto.MutiraoDTO;
 import com.agu.gestaoescalabackend.dto.PautaDto;
 import com.agu.gestaoescalabackend.entities.Pauta;
+import com.agu.gestaoescalabackend.enums.GrupoPautista;
 import com.agu.gestaoescalabackend.repositories.MutiraoRepository;
 import com.agu.gestaoescalabackend.services.MutiraoService;
 import lombok.AllArgsConstructor;
@@ -73,10 +74,9 @@ public class MutiraoController {
 	}
 
 
-	//@PostMapping("/{mutiraoId}/escala")
-	@PostMapping("/{mutiraoId}/{grupo}")
-	public List<Pauta> gerarEscala(@PathVariable Long mutiraoId, @PathVariable String grupo) {
-		return mutiraoService.gerarEscala(mutiraoId, grupo);
+	@PostMapping("/{mutiraoId}/{grupoPautista}")
+	public List<Pauta> gerarEscala(@PathVariable Long mutiraoId, @PathVariable GrupoPautista grupoPautista) {
+		return mutiraoService.gerarEscala(mutiraoId, grupoPautista);
 	}
 
 	/*------------------------------------------------

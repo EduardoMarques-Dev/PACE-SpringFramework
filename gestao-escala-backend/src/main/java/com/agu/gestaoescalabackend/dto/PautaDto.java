@@ -1,8 +1,8 @@
 package com.agu.gestaoescalabackend.dto;
 
 import com.agu.gestaoescalabackend.entities.Pauta;
-import com.agu.gestaoescalabackend.enums.Tipo;
-import com.agu.gestaoescalabackend.enums.Turno;
+import com.agu.gestaoescalabackend.enums.TipoPauta;
+import com.agu.gestaoescalabackend.enums.TurnoPauta;
 import com.agu.gestaoescalabackend.util.Conversor;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
@@ -53,9 +53,11 @@ public class PautaDto implements Serializable {
 	@NotBlank
 	private String vara;
 	@NotNull
-	private Tipo tipo;
+	@JsonProperty(value = "tipo")
+	private TipoPauta tipoPauta;
 	@NotNull
-	private Turno turno;
+	@JsonProperty(value = "turno")
+	private TurnoPauta turnoPauta;
 
 	// ATRIBUTOS DE RELACIONAMENTO
 	@JsonProperty(access = JsonProperty.Access.READ_ONLY)

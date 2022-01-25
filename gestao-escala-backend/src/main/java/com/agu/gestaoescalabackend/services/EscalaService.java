@@ -5,7 +5,7 @@ import com.agu.gestaoescalabackend.dto.PautaDto;
 import com.agu.gestaoescalabackend.entities.Mutirao;
 import com.agu.gestaoescalabackend.entities.Pauta;
 import com.agu.gestaoescalabackend.entities.Pautista;
-import com.agu.gestaoescalabackend.enums.Tipo;
+import com.agu.gestaoescalabackend.enums.TipoPauta;
 import com.agu.gestaoescalabackend.repositories.PautaRepository;
 import com.agu.gestaoescalabackend.repositories.PautistaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -172,19 +172,19 @@ public class EscalaService {
 			}
 		}
 
-		Tipo tipo = listaPautaEscala.get(0).getTipo();
+		TipoPauta tipoPauta = listaPautaEscala.get(0).getTipoPauta();
 
 		// insere na lista todos os procuradores
 		// int cont = 0;
-		if (tipo.equals(Tipo.INSTRUÇÃO)) {
+		if (tipoPauta.equals(TipoPauta.INSTRUÇÃO)) {
 			for (Pautista pEscala : listaPautista) {
-				if ((pEscala.getGrupo().toString().equalsIgnoreCase("procurador"))
-						&& (pEscala.getStatus().toString().equalsIgnoreCase("ativo")))
+				if ((pEscala.getGrupoPautista().toString().equalsIgnoreCase("procurador"))
+						&& (pEscala.getStatusPautista().toString().equalsIgnoreCase("ativo")))
 					listaPautistaEscala.add(pEscala);
 			}
 		} else {
 			for (Pautista pEscala : listaPautista) {
-				if (pEscala.getStatus().toString().equalsIgnoreCase("ativo"))
+				if (pEscala.getStatusPautista().toString().equalsIgnoreCase("ativo"))
 					listaPautistaEscala.add(pEscala);
 			}
 		}

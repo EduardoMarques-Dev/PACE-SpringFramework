@@ -12,7 +12,6 @@ import java.util.List;
 @Repository
 public interface MutiraoRepository extends JpaRepository<Mutirao, Long> {
 	List<Mutirao> findAllByOrderByIdAsc();
-	Mutirao findByVaraAndDataInicialAndDataFinal(String vara, LocalDate dataInicial, LocalDate dataFinal);
 	List<Mutirao> findByVara(String vara);
 	boolean  existsByVaraAndDataInicialAndDataFinal(String vara, LocalDate dataInicial, LocalDate dataFinal);
 

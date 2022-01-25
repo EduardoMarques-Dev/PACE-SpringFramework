@@ -1,6 +1,7 @@
 package com.agu.gestaoescalabackend.entities;
 
 import com.agu.gestaoescalabackend.dto.MutiraoDTO;
+import com.agu.gestaoescalabackend.enums.StatusPauta;
 import com.agu.gestaoescalabackend.util.Conversor;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -25,7 +26,7 @@ public class Mutirao implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	@Enumerated(value = EnumType.STRING)
-	private TipoStatus status;
+	private StatusPauta statusPauta;
 
 	// ATRIBUTOS DE REGISTRO
 	private Integer quantidaDePautas;

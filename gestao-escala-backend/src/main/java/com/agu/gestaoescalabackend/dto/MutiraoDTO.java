@@ -1,7 +1,7 @@
 package com.agu.gestaoescalabackend.dto;
 
 import com.agu.gestaoescalabackend.entities.Mutirao;
-import com.agu.gestaoescalabackend.entities.TipoStatus;
+import com.agu.gestaoescalabackend.enums.StatusPauta;
 import com.agu.gestaoescalabackend.util.Conversor;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
@@ -24,8 +24,8 @@ public class MutiraoDTO implements Serializable {
 	// ATRIBUTOS DE IDENTIFICAÇÃO
 	@JsonProperty(access = JsonProperty.Access.READ_ONLY)
 	private Long id;
-	@JsonProperty(access = JsonProperty.Access.READ_ONLY)
-	private TipoStatus status;
+	@JsonProperty(access = JsonProperty.Access.READ_ONLY, value = "status")
+	private StatusPauta statusPauta;
 
 	// ATRIBUTOS DE REGISTRO
 	@JsonProperty(access = JsonProperty.Access.READ_ONLY)
