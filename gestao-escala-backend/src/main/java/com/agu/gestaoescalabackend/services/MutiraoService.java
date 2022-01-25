@@ -9,10 +9,10 @@ import com.agu.gestaoescalabackend.dto.PautaDto;
 import com.agu.gestaoescalabackend.entities.Mutirao;
 import com.agu.gestaoescalabackend.entities.Pauta;
 import com.agu.gestaoescalabackend.entities.Pautista;
-import com.agu.gestaoescalabackend.entities.TipoStatus;
-import com.agu.gestaoescalabackend.enums.Grupo;
-import com.agu.gestaoescalabackend.enums.Status;
-import com.agu.gestaoescalabackend.enums.Turno;
+import com.agu.gestaoescalabackend.enums.StatusPauta;
+import com.agu.gestaoescalabackend.enums.GrupoPautista;
+import com.agu.gestaoescalabackend.enums.StatusPautista;
+import com.agu.gestaoescalabackend.enums.TurnoPauta;
 import com.agu.gestaoescalabackend.repositories.MutiraoRepository;
 import com.agu.gestaoescalabackend.repositories.PautaRepository;
 import com.agu.gestaoescalabackend.repositories.PautistaRepository;
@@ -102,7 +102,7 @@ public class MutiraoService {
 		Pauta pauta = pautaRepository.findById(pautaDeAudienciaId).get();
 		List<Pauta> listaPautaDoProcurador =
 				pautaRepository.findByDataAndSalaAndTurno(pauta.getData(), pauta.getSala(),
-						pauta.getTurno().toString());
+						pauta.getTurnoPauta().toString());
 		Pautista pautistaAntigo = pautistaRepository.findById(pauta.getPautista().getId()).get();
 		Pautista pautistaNovo = pautistaRepository.findById(procuradorId).get();
 
@@ -126,21 +126,21 @@ public class MutiraoService {
 //////////////////////////////////    ESCALA    ///////////////////////////////////
 
 	@Transactional
-	public List<Pauta> gerarEscala(Long mutiraoId, Grupo grupo) { // 24 linhas
+	public List<Pauta> gerarEscala(Long mutiraoId, GrupoPautista grupoPautista) { // 24 linhas
 
 		// INSTANCIA A LISTA DE OBJETOS
 		List<Pauta> pautaList = pautaRepository.findAllByMutiraoId(mutiraoId);
 		List<Pautista> procuradorList = retornarListaDe(
-				Grupo.PROCURADOR);
+				GrupoPautista.PROCURADOR);
 		List<Pautista> prepostoList = retornarListaDe(
-				Grupo.PREPOSTO);
+				GrupoPautista.PREPOSTO);
 		List<Pautista> pautistaList = pautistaRepository.findAllByStatusOrderBySaldoPesoAsc(
-				Status.ATIVO);
+				StatusPautista.ATIVO);
 
 		// ---------------
 		String salaDaPautaAtual;
 		LocalDate diaDaPautaAtual;
-		Turno turnoDaPautaAtual;
+		TurnoPauta turnoPautaDaPautaAtual;
 
 		// ----------------
 		String tipoDoUltimoPautistaInserido = "Nenhum";
@@ -164,7 +164,7 @@ public class MutiraoService {
 			if (pautaVerificada.isTheSame(pautaAtual)) {
 
 				tipoDoUltimoPautistaInserido = validarInserçãoDePautista(pautaAtual, procuradorList,
-						prepostoList, pautistaList, repetiuPautista, grupo);
+						prepostoList, pautistaList, repetiuPautista, grupoPautista);
 
 			} else {
 
@@ -174,18 +174,18 @@ public class MutiraoService {
 				switch (tipoDoUltimoPautistaInserido) {
 					case "Procurador":
 						System.out.println("Else Procurador");
-						repetiuPautista = reordenarPautista(procuradorList, repetiuPautista, grupo);
+						repetiuPautista = reordenarPautista(procuradorList, repetiuPautista, grupoPautista);
 
 						// Ordena apenas a lista dos prepostos
 						break;
 					case "Preposto":
 						System.out.println("Else Preposto");
-						repetiuPautista = reordenarPautista(prepostoList, repetiuPautista, grupo);
+						repetiuPautista = reordenarPautista(prepostoList, repetiuPautista, grupoPautista);
 
 						break;
 					case "Todos":
 						System.out.println("Else Todos");
-						repetiuPautista = reordenarPautista(pautistaList, repetiuPautista, grupo);
+						repetiuPautista = reordenarPautista(pautistaList, repetiuPautista, grupoPautista);
 						System.out.println("Voltou para Else Todos: repetiu pautista: " + repetiuPautista);
 						break;
 				}
@@ -196,7 +196,7 @@ public class MutiraoService {
 				pautaVerificada = pautaAtual;
 
 
-				validarInserçãoDePautista(pautaAtual, procuradorList, prepostoList, pautistaList, repetiuPautista, grupo);
+				validarInserçãoDePautista(pautaAtual, procuradorList, prepostoList, pautistaList, repetiuPautista, grupoPautista);
 
 				if (repetiuPautista) {
 					System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
@@ -212,7 +212,7 @@ public class MutiraoService {
 
 //////////////////////////////////    MÉTODOS    ///////////////////////////////////
 
-	private boolean reordenarPautista(List<Pautista> listaPautista, boolean repetiuPautista, Grupo grupo) {
+	private boolean reordenarPautista(List<Pautista> listaPautista, boolean repetiuPautista, GrupoPautista grupoPautista) {
 		String nomeAntigo;
 		int marcador = 0;
 
@@ -236,7 +236,7 @@ public class MutiraoService {
 	}
 
 	private String validarInserçãoDePautista(Pauta pautaAtual, List<Pautista> listaProcurador,
-											 List<Pautista> listaPreposto, List<Pautista> listaPautista, boolean repetiuPautista, Grupo grupo) {
+											 List<Pautista> listaPreposto, List<Pautista> listaPautista, boolean repetiuPautista, GrupoPautista grupoPautista) {
 
 		// O MARCADOR SERVE PARA PEGAR O PRÓXIMO PAUTISTA, CASO IDENTIFIQUE QUE O PAUTISTA REPETIU
 
@@ -244,11 +244,11 @@ public class MutiraoService {
 		if (repetiuPautista) {
 			pautistaIndex = 1;
 		}
-			if (grupo.equals(Grupo.PROCURADOR)) {
+			if (grupoPautista.equals(GrupoPautista.PROCURADOR)) {
 				definirPautista(listaProcurador.get(pautistaIndex), pautaAtual);
 				return "Procurador";
 				
-			} else if (grupo.equals(Grupo.PREPOSTO)){
+			} else if (grupoPautista.equals(GrupoPautista.PREPOSTO)){
 
 				definirPautista(listaPreposto.get(pautistaIndex), pautaAtual);
 				return "Preposto";
@@ -274,13 +274,13 @@ public class MutiraoService {
 
 	}
 
-	private List<Pautista> retornarListaDe(Grupo grupo) {
-		return pautistaRepository.findAllByGrupoAndStatusOrderBySaldoPesoAsc(grupo, Status.ATIVO);
+	private List<Pautista> retornarListaDe(GrupoPautista grupoPautista) {
+		return pautistaRepository.findAllByGrupoAndStatusOrderBySaldoPesoAsc(grupoPautista, StatusPautista.ATIVO);
 	}
 
 	private void definirStatusMutiraoParaSemEscala(Long mutiraoId) {
 		Mutirao mutirao = mutiraoRepository.findById(mutiraoId).get();
-		mutirao.setStatus(TipoStatus.COM_ESCALA);
+		mutirao.setStatus(StatusPauta.COM_ESCALA);
 		mutiraoRepository.save(mutirao);
 	}
 

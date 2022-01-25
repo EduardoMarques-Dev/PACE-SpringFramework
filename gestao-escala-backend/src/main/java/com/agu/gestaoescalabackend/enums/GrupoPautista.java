@@ -1,6 +1,6 @@
 package com.agu.gestaoescalabackend.enums;
 
-public enum Grupo {
+public enum GrupoPautista {
     PREPOSTO,
     PROCURADOR
     

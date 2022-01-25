@@ -1,6 +1,6 @@
 package com.agu.gestaoescalabackend.enums;
 
-public enum Status {
+public enum StatusPautista {
     ATIVO,
     INATIVO,
     FÉRIAS,

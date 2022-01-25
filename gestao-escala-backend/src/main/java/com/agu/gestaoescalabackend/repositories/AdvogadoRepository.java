@@ -15,7 +15,7 @@ public interface AdvogadoRepository extends JpaRepository<Advogado, Long>{
 
 	@Modifying
 	@Query(
-			value = "TRUNCATE TABLE tb_advogados RESTART IDENTITY CASCADE;",
+			value = "TRUNCATE TABLE tb_advogado RESTART IDENTITY CASCADE;",
 			nativeQuery = true
 	)
 	void truncateTable();

@@ -1,8 +1,8 @@
 package com.agu.gestaoescalabackend.dto;
 
 import com.agu.gestaoescalabackend.entities.Pautista;
-import com.agu.gestaoescalabackend.enums.Grupo;
-import com.agu.gestaoescalabackend.enums.Status;
+import com.agu.gestaoescalabackend.enums.GrupoPautista;
+import com.agu.gestaoescalabackend.enums.StatusPautista;
 import com.agu.gestaoescalabackend.util.Conversor;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
@@ -29,11 +29,11 @@ public class PautistaDto implements Serializable {
     @NotBlank
     private String nome;
     @NotNull
-    private Grupo grupo;
+    private GrupoPautista grupoPautista;
 
     // ATRIBUTOS DE ESTADO
     @NotNull
-    private Status status;
+    private StatusPautista statusPautista;
     private LocalDate dataInicial;
     private LocalDate dataFinal;
 

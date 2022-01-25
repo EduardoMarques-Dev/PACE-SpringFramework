@@ -1,8 +1,8 @@
 package com.agu.gestaoescalabackend.entities;
 
 import com.agu.gestaoescalabackend.dto.PautistaDto;
-import com.agu.gestaoescalabackend.enums.Grupo;
-import com.agu.gestaoescalabackend.enums.Status;
+import com.agu.gestaoescalabackend.enums.GrupoPautista;
+import com.agu.gestaoescalabackend.enums.StatusPautista;
 import com.agu.gestaoescalabackend.util.Conversor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -14,7 +14,7 @@ import java.io.Serializable;
 import java.time.LocalDate;
 
 @Entity
-@Table(name = "tb_pautistas")
+@Table(name = "tb_pautista")
 @Getter
 @Setter
 @ToString
@@ -29,11 +29,11 @@ public class Pautista implements Serializable, Comparable<Pautista> {
     @Column(unique = true)
     private String nome;
     @Enumerated(value = EnumType.STRING)
-    private Grupo grupo;
+    private GrupoPautista grupoPautista;
 
     // ATRIBUTOS DE ESTADO
     @Enumerated(value = EnumType.STRING)
-    private Status status;
+    private StatusPautista statusPautista;
     private LocalDate dataInicial;
     private LocalDate dataFinal;
 

@@ -1,6 +1,6 @@
 package com.agu.gestaoescalabackend.enums;
 
-public enum Turno {
+public enum TurnoPauta {
     MANHÃ,
     TARDE
 }
