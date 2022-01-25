@@ -12,6 +12,7 @@ import com.agu.gestaoescalabackend.entities.Pautista;
 import com.agu.gestaoescalabackend.entities.TipoStatus;
 import com.agu.gestaoescalabackend.enums.Grupo;
 import com.agu.gestaoescalabackend.enums.Status;
+import com.agu.gestaoescalabackend.enums.Turno;
 import com.agu.gestaoescalabackend.repositories.MutiraoRepository;
 import com.agu.gestaoescalabackend.repositories.PautaRepository;
 import com.agu.gestaoescalabackend.repositories.PautistaRepository;
@@ -125,44 +126,45 @@ public class MutiraoService {
 //////////////////////////////////    ESCALA    ///////////////////////////////////
 
 	@Transactional
-	public List<Pauta> gerarEscala(Long mutiraoId, String grupo) { // 24 linhas
+	public List<Pauta> gerarEscala(Long mutiraoId, Grupo grupo) { // 24 linhas
 
-		List<Pauta> listaPauta = pautaRepository.findAllByMutiraoId(mutiraoId);
-		List<Pautista> listaProcurador = retornarListaDe(
+		// INSTANCIA A LISTA DE OBJETOS
+		List<Pauta> pautaList = pautaRepository.findAllByMutiraoId(mutiraoId);
+		List<Pautista> procuradorList = retornarListaDe(
 				Grupo.PROCURADOR);
-		List<Pautista> listaPreposto = retornarListaDe(
+		List<Pautista> prepostoList = retornarListaDe(
 				Grupo.PREPOSTO);
-		List<Pautista> listaPautista = pautistaRepository.findAllByStatusOrderBySaldoPesoAsc(
+		List<Pautista> pautistaList = pautistaRepository.findAllByStatusOrderBySaldoPesoAsc(
 				Status.ATIVO);
-		String salaAtual = listaPauta.get(0).getSala();
-		LocalDate diaAtual = listaPauta.get(0).getData();
-		String turnoAtual = listaPauta.get(0).getTurno().toString();
-		String salaDaPautaAtual = listaPauta.get(0).getSala();
-		LocalDate diaDaPautaAtual = listaPauta.get(0).getData();
-		String turnoDaPautaAtual = listaPauta.get(0).getTurno().toString();
+
+		// ---------------
+		String salaDaPautaAtual;
+		LocalDate diaDaPautaAtual;
+		Turno turnoDaPautaAtual;
+
+		// ----------------
 		String tipoDoUltimoPautistaInserido = "Nenhum";
 		boolean repetiuPautista = false;
-		
-		for(Pautista lista : listaPautista) {
+
+		// CHECA O SALDO PESO
+		System.out.println("CHECAR SALDO PESO");
+		for(Pautista lista : pautistaList) {
 			System.out.println(lista.getNome()+": "+lista.getSaldoPeso());
 		}
 
 		definirStatusMutiraoParaSemEscala(mutiraoId);
 
-		// percorre a lista para inserir e salvar no banco o procurador
-		for (Pauta value : listaPauta) {
-			// Atribuição para facilitar a legibilidade da condicional
-			salaDaPautaAtual = value.getSala();
-			diaDaPautaAtual = value.getData();
-			turnoDaPautaAtual = value.getTurno().toString();
+		// Inicializa as informações da pauta
+		Pauta pautaVerificada = pautaList.get(0);
 
-			// compara se a sala da lista que foi pego inicialmente é igual a sala da lista
-			if ((salaAtual.equals(salaDaPautaAtual)) && (diaAtual.equals(diaDaPautaAtual))
-					&& (turnoAtual.equals(turnoDaPautaAtual))) {
-				System.out.println("Primeiro if");
-				tipoDoUltimoPautistaInserido = validarInserçãoDePautista(value, listaProcurador,
-						listaPreposto, listaPautista, repetiuPautista, grupo);
-				System.out.println("Voltou para o Primeiro if: " + tipoDoUltimoPautistaInserido);
+		// percorre a lista para inserir e salvar no banco o procurador
+		for (Pauta pautaAtual : pautaList) {
+
+			// Verifica se a sala, dia ou turno mudaram
+			if (pautaVerificada.isTheSame(pautaAtual)) {
+
+				tipoDoUltimoPautistaInserido = validarInserçãoDePautista(pautaAtual, procuradorList,
+						prepostoList, pautistaList, repetiuPautista, grupo);
 
 			} else {
 
@@ -172,18 +174,18 @@ public class MutiraoService {
 				switch (tipoDoUltimoPautistaInserido) {
 					case "Procurador":
 						System.out.println("Else Procurador");
-						repetiuPautista = reordenarPautista(listaProcurador, repetiuPautista, grupo);
+						repetiuPautista = reordenarPautista(procuradorList, repetiuPautista, grupo);
 
 						// Ordena apenas a lista dos prepostos
 						break;
 					case "Preposto":
 						System.out.println("Else Preposto");
-						repetiuPautista = reordenarPautista(listaPreposto, repetiuPautista, grupo);
+						repetiuPautista = reordenarPautista(prepostoList, repetiuPautista, grupo);
 
 						break;
 					case "Todos":
 						System.out.println("Else Todos");
-						repetiuPautista = reordenarPautista(listaPautista, repetiuPautista, grupo);
+						repetiuPautista = reordenarPautista(pautistaList, repetiuPautista, grupo);
 						System.out.println("Voltou para Else Todos: repetiu pautista: " + repetiuPautista);
 						break;
 				}
@@ -191,12 +193,10 @@ public class MutiraoService {
 				System.out.println("----------------------------------- ");
 
 				// Atribui para a salaLista a sala corrente
-				salaAtual = value.getSala();
-				diaAtual = value.getData();
-				turnoAtual = value.getTurno().toString();
+				pautaVerificada = pautaAtual;
 
 
-				validarInserçãoDePautista(value, listaProcurador, listaPreposto, listaPautista, repetiuPautista, grupo);
+				validarInserçãoDePautista(pautaAtual, procuradorList, prepostoList, pautistaList, repetiuPautista, grupo);
 
 				if (repetiuPautista) {
 					System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
@@ -212,7 +212,7 @@ public class MutiraoService {
 
 //////////////////////////////////    MÉTODOS    ///////////////////////////////////
 
-	private boolean reordenarPautista(List<Pautista> listaPautista, boolean repetiuPautista, String grupo) {
+	private boolean reordenarPautista(List<Pautista> listaPautista, boolean repetiuPautista, Grupo grupo) {
 		String nomeAntigo;
 		int marcador = 0;
 
@@ -236,29 +236,27 @@ public class MutiraoService {
 	}
 
 	private String validarInserçãoDePautista(Pauta pautaAtual, List<Pautista> listaProcurador,
-											 List<Pautista> listaPreposto, List<Pautista> listaPautista, boolean repetiuPautista, String grupo) {
-		System.out.println("Validar");
-		int marcador = 0;
-		if (repetiuPautista) {
-			marcador = 1;
-		}
-		// if (pautaAtual.getProcurador() == null) {
-			if (grupo.equalsIgnoreCase("1")) {
+											 List<Pautista> listaPreposto, List<Pautista> listaPautista, boolean repetiuPautista, Grupo grupo) {
 
-				definirPautista(listaProcurador.get(marcador), pautaAtual);
+		// O MARCADOR SERVE PARA PEGAR O PRÓXIMO PAUTISTA, CASO IDENTIFIQUE QUE O PAUTISTA REPETIU
+
+		int pautistaIndex = 0;
+		if (repetiuPautista) {
+			pautistaIndex = 1;
+		}
+			if (grupo.equals(Grupo.PROCURADOR)) {
+				definirPautista(listaProcurador.get(pautistaIndex), pautaAtual);
 				return "Procurador";
 				
-			} else if (grupo.equalsIgnoreCase("2")){
+			} else if (grupo.equals(Grupo.PREPOSTO)){
 
-				definirPautista(listaPreposto.get(marcador), pautaAtual);
+				definirPautista(listaPreposto.get(pautistaIndex), pautaAtual);
 				return "Preposto";
 				
 			} else {
-				System.out.println("ValidarIf3: marcador: " + marcador);
-				definirPautista(listaPautista.get(marcador), pautaAtual);
+				definirPautista(listaPautista.get(pautistaIndex), pautaAtual);
 				return "Todos";
 			}
-		//} return "Nenhum";
 	}
 
 	private boolean validarCriacao(MutiraoDTO mutiraoDto) {
@@ -288,12 +286,14 @@ public class MutiraoService {
 
 	private void definirPautista(Pautista pautistaAtual, Pauta pautaAtual) {
 		// Seta na pauta o procurador na posição especificada e incrementa seu saldo
-		System.out.println("Definir Pautista");
+
 		pautaAtual.setPautista(pautistaAtual);
 		pautistaAtual.setSaldo(pautistaAtual.getSaldo() + 1);
 		pautistaAtual.setSaldoPeso(pautistaAtual.getSaldo() * pautistaAtual.getPeso());
+
 		System.out.println(pautistaAtual.getNome()+"= "+pautistaAtual.getSaldo()+"  "+
 				pautistaAtual.getSaldoPeso());
+
 		// Salva a pauta e o procurador com o saldo atualizado no banco
 		pautistaRepository.save(pautistaAtual);
 		pautaRepository.save(pautaAtual);

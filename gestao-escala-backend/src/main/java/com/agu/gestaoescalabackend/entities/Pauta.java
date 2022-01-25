@@ -60,9 +60,20 @@ public class Pauta implements Serializable {
      METODOS DE CONVERSÃO
     ------------------------------------------------*/
 
-
 	public PautaDto toDto(){
 		return Conversor.converter(this, PautaDto.class);
+	}
+
+	/*------------------------------------------------
+     METODOS DE NEGÓCIO
+    ------------------------------------------------*/
+
+	public boolean isTheSame(Pauta pauta){
+		if (this.sala == pauta.getSala()
+			&& this.data == pauta.getData()
+			&& this.turno == pauta.getTurno())
+			return true;
+		return false;
 	}
 
 /////////////////  CONSTRUTOR  //////////////////
