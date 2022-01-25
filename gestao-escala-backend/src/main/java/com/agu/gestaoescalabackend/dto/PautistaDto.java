@@ -29,10 +29,12 @@ public class PautistaDto implements Serializable {
     @NotBlank
     private String nome;
     @NotNull
+    @JsonProperty(value = "grupo")
     private GrupoPautista grupoPautista;
 
     // ATRIBUTOS DE ESTADO
     @NotNull
+    @JsonProperty(value = "status")
     private StatusPautista statusPautista;
     private LocalDate dataInicial;
     private LocalDate dataFinal;

@@ -24,8 +24,8 @@ public class MutiraoDTO implements Serializable {
 	// ATRIBUTOS DE IDENTIFICAÇÃO
 	@JsonProperty(access = JsonProperty.Access.READ_ONLY)
 	private Long id;
-	@JsonProperty(access = JsonProperty.Access.READ_ONLY)
-	private StatusPauta status;
+	@JsonProperty(access = JsonProperty.Access.READ_ONLY, value = "status")
+	private StatusPauta statusPauta;
 
 	// ATRIBUTOS DE REGISTRO
 	@JsonProperty(access = JsonProperty.Access.READ_ONLY)

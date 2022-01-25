@@ -26,7 +26,7 @@ public class Mutirao implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	@Enumerated(value = EnumType.STRING)
-	private StatusPauta status;
+	private StatusPauta statusPauta;
 
 	// ATRIBUTOS DE REGISTRO
 	private Integer quantidaDePautas;

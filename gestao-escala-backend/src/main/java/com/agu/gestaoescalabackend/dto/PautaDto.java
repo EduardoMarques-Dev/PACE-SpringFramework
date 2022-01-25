@@ -53,8 +53,10 @@ public class PautaDto implements Serializable {
 	@NotBlank
 	private String vara;
 	@NotNull
+	@JsonProperty(value = "tipo")
 	private TipoPauta tipoPauta;
 	@NotNull
+	@JsonProperty(value = "turno")
 	private TurnoPauta turnoPauta;
 
 	// ATRIBUTOS DE RELACIONAMENTO

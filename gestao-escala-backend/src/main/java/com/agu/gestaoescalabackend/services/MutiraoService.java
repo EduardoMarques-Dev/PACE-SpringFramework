@@ -280,7 +280,7 @@ public class MutiraoService {
 
 	private void definirStatusMutiraoParaSemEscala(Long mutiraoId) {
 		Mutirao mutirao = mutiraoRepository.findById(mutiraoId).get();
-		mutirao.setStatus(StatusPauta.COM_ESCALA);
+		mutirao.setStatusPauta(StatusPauta.COM_ESCALA);
 		mutiraoRepository.save(mutirao);
 	}
 

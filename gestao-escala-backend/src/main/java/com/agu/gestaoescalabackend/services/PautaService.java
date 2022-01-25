@@ -127,7 +127,7 @@ public class PautaService {
 		if (validarCriacaoMutirao(listaPautaDto)) {
 
 			mutiraoDto = mutiraoDto.forSave(listaPautaDto);
-			mutiraoDto.setStatus(StatusPauta.SEM_ESCALA);
+			mutiraoDto.setStatusPauta(StatusPauta.SEM_ESCALA);
 			mutiraoDto.setQuantidaDePautas(0);
 
 			return mutiraoService.save(mutiraoDto).toEntity();
@@ -148,8 +148,8 @@ public class PautaService {
 				if (dataInicialMutirao.isBefore(dataInicialPauta) && dataFinalMutirao.isAfter(dataFinalPauta)) {
 					// Se a condição das datas for verdadeira, retorna o mutirao encontrado
 
-					if (mutirao.getStatus() == StatusPauta.COM_ESCALA)
-						mutirao.setStatus(StatusPauta.PARCIAL_ESCALA);
+					if (mutirao.getStatusPauta() == StatusPauta.COM_ESCALA)
+						mutirao.setStatusPauta(StatusPauta.PARCIAL_ESCALA);
 
 					return mutiraoService.update(mutirao.getId(), mutirao.toDto()).toEntity();
 				}
