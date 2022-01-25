@@ -14,9 +14,9 @@ import java.util.Optional;
 @Repository
 public interface PautaRepository extends JpaRepository<Pauta, Long> {
 
-	Pauta findByProcessoAndTipo(String processo, TipoPauta tipoPauta);
+	Pauta findByProcessoAndTipoPauta(String processo, TipoPauta tipoPauta);
 
-	List<Pauta> findByDataAndSalaAndTurno(LocalDate data, String sala, String turno);
+	List<Pauta> findByDataAndSalaAndTurnoPauta(LocalDate data, String sala, String turno);
 
 	List<Pauta> findByVara(String vara);
 

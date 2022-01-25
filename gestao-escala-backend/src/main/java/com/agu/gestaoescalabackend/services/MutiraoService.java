@@ -101,7 +101,7 @@ public class MutiraoService {
 
 		Pauta pauta = pautaRepository.findById(pautaDeAudienciaId).get();
 		List<Pauta> listaPautaDoProcurador =
-				pautaRepository.findByDataAndSalaAndTurno(pauta.getData(), pauta.getSala(),
+				pautaRepository.findByDataAndSalaAndTurnoPauta(pauta.getData(), pauta.getSala(),
 						pauta.getTurnoPauta().toString());
 		Pautista pautistaAntigo = pautistaRepository.findById(pauta.getPautista().getId()).get();
 		Pautista pautistaNovo = pautistaRepository.findById(procuradorId).get();
@@ -134,7 +134,7 @@ public class MutiraoService {
 				GrupoPautista.PROCURADOR);
 		List<Pautista> prepostoList = retornarListaDe(
 				GrupoPautista.PREPOSTO);
-		List<Pautista> pautistaList = pautistaRepository.findAllByStatusOrderBySaldoPesoAsc(
+		List<Pautista> pautistaList = pautistaRepository.findAllByStatusPautistaOrderBySaldoPesoAsc(
 				StatusPautista.ATIVO);
 
 		// ---------------
@@ -275,7 +275,7 @@ public class MutiraoService {
 	}
 
 	private List<Pautista> retornarListaDe(GrupoPautista grupoPautista) {
-		return pautistaRepository.findAllByGrupoAndStatusOrderBySaldoPesoAsc(grupoPautista, StatusPautista.ATIVO);
+		return pautistaRepository.findAllByGrupoPautistaAndStatusPautistaOrderBySaldoPesoAsc(grupoPautista, StatusPautista.ATIVO);
 	}
 
 	private void definirStatusMutiraoParaSemEscala(Long mutiraoId) {

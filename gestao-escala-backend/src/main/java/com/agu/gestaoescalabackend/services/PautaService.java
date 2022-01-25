@@ -197,7 +197,7 @@ public class PautaService {
 	private boolean validarCriacao(PautaDto pautaDto, Pauta pauta) {
 		// Instancia um objeto base para verificar se já existe um registro 'nome'
 		// no banco igual ao do DTO | OU | se não há algum multirão válido para a pauta
-		Pauta pautaExistente = pautaRepository.findByProcessoAndTipo(pautaDto.getProcesso(),
+		Pauta pautaExistente = pautaRepository.findByProcessoAndTipoPauta(pautaDto.getProcesso(),
 				pautaDto.getTipoPauta());
 		return (pautaExistente == null || pautaExistente.equals(pauta))
 				&& (pauta.getMutirao() != null);
