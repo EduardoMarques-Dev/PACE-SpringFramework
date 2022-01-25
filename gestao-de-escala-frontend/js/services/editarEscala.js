@@ -33,7 +33,7 @@ var pautaJson = {
 }
 
 var pautistaJson = {
-  "nomeProcurador": "",
+  "nome": "",
   "status": "",
   "dataInicial":"",
   "dataFinal":"",
@@ -44,7 +44,7 @@ var pautistaJson = {
 window.onload = function() {
 
   
-  axios.get(baseURL + 'pautas/').then(response => {
+  axios.get(baseURL + 'pauta/').then(response => {
 
 
     pautas = response.data;
@@ -58,27 +58,27 @@ window.onload = function() {
     if(procurador == null){
       pautaJson.procurador = "";
     }else{
-      pautaJson.procurador = procurador.nomeProcurador;
+      pautaJson.procurador = procurador.nome;
     }
 
     pautistaAntigo = pautaJson.procurador;
-    console.log(procurador.nomeProcurador)
+    console.log(procurador.nome)
     console.log(procurador.id)
 
     document.getElementById("data-pauta").value = pautaJson.data;
     document.getElementById("hora-pauta").value = pautaJson.hora;
     document.getElementById("sala-pauta").value = pautaJson.sala;
     document.getElementById("processo").value = pautaJson.processo;
-    document.getElementById("pautista").value = procurador.nomeProcurador;
+    document.getElementById("pautista").value = procurador.nome;
 
-    axios.get(baseURL + 'procuradores/status?status=ATIVO,INATIVO').then(response => {
+    axios.get(baseURL + 'pautista/status?status=ATIVO,INATIVO').then(response => {
       var lista = response.data;
       lista.forEach(function(procurador){
           procuradores.push(procurador);
       });
       console.log(procuradores)
       selectPautistas(procuradores);
-      document.getElementById("pautista").value = procurador.nomeProcurador;
+      document.getElementById("pautista").value = procurador.nome;
     }).catch(error => console.error(error)); 
     
   }).catch(error => console.error(error));
@@ -102,7 +102,7 @@ $('#salvar-editado').click( function () {
     var selectPautista = document.getElementById('pautista');
     selectPautista = selectPautista.options[selectPautista.selectedIndex].value;
 
-    var pautista = procuradores.filter(item =>  item.nomeProcurador == selectPautista);
+    var pautista = procuradores.filter(item =>  item.nome == selectPautista);
     pautaJson.procurador = pautista[0];
     pautaJson.procuradorDto = pautista[0];
 
@@ -117,14 +117,14 @@ $('#salvar-editado').click( function () {
 
 function editar(pautistaId){
 
-  axios.get(baseURL + 'pautas/').then(response => {
+  axios.get(baseURL + 'pauta/').then(response => {
     pautas = response.data;
     processo = sessionStorage.getItem('processo'); 
     pautaJson = pautas.filter(item =>  item.processo == processo);
     pautaJson = pautaJson[0];
 
-    console.log(baseURL + "mutiroes/" + pautaJson.id + "/" + pautistaId)
-      axios.put(baseURL + "mutiroes/" + pautaJson.id + "/" + pautistaId).then(response => {
+    console.log(baseURL + "mutirao/" + pautaJson.id + "/" + pautistaId)
+      axios.put(baseURL + "mutirao/" + pautaJson.id + "/" + pautistaId).then(response => {
         console.log(response.status)
         //limparCampos();
         window.history.back();
@@ -160,7 +160,7 @@ function selectPautistas(procuradores){
      if (procuradores){
       var option;
       $.each(procuradores, function(i, obj){
-        option += '<option value="'+obj.nomeProcurador+'">'+obj.nomeProcurador+'</option>';
+        option += '<option value="'+obj.nome+'">'+obj.nome+'</option>';
       })
      // $('#mensagem').html('<span class="mensagem">Total de paises encontrados.: '+dados.length+'</span>');
       $('#pautista').html(option).show();

@@ -10,7 +10,7 @@ var selectVara = 'TODAS'
 var tablePautista = document.getElementById("tablePautista");
 
 var pautistaJson = {
-  "nomeProcurador": "",
+  "nome": "",
   "status": "",
   "dataInicial":"",
   "dataFinal":"",
@@ -40,12 +40,12 @@ function pegarProcuradores(){
   var vara = document.getElementById('vara');
   varaAtual = vara.options[vara.selectedIndex].value;
 
-  axios.get(baseURL + 'procuradores/').then(response => {
+  axios.get(baseURL + 'pautista/').then(response => {
     var lista = response.data;
     lista.forEach(function(procurador){
       procurador.saldo = parseInt(procurador.saldo);
-      if (procurador.status == "Ativo"){     
-      // console.log(procurador.nomeProcurador+' '+procurador.saldo)
+      if (procurador.status == "ATIVO"){     
+      // console.log(procurador.nome+' '+procurador.saldo)
         procuradores.push(procurador);
       }
     });
@@ -61,7 +61,7 @@ function pegarProcuradores(){
 
 function listarTablePautista(lista){
   lista.forEach(function(procurador){
-    addRowTablePautista(procurador.nomeProcurador, procurador.saldo);
+    addRowTablePautista(procurador.nome, procurador.saldo);
   });
 }
 
@@ -78,7 +78,7 @@ function selectPautistas(procuradores){
      if (procuradores){
       var option = '<option selected>TODOS</option>';
       $.each(procuradores, function(i, obj){
-        option += '<option value="'+obj.id+'">'+obj.nomeProcurador+'</option>';
+        option += '<option value="'+obj.id+'">'+obj.nome+'</option>';
       })
     //  $('#mensagem').html('<span class="mensagem">Total  encontrados.: '+obj.id+'</span>');
       $('#pautista').html(option).show();
@@ -96,7 +96,7 @@ function atualizarTablePautitas(listaDePautas, vara){
       add = true;
       pautistas.forEach(function(pautista){
         if(pautista){
-          if(pauta.procurador.nomeProcurador == pautista.nomeProcurador){
+          if(pauta.procurador.nome == pautista.nome){
             add = false;
           }
         }
@@ -116,8 +116,8 @@ function atualizarTablePautitas(listaDePautas, vara){
     // listarTablePautista(pautistas);
 
     // addRowTablePautista('TODOS', totalDePautas);
-    // if(pautistaJson.nomeProcurador){
-    //   pautistaDaPesquisa = pautistas.filter(item =>  item.nomeProcurador == pautistaJson.nomeProcurador);
+    // if(pautistaJson.nome){
+    //   pautistaDaPesquisa = pautistas.filter(item =>  item.nome == pautistaJson.nome);
     // }
     // if(listaDePautas[0].vara == 'TODAS AS VARAS'){
     //   console.log('oi')
@@ -138,12 +138,12 @@ function exibirTabelaPautista(procuradores, vara){
 
     var tbody;
     $('#theadPautista').html(theadPautista).show();
-    axios.get(baseURL + 'pautas/').then(response => {
+    axios.get(baseURL + 'pauta/').then(response => {
       totalDePautas =  response.data.length;
       tbody = '<tr> <td>TODOS</td> <td>'+ totalDePautas +'</td> </tr>';
       $.each(procuradores, function(i, obj){
         if(obj){
-          tbody += '<tr> <td>'+obj.nomeProcurador+'</td> <td>'+ obj.saldo +'</td> </tr>';
+          tbody += '<tr> <td>'+obj.nome+'</td> <td>'+ obj.saldo +'</td> </tr>';
         }
       })
       $('#tbodyPautista').html(tbody).show();
@@ -183,11 +183,11 @@ function pegarProcuradoresPorVara(vara, pautas){
   if(vara != 'TODAS AS VARAS'){
     filtro = '2/'+vara+'/0/0'; 
   }
-  axios.get(baseURL + 'procuradores/').then(response => {
+  axios.get(baseURL + 'pautista/').then(response => {
     lista = response.data;
   }).catch(error => console.error(error));
 console.log(vara)
-  axios.get(baseURL + 'pautas/' + filtro).then(response => {
+  axios.get(baseURL + 'pauta/' + filtro).then(response => {
     listaPautas = response.data;
     console.log(listaPautas.length)
 // Começando na posição do índice 2, remova um elemento
@@ -228,15 +228,15 @@ console.log('Novos pautistas TAM: '+ novaListaProcuradores.length)
     // var tbody;
 
     // $.each(novaListaProcuradore, function(i, obj){
-    //   tbody += '<tr> <td>'+obj.nomeProcurador+'</td> <td>'+ obj.saldo +'</td> </tr>';
+    //   tbody += '<tr> <td>'+obj.nome+'</td> <td>'+ obj.saldo +'</td> </tr>';
     // })
     // $('#tbodyPautista').html(tbody).show();
     
 
-    // /pautas/6/Vara Federal Castanhal/2/10
-    // {{host}}/pautas/2/1ª Vara Federal/0/0
-    // if(pautistaJson.nomeProcurador){
-    //   pautistaDaPesquisa = pautistas.filter(item =>  item.nomeProcurador == pautistaJson.nomeProcurador);
+    // /pauta/6/Vara Federal Castanhal/2/10
+    // {{host}}/pauta/2/1ª Vara Federal/0/0
+    // if(pautistaJson.nome){
+    //   pautistaDaPesquisa = pautistas.filter(item =>  item.nome == pautistaJson.nome);
     // }
     // procuradores.push(pautistaJson);
     
@@ -244,7 +244,7 @@ console.log('Novos pautistas TAM: '+ novaListaProcuradores.length)
       // lista.forEach(function(procurador){
       
       //   procurador.saldo = parseInt(procurador.saldo);
-      //   if (procurador.status == "Ativo") 
+      //   if (procurador.status == "ATIVO") 
       //     procuradores.push(procurador);
       // });
     }else{
@@ -253,7 +253,7 @@ console.log('Novos pautistas TAM: '+ novaListaProcuradores.length)
 
     selectPautistas(procuradores);
     // exibirTabelaPautista(procuradores, vara);
-    //document.getElementById("pautista").value = procurador.nomeProcurador;
+    //document.getElementById("pautista").value = procurador.nome;
 }
 
 //////////// FILTRO /////////////
@@ -296,14 +296,14 @@ function pesquisar(vara){
           filtro = '3/'+vara+'/'+mutiraoSelect+'/0';
         }
 
-  axios.get(baseURL + 'pautas/'+filtro).then(response => {
+  axios.get(baseURL + 'pauta/'+filtro).then(response => {
     $('#totalPautas').html(response.data.length).show(); 
     if(response.data.length > 0){
       atualizarTablePautitas(response.data, varaSelect);
     }
   }).catch(error => console.error(error)); 
 
-  axios.get(baseURL + 'procuradores/').then(response => {
+  axios.get(baseURL + 'pautista/').then(response => {
     $('#totalPautista').html(response.data.length).show();
   }).catch(error => console.error(error));
 
@@ -316,12 +316,12 @@ function pesquisar(vara){
 // 5 todos          todos            Bianca
 // 6 Castanhal      todos            Bianca
 
-  // console.log('Pesquisa: '+'pautas/'+filtro)
+  // console.log('Pesquisa: '+'pauta/'+filtro)
   
   if(false){
     var procurador = pautaJson.procurador;
     console.log(pautaJson);
-    axios.get(baseURL + 'pautas/').then(response => {
+    axios.get(baseURL + 'pauta/').then(response => {
       var pautas = response.data;
       pautaDaPesquisa = pautas;
       console.log(pautas.length)
@@ -330,8 +330,8 @@ function pesquisar(vara){
         pautaDaPesquisa = pautaDaPesquisa.filter(item =>  item.vara == pautaJson.vara);
       }
   
-      if(procurador.nomeProcurador){
-        pautaDaPesquisa = pautaDaPesquisa.filter(item =>  item.procurador.nomeProcurador == procurador.nomeProcurador);
+      if(procurador.nome){
+        pautaDaPesquisa = pautaDaPesquisa.filter(item =>  item.procurador.nome == procurador.nome);
       }
   
       if(pautaDaPesquisa){
@@ -352,7 +352,7 @@ function pesquisar(vara){
 
  function getMutirao(selectVara){
 
-  axios.get(baseURL + 'mutiroes/').then(response => {
+  axios.get(baseURL + 'mutirao/').then(response => {
     var mutiroes = response.data;
     $('#totalMutirao').html(response.data.length).show();
     if(selectVara){
@@ -421,12 +421,12 @@ $('#vara').on( 'click', function () {
   getMutirao(selectVara);
   var idMutirao = document.getElementById('mutirao');
   if(selectVara == 'TODAS AS VARAS'){
-    axios.get(baseURL + 'mutiroes/').then(response => {
+    axios.get(baseURL + 'mutirao/').then(response => {
       $('#totalMutirao').html(response.data.length).show();
     }).catch(error => console.error(error));
   }else{
     
-    axios.get(baseURL + 'mutiroes/').then(response => {
+    axios.get(baseURL + 'mutirao/').then(response => {
       var mutiroes = response.data;
       if(selectVara){
   

@@ -1,12 +1,12 @@
 import baseURL from '../../ambiente/baseURL.js'
 
-var url = baseURL + 'procuradores/';
+var url = baseURL + 'pautista/';
 var pautistas;
-var nomeProcurador;
+var nome;
 
 var pautistaJson = {
 "id":"",
-"nomeProcurador": "",
+"nome": "",
 "status": "",
 "dataInicial":"",
 "dataFinal":"",
@@ -16,17 +16,17 @@ var pautistaJson = {
 }
 
 window.onload = function() {
-  if(sessionStorage.getItem('nomeProcurador') == 'false'){
+  if(sessionStorage.getItem('nome') == 'false'){
     window.history.back();
   }
     //Function getprocuradores(){...
     axios.get(url).then(response => {
         pautistas = response.data;
-        nomeProcurador = sessionStorage.getItem('nomeProcurador');
-        pautistaJson = pautistas.filter(item =>  item.nomeProcurador == nomeProcurador);
+        nome = sessionStorage.getItem('nome');
+        pautistaJson = pautistas.filter(item =>  item.nome == nome);
         pautistaJson = pautistaJson[0];
-        document.getElementById("nome-pautista").value = pautistaJson.nomeProcurador;
-        document.getElementById("status").value = pautistaJson.status;
+        document.getElementById("nome-pautista").value = pautistaJson.nome;
+        document.getElementById("status").value = pautistaJson.status.toUpperCase();
         document.getElementById("data-inicial").value = pautistaJson.dataInicial;
         document.getElementById("data-final").value = pautistaJson.dataFinal;
         document.getElementById("grupo").value = pautistaJson.grupo;
@@ -37,14 +37,14 @@ window.onload = function() {
 
 $('#salvar').on( 'click', function () {
   
-    pautistaJson.nomeProcurador= document.querySelector('#nome-pautista').value;
+    pautistaJson.nome= document.querySelector('#nome-pautista').value;
     pautistaJson.status = document.querySelector('#status').value.toUpperCase();
     pautistaJson.dataInicial = document.querySelector('#data-inicial').value;
     pautistaJson.dataFinal = document.querySelector('#data-final').value;
     pautistaJson.grupo = document.querySelector('#grupo').value.toUpperCase();
     pautistaJson.peso = document.querySelector('#peso').value;
    
-    if(pautistaJson.nomeProcurador != ""){
+    if(pautistaJson.nome != ""){
       editar(pautistaJson);
     } 
   });
@@ -61,7 +61,7 @@ $('#salvar').on( 'click', function () {
 // var nome = document.querySelector('#nome_pautista').value;
 // advogado.nome = nome;
 // axios.post(url,
-// {nomeProcurador: nome}
+// {nome: nome}
 // ).then(response =>{
-// listar(response.data.nomeProcurador);
+// listar(response.data.nome);
 // }).catch(error => console.error(error));

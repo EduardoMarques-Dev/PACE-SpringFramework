@@ -1,6 +1,6 @@
 import baseURL from '../../ambiente/baseURL.js'
 
-var url = baseURL + 'mutiroes/';
+var url = baseURL + 'mutirao/';
 
 var backgroundColor = [ 'darkBlue','#4e73df', '#36b9cc', '#037665', '#0e8e7b', '#1cc88a','green', '#e83e8c', 'purple', '#6f42c1', 'red', 'orange', 'yellow', 'pink', 'black', 'grey'];//16
 

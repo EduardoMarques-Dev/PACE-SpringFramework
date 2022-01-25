@@ -36,7 +36,7 @@ window.onload = function() {
   $('#vara').html(option).show();
   listarVaras();
 
-  axios.get(baseURL + 'pautas/').then(response => {
+  axios.get(baseURL + 'pauta/').then(response => {
     pautas = response.data;
     pautas.forEach(listar);
     
@@ -45,24 +45,24 @@ window.onload = function() {
     advogadoListar()
   }).catch(error => console.error(error));
 
-  axios.get(baseURL + 'procuradores/').then(response => {
+  axios.get(baseURL + 'pautista/').then(response => {
     var lista = response.data;
     var procuradores = [];
     lista.forEach(function(procurador){
       
-      if (procurador.status == "Ativo") 
+      if (procurador.status == "ATIVO") 
       procuradores.push(procurador);
     });
     selectPautistas(procuradores);
   }).catch(error => console.error(error)); 
 
-  axios.get(baseURL + 'advogados/').then(response => {
+  axios.get(baseURL + 'advogado/').then(response => {
     listaAdvogados = response.data;
   }).catch(error => console.error(error));
 };
 
 function listarVaras(){
-  axios.get(baseURL + 'mutiroes/').then(response => {
+  axios.get(baseURL + 'mutirao/').then(response => {
     var mutirao = response.data;
     muti(mutirao);
 
@@ -89,8 +89,8 @@ function listar(pautas){
   if(procurador == null){
     pautas.procurador = "";
   }else{
-    if( procurador.nomeProcurador)
-      pautas.procurador = procurador.nomeProcurador;
+    if( procurador.nome)
+      pautas.procurador = procurador.nome;
   }
 
   pautas.data = formatarData(pautas.data, "-");
@@ -147,7 +147,7 @@ function pesquisar(pautaJson){
   var pautaDaPesquisa; 
   var procurador = pautaJson.procurador;
   console.log(pautaJson);
-  axios.get(baseURL + 'pautas/').then(response => {
+  axios.get(baseURL + 'pauta/').then(response => {
     var pautas = response.data;
     pautaDaPesquisa = pautas;
 
@@ -167,8 +167,8 @@ function pesquisar(pautaJson){
       pautaDaPesquisa = pautaDaPesquisa.filter(item =>  item.vara == pautaJson.vara);
     }
 
-    if(procurador.nomeProcurador){
-      pautaDaPesquisa = pautaDaPesquisa.filter(item =>  item.procurador.nomeProcurador == procurador.nomeProcurador);
+    if(procurador.nome){
+      pautaDaPesquisa = pautaDaPesquisa.filter(item =>  item.procurador.nome == procurador.nome);
     }
 
     if(pautaDaPesquisa){
@@ -200,7 +200,7 @@ function getMutirao(){
   vara = vara.options[vara.selectedIndex].value; 
   selectVara = vara;
 
-  axios.get(baseURL + 'mutiroes/').then(response => {
+  axios.get(baseURL + 'mutirao/').then(response => {
     mutiroes = response.data;
     mutiroes = mutiroes.filter(item =>  item.vara == vara);
     
@@ -211,7 +211,7 @@ function getMutirao(){
 
   }).catch(error => console.error(error));
 
-  // axios.get(baseURL + 'pautas/').then(response => {
+  // axios.get(baseURL + 'pauta/').then(response => {
   //   pautas = response.data;
   //   pautas = pautas.filter(item =>  item.vara == vara);
   //   if(pautas.length < 1)
@@ -227,7 +227,7 @@ function selectPautistas(procuradores){
   if (procuradores){
     var option = '<option></option>';
     $.each(procuradores, function(i, obj){
-      option += '<option value="'+obj.nomeProcurador+'">'+obj.nomeProcurador+'</option>';
+      option += '<option value="'+obj.nome+'">'+obj.nome+'</option>';
     })
     $('#pautista').html(option).show();
   }
@@ -239,7 +239,7 @@ function exibirPorMutirao(){
   var pautasPorMutirao = [];
   idMutirao = idMutirao.options[idMutirao.selectedIndex].value;  
 
-  axios.get(baseURL + 'pautas/').then(response => {
+  axios.get(baseURL + 'pauta/').then(response => {
     pautas = response.data;
     pautas = pautas.filter(item =>  item.vara == vara);
     if(pautas.length > 0){
@@ -264,7 +264,7 @@ function exibirPorMutirao(){
   vara = vara.options[vara.selectedIndex].value; 
   selectVara = vara;
 
-  axios.get(baseURL + 'mutiroes/').then(response => {
+  axios.get(baseURL + 'mutirao/').then(response => {
     mutiroes = response.data;
     mutiroes = mutiroes.filter(item =>  item.vara == vara);
     
@@ -368,7 +368,7 @@ function exibirBtnGerar(){
   if(idMutirao){  
     idMutirao = idMutirao.options[idMutirao.selectedIndex].value;
    
-    axios.get(baseURL + 'mutiroes/').then(response => {
+    axios.get(baseURL + 'mutirao/').then(response => {
       var mutirao = response.data;
 
       mutirao =  mutirao.filter(item =>  item.id == idMutirao);
@@ -390,7 +390,7 @@ function verificarSeTemEscala(pautas){
   var vara = document.getElementById('vara');
   vara = vara.options[vara.selectedIndex].value;
 
-  axios.get(baseURL + 'pautas/').then(response => {
+  axios.get(baseURL + 'pauta/').then(response => {
     pautas = response.data;
     pautas = pautas.filter(item =>  item.vara == vara);
     //console.log(pautas);
@@ -449,13 +449,13 @@ $('#gerar').on( 'click', function () {
     var pautasPorMutirao= [];
     var vara = document.getElementById('vara');
     vara = vara.options[vara.selectedIndex].value; 
-     axios.get(baseURL + 'pautas/').then(response => {
+     axios.get(baseURL + 'pauta/').then(response => {
       pautas = response.data;
       pautas = pautas.filter(item =>  item.vara == vara);
       console.log(pautas);
      });
      console.log(idMutirao+'/'+grupo)
-    axios.post(baseURL + 'mutiroes/'+idMutirao+'/' + grupo).then(response => {
+    axios.post(baseURL + 'mutirao/'+idMutirao+'/' + grupo).then(response => {
       exibirBtnGerar();
       exibirPorMutirao();
     }).catch(error => console.error(error));  
@@ -473,7 +473,7 @@ $('#vara').on( 'click', function () {
   var vara = document.getElementById('vara');
   vara = vara.options[vara.selectedIndex].value;
 
-  axios.get(baseURL + 'pautas/').then(response => {
+  axios.get(baseURL + 'pauta/').then(response => {
     pautas = response.data;
     pautas = pautas.filter(item =>  item.vara == vara);
     //console.log(pautas);
@@ -541,10 +541,10 @@ $('#pesquisar').click( function () {
 
   pautaJson.vara = document.getElementById('vara').value;
   var procurador = {
-    "nomeProcurador": ""
+    "nome": ""
   }
 
-  procurador.nomeProcurador = document.getElementById('pautista').value;
+  procurador.nome = document.getElementById('pautista').value;
   pautaJson.procurador = procurador;  
 
   pesquisar(pautaJson);

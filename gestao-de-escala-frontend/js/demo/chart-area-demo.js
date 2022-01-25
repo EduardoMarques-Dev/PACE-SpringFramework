@@ -2,7 +2,7 @@
 //Pautas Mensais
 import baseURL from '../../ambiente/baseURL.js'
 
-var url = baseURL + 'pautas/';
+var url = baseURL + 'pauta/';
 
 //Data atual
 

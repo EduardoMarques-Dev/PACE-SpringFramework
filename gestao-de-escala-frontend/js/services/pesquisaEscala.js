@@ -28,7 +28,7 @@ var pautaJson = {
    "nomeAdvogado": "",
    "objeto": "",
    "vara" : "",
-   "procurador": {}
+  
 }
 
 window.onload = function() {
@@ -37,10 +37,11 @@ window.onload = function() {
   $('#vara').html(option).show();
   listarVaras();
 
-  axios.get(baseURL + 'pautas/').then(response => {
+  axios.get(baseURL + 'pauta/').then(response => {
     pautas = response.data;
+    console.log(pautas);
     pautas = pautas.filter(item => item.procurador != null);
-    //console.log(pautas);
+    console.log(pautas);
     pautas.forEach(listar);
     
     //verificarSeTemEscala(pautas);
@@ -48,18 +49,18 @@ window.onload = function() {
     advogadoListar()
   }).catch(error => console.error(error));
 
-  axios.get(baseURL + 'procuradores/').then(response => {
+  axios.get(baseURL + 'pautista/').then(response => {
     var lista = response.data;
     var procuradores = [];
     lista.forEach(function(procurador){
       
-      if (procurador.status == "Ativo") 
+      if (procurador.status == "ATIVO") 
       procuradores.push(procurador);
     });
     selectPautistas(procuradores);
   }).catch(error => console.error(error)); 
 
-  axios.get(baseURL + 'advogados/').then(response => {
+  axios.get(baseURL + 'advogado/').then(response => {
     listaAdvogados = response.data;
   }).catch(error => console.error(error));
 };
@@ -67,7 +68,7 @@ window.onload = function() {
 
 
 function listarVaras(){
-  axios.get(baseURL + 'mutiroes/').then(response => {
+  axios.get(baseURL + 'mutirao/').then(response => {
     var mutirao = response.data;
     muti(mutirao);
 
@@ -94,8 +95,8 @@ function listar(pautas){
   if(procurador == null){
     pautas.procurador = "";
   }else{
-    if( procurador.nomeProcurador)
-      pautas.procurador = procurador.nomeProcurador;
+    if( procurador.nome)
+      pautas.procurador = procurador.nome;
   }
   //  pautas.processo = 1234
   // pautas.processo = pautas.processo.replace(/(\d)(\d{3}[\.,])/,"$1.$2")
@@ -162,7 +163,7 @@ function pesquisar(pautaJson){
   var tabela = $('#dataTablePesquisa').DataTable();
   var pautaDaPesquisa; 
   var procurador = pautaJson.procurador;
-  axios.get(baseURL + 'pautas/').then(response => {
+  axios.get(baseURL + 'pauta/').then(response => {
     var pautas = response.data;
     pautaDaPesquisa = pautas;
     if(pautaJson.data2 && pautaJson.data) {
@@ -201,8 +202,8 @@ function pesquisar(pautaJson){
 
     pautaDaPesquisa = pautaDaPesquisa.filter(item => item.procurador != null);
 
-    if(procurador.nomeProcurador && !(procurador.nomeProcurador === "Todos os pautistas")){
-      pautaDaPesquisa = pautaDaPesquisa.filter(item =>  item.procurador.nomeProcurador == procurador.nomeProcurador);
+    if(procurador.nome && !(procurador.nome === "Todos os pautistas")){
+      pautaDaPesquisa = pautaDaPesquisa.filter(item =>  item.procurador.nome == procurador.nome);
     }
 
     if(pautaDaPesquisa){
@@ -234,7 +235,7 @@ function gerarPorVara(escala){
 //   vara = vara.options[vara.selectedIndex].value; 
 //   selectVara = vara;
 
-//   axios.get(baseURL + 'mutiroes/').then(response => {
+//   axios.get(baseURL + 'mutirao/').then(response => {
 //     mutiroes = response.data;
 //     mutiroes = mutiroes.filter(item =>  item.vara == vara);
     
@@ -245,7 +246,7 @@ function gerarPorVara(escala){
 
 //   }).catch(error => console.error(error));
 
-//   // axios.get(baseURL + 'pautas/').then(response => {
+//   // axios.get(baseURL + 'pauta/').then(response => {
 //   //   pautas = response.data;
 //   //   pautas = pautas.filter(item =>  item.vara == vara);
 //   //   if(pautas.length < 1)
@@ -261,7 +262,7 @@ function selectPautistas(procuradores){
   if (procuradores){
     var option = '<option>Todos os pautistas</option>';
     $.each(procuradores, function(i, obj){
-      option += '<option value="'+obj.nomeProcurador+'">'+obj.nomeProcurador+'</option>';
+      option += '<option value="'+obj.nome+'">'+obj.nome+'</option>';
     })
     $('#pautista').html(option).show();
   }
@@ -273,7 +274,7 @@ function exibirPorMutirao(){
   var pautasPorMutirao = [];
   idMutirao = idMutirao.options[idMutirao.selectedIndex].value;  
 
-  axios.get(baseURL + 'pautas/').then(response => {
+  axios.get(baseURL + 'pauta/').then(response => {
     pautas = response.data;
     pautas = pautas.filter(item =>  item.vara == vara);
     if(pautas.length > 0){
@@ -298,7 +299,7 @@ function exibirPorMutirao(){
   vara = vara.options[vara.selectedIndex].value; 
   selectVara = vara;
 
-  axios.get(baseURL + 'mutiroes/').then(response => {
+  axios.get(baseURL + 'mutirao/').then(response => {
     mutiroes = response.data;
     mutiroes = mutiroes.filter(item =>  item.vara == vara);
     
@@ -405,7 +406,7 @@ function formatarData(LocalDate, char){
 //   if(idMutirao){  
 //     idMutirao = idMutirao.options[idMutirao.selectedIndex].value;
    
-//     axios.get(baseURL + 'mutiroes/').then(response => {
+//     axios.get(baseURL + 'mutirao/').then(response => {
 //       var mutirao = response.data;
 
 //       mutirao =  mutirao.filter(item =>  item.id == idMutirao);
@@ -427,7 +428,7 @@ function formatarData(LocalDate, char){
 //   var vara = document.getElementById('vara');
 //   vara = vara.options[vara.selectedIndex].value;
 
-//   axios.get(baseURL + 'pautas/').then(response => {
+//   axios.get(baseURL + 'pauta/').then(response => {
 //     pautas = response.data;
 //     pautas = pautas.filter(item =>  item.vara == vara);
 //     console.log(pautas.length);
@@ -487,13 +488,13 @@ $('#gerar').on( 'click', function () {
     var pautasPorMutirao= [];
     var vara = document.getElementById('vara');
     vara = vara.options[vara.selectedIndex].value; 
-     axios.get(baseURL + 'pautas/').then(response => {
+     axios.get(baseURL + 'pauta/').then(response => {
       pautas = response.data;
       pautas = pautas.filter(item =>  item.vara == vara);
       console.log(pautas);
      });
      console.log(idMutirao+'/'+grupo)
-    axios.post(baseURL + 'mutiroes/'+idMutirao+'/' + grupo).then(response => {
+    axios.post(baseURL + 'mutirao/'+idMutirao+'/' + grupo).then(response => {
       exibirBtnGerar();
       exibirPorMutirao();
     }).catch(error => console.error(error));  
@@ -511,7 +512,7 @@ $('#gerar').on( 'click', function () {
 //   var vara = document.getElementById('vara');
 //   vara = vara.options[vara.selectedIndex].value;
 
-//   axios.get(baseURL + 'pautas/').then(response => {
+//   axios.get(baseURL + 'pauta/').then(response => {
 //     pautas = response.data;
 //     pautas = pautas.filter(item =>  item.vara == vara);
 //     //console.log(pautas);
@@ -580,10 +581,10 @@ $('#pesquisar').click( function () {
 
   pautaJson.vara = document.getElementById('vara').value;
   var procurador = {
-    "nomeProcurador": ""
+    "nome": ""
   }
 
-  procurador.nomeProcurador = document.getElementById('pautista').value;
+  procurador.nome = document.getElementById('pautista').value;
   pautaJson.procurador = procurador;  
 
   pesquisar(pautaJson);
@@ -609,7 +610,7 @@ $('#excluirEscala').click(() => {
 
 function deletar(id) {
   var table = $('#dataTablePesquisa').DataTable();
-  axios.delete(baseURL + "pautas/" + id).then(response => {
+  axios.delete(baseURL + "pauta/" + id).then(response => {
     console.log("Status ", response.status);
     table.row('.selected').remove().draw(false);
   }).catch(error => {
