@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping(value = "/mutiroes")
+@RequestMapping(value = "/mutirao")
 @AllArgsConstructor
 public class MutiraoController {
 
