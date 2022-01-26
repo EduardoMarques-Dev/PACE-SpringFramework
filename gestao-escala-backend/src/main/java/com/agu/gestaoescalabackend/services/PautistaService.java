@@ -2,6 +2,7 @@ package com.agu.gestaoescalabackend.services;
 
 import com.agu.gestaoescalabackend.dto.PautistaDto;
 import com.agu.gestaoescalabackend.entities.Pautista;
+import com.agu.gestaoescalabackend.enums.StatusPautista;
 import com.agu.gestaoescalabackend.repositories.PautistaRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -25,7 +26,7 @@ public class PautistaService {
     }
 
     @Transactional(readOnly = true)
-    public List<PautistaDto> findByStatus(List<String> status) {
+    public List<PautistaDto> findByStatus(List<StatusPautista> status) {
         return pautistaRepository.findAllByStatusPautistaInOrderByNomeAsc(status)
                 .stream()
                 .map(Pautista::toDto)

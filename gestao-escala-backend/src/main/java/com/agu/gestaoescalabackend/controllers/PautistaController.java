@@ -1,6 +1,7 @@
 package com.agu.gestaoescalabackend.controllers;
 
 import com.agu.gestaoescalabackend.dto.PautistaDto;
+import com.agu.gestaoescalabackend.enums.StatusPautista;
 import com.agu.gestaoescalabackend.repositories.PautistaRepository;
 import com.agu.gestaoescalabackend.services.PautistaService;
 import lombok.AllArgsConstructor;
@@ -31,7 +32,7 @@ public class PautistaController {
 	}
 
 	@GetMapping("/status")
-	public ResponseEntity<List<PautistaDto>> findByStatus(@RequestBody List<String> status) {
+	public ResponseEntity<List<PautistaDto>> findByStatus(@RequestParam List<StatusPautista> status) {
 		List<PautistaDto> pautistaDtoList = pautistaService.findByStatus(status);
 
 		if (pautistaDtoList.isEmpty())
