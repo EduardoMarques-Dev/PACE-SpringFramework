@@ -42,11 +42,9 @@ public class PautaDto implements Serializable {
 	@NotBlank
 	private String nomeParte;
 	@CPF
-	@NotNull
 	private String cpf;
 	@NotBlank
 	private String nomeAdvogado;
-	@NotBlank
 	private String objeto;
 
 	//  ATRIBUTOS DE MUTIRAO
