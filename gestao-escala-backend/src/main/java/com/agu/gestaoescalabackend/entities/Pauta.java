@@ -51,7 +51,7 @@ public class Pauta implements Serializable {
 
 	// ATRIBUTOS DE RELACIONAMENTO
 	@ManyToOne
-	@JoinColumn(name = "procurador_id")
+	@JoinColumn(name = "pautista_id")
 	private Pautista pautista;
 	@ManyToOne
 	@JoinColumn(name = "mutirao_id")
