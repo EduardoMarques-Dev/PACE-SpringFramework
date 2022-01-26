@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -44,9 +45,11 @@ public class PautistaService {
     @Transactional
     public PautistaDto update(Long id, PautistaDto pautistaDto) {
 
-        if (!pautistaRepository.existsById(id))
+
+        Optional<Pautista> pautistaOptional = pautistaRepository.findById(id);
+        if (pautistaOptional.isEmpty())
             return null;
-        Pautista pautista = pautistaDto.toEntity().forUpdate(id);
+        Pautista pautista = pautistaOptional.get().forUpdate(pautistaDto);
         return pautistaRepository.save(pautista).toDto();
 
     }

@@ -58,8 +58,15 @@ public class Pautista implements Serializable, Comparable<Pautista> {
         return this;
     }
 
-    public Pautista forUpdate(Long id){
-        this.id = id;
+    public Pautista forUpdate(PautistaDto pautistaDto){
+        this.nome = pautistaDto.getNome();
+        this.grupoPautista = pautistaDto.getGrupoPautista();
+        this.statusPautista = pautistaDto.getStatusPautista();
+        this.dataInicial = pautistaDto.getDataInicial();
+        this.dataFinal = pautistaDto.getDataFinal();
+
+        this.peso = pautistaDto.getPeso();
+
         return this;
     }
 
