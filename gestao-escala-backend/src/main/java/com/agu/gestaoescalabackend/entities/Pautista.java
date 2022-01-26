@@ -55,6 +55,7 @@ public class Pautista implements Serializable, Comparable<Pautista> {
     ------------------------------------------------*/
 
     public Pautista forSave(){
+        this.saldoPeso = 0;
         return this;
     }
 

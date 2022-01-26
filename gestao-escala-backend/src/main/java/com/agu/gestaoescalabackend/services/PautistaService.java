@@ -37,7 +37,7 @@ public class PautistaService {
     @Transactional
     public PautistaDto save(PautistaDto pautistaDto) {
 
-        Pautista pautista = pautistaDto.toEntity();
+        Pautista pautista = pautistaDto.toEntity().forSave();
         definirSaldo(pautista);
         return pautistaRepository.save(pautista).toDto();
     }
