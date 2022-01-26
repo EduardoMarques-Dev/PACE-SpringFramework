@@ -32,7 +32,7 @@ public class PautistaController {
 	}
 
 	@GetMapping("/status")
-	public ResponseEntity<List<PautistaDto>> findByStatus(@RequestParam List<StatusPautista> status) {
+	public ResponseEntity<List<PautistaDto>> findByStatus(@RequestBody List<StatusPautista> status) {
 		List<PautistaDto> pautistaDtoList = pautistaService.findByStatus(status);
 
 		if (pautistaDtoList.isEmpty())
@@ -49,18 +49,18 @@ public class PautistaController {
 
 	}
 
-	@PutMapping("/{procuradorId}")
-	public ResponseEntity<PautistaDto> update(@PathVariable Long id,
+	@PutMapping("/{pautistaId}")
+	public ResponseEntity<PautistaDto> update(@PathVariable Long pautistaId,
 											  @Validated @RequestBody PautistaDto pautistaDto) {
-		pautistaDto = pautistaService.update(id, pautistaDto);
+		pautistaDto = pautistaService.update(pautistaId, pautistaDto);
 		if (pautistaDto == null)
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
 		return ResponseEntity.ok().body(pautistaDto);
 	}
 
-	@DeleteMapping("/{procuradorId}")
-	public ResponseEntity<Void> delete(@PathVariable Long procuradorId) {
-		pautistaService.delete(procuradorId);
+	@DeleteMapping("/{pautistaId}")
+	public ResponseEntity<Void> delete(@PathVariable Long pautistaId) {
+		pautistaService.delete(pautistaId);
 		return ResponseEntity.noContent().build();
 	}
 
