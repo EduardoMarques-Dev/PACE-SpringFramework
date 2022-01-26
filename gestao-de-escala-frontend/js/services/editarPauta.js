@@ -16,7 +16,7 @@ var pautaJson = {
   "nomeAdvogado": "",
   "objeto": "",
   "vara" : "",
-  "procurador": ""
+  "xablau": ""
 }
 
 window.onload = function() {

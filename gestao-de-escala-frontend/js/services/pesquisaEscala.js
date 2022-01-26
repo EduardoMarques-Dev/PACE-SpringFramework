@@ -37,10 +37,12 @@ window.onload = function() {
   $('#vara').html(option).show();
   listarVaras();
 
-  axios.get(baseURL + 'pauta/').then(response => {
+  fetch(baseURL + 'pauta/', {method : "GET"}).then(response => response.json()).then(response => 
+    {
+    console.log(response)
     pautas = response.data;
-    console.log(pautas);
-    pautas = pautas.filter(item => item.procurador != null);
+   
+    pautas = pautas.filter(item => item.pautista != null);
     console.log(pautas);
     pautas.forEach(listar);
     
@@ -91,12 +93,12 @@ function listarVaras(){
 }
 
 function listar(pautas){
-  var procurador = pautas.procurador;
-  if(procurador == null){
-    pautas.procurador = "";
+  var pautista = pautas.pautista;
+  if(pautista == null){
+    pautas.pautista = "";
   }else{
-    if( procurador.nome)
-      pautas.procurador = procurador.nome;
+    if( pautista.nome)
+      pautas.pautista = pautista.nome;
   }
   //  pautas.processo = 1234
   // pautas.processo = pautas.processo.replace(/(\d)(\d{3}[\.,])/,"$1.$2")
@@ -114,7 +116,7 @@ function listar(pautas){
       pautas.objeto,
       pautas.nomeAdvogado,
       pautas.vara,
-      pautas.procurador
+      pautas.pautista
 
     ] ).draw( false );
 }
@@ -162,7 +164,7 @@ $("#print-escala").click(function (e) {
 function pesquisar(pautaJson){
   var tabela = $('#dataTablePesquisa').DataTable();
   var pautaDaPesquisa; 
-  var procurador = pautaJson.procurador;
+  var pautista = pautaJson.pautista;
   axios.get(baseURL + 'pauta/').then(response => {
     var pautas = response.data;
     pautaDaPesquisa = pautas;
@@ -200,10 +202,10 @@ function pesquisar(pautaJson){
       pautaDaPesquisa = pautaDaPesquisa.filter(item =>  item.vara == pautaJson.vara);
     }
 
-    pautaDaPesquisa = pautaDaPesquisa.filter(item => item.procurador != null);
+    pautaDaPesquisa = pautaDaPesquisa.filter(item => item.pautista != null);
 
-    if(procurador.nome && !(procurador.nome === "Todos os pautistas")){
-      pautaDaPesquisa = pautaDaPesquisa.filter(item =>  item.procurador.nome == procurador.nome);
+    if(pautista.nome && !(pautista.nome === "Todos os pautistas")){
+      pautaDaPesquisa = pautaDaPesquisa.filter(item =>  item.pautista.nome == pautista.nome);
     }
 
     if(pautaDaPesquisa){
@@ -477,12 +479,12 @@ $('#gerar').on( 'click', function () {
 
   var grupo = document.getElementById('grupo');
   grupo = grupo.options[grupo.selectedIndex].value; 
-  if(grupo == 'Preposto')
-    grupoInt = 2
+  // if(grupo == 'Preposto')
+  //   grupoInt = 2
 
-  if(grupo == 'Procurador')
-    grupoInt = 1
-  grupo = grupoInt
+  // if(grupo == 'Procurador')
+  //   grupoInt = 1
+  // grupo = grupoInt
 
   if(idMutirao != "Vara selecionada sem Mutirão"){
     var pautasPorMutirao= [];
@@ -580,12 +582,12 @@ $('#pesquisar').click( function () {
   pautaJson.data2 = document.querySelector("#data2").value.trim();
 
   pautaJson.vara = document.getElementById('vara').value;
-  var procurador = {
+  var pautista = {
     "nome": ""
   }
 
-  procurador.nome = document.getElementById('pautista').value;
-  pautaJson.procurador = procurador;  
+  pautista.nome = document.getElementById('pautista').value;
+  pautaJson.pautista = pautista;  
 
   pesquisar(pautaJson);
 });

@@ -3,7 +3,23 @@ import baseURL from '../../ambiente/baseURL.js'
 var url = baseURL + 'escala/';
 
 var mutiroes;
-var pautas;
+var pautas = {
+        "id": "",
+        "data":"",
+        "hora": "",
+        "sala":"",
+        "processo":"",
+        "nomeParte":"", 
+        "cpf":"",
+        "nomeAdvogado":"", 
+        "objeto":"",
+        "vara":"",
+        "tipoPauta":"",
+        "turnoPauta":"",
+        "pautista":{},
+        "mutirao":""
+    }
+
 var pauta;
 var selectVara;
 var listaAdvogados = [];
@@ -27,7 +43,7 @@ var pautaJson = {
    "nomeAdvogado": "",
    "objeto": "",
    "vara" : "",
-   "procurador": {}
+   "pautista": {}
 }
 
 window.onload = function() {
@@ -37,6 +53,7 @@ window.onload = function() {
   listarVaras();
 
   axios.get(baseURL + 'pauta/').then(response => {
+    console.log(response);
     pautas = response.data;
     pautas.forEach(listar);
     
@@ -64,6 +81,7 @@ window.onload = function() {
 function listarVaras(){
   axios.get(baseURL + 'mutirao/').then(response => {
     var mutirao = response.data;
+    console.log(mutirao);
     muti(mutirao);
 
     // mutirao =  mutirao.filter(item =>  item.id == idMutirao);
@@ -85,12 +103,12 @@ function listarVaras(){
 }
 
 function listar(pautas){
-  var procurador = pautas.procurador;
-  if(procurador == null){
-    pautas.procurador = "";
+  var pautista = pautas.pautista;
+  if(pautista == null){
+    pautas.pautista = "";
   }else{
-    if( procurador.nome)
-      pautas.procurador = procurador.nome;
+    if( pautista.nome)
+      pautas.pautista = pautista.nome;
   }
 
   pautas.data = formatarData(pautas.data, "-");
@@ -105,7 +123,7 @@ function listar(pautas){
       pautas.objeto,
       pautas.nomeAdvogado,
       pautas.vara,
-      pautas.procurador
+      pautas.pautista
 
     ] ).draw( false );
 
@@ -120,7 +138,7 @@ function listar(pautas){
       // pautas.objeto,
       pautas.nomeAdvogado,
       pautas.vara,
-      pautas.procurador
+      pautas.pautista
 
     ] ).draw( false );
 }
@@ -145,7 +163,7 @@ function advogadoListar(){
 function pesquisar(pautaJson){
   var tabela = $('#dataTable').DataTable();
   var pautaDaPesquisa; 
-  var procurador = pautaJson.procurador;
+  var pautista = pautaJson.pautista;
   console.log(pautaJson);
   axios.get(baseURL + 'pauta/').then(response => {
     var pautas = response.data;
@@ -167,8 +185,8 @@ function pesquisar(pautaJson){
       pautaDaPesquisa = pautaDaPesquisa.filter(item =>  item.vara == pautaJson.vara);
     }
 
-    if(procurador.nome){
-      pautaDaPesquisa = pautaDaPesquisa.filter(item =>  item.procurador.nome == procurador.nome);
+    if(pautista.nome){
+      pautaDaPesquisa = pautaDaPesquisa.filter(item =>  item.pautista.nome == pautista.nome);
     }
 
     if(pautaDaPesquisa){
@@ -241,6 +259,7 @@ function exibirPorMutirao(){
 
   axios.get(baseURL + 'pauta/').then(response => {
     pautas = response.data;
+    console.log(pautas)
     pautas = pautas.filter(item =>  item.vara == vara);
     if(pautas.length > 0){
       pautas.forEach(function(pauta){
@@ -402,7 +421,7 @@ function verificarSeTemEscala(pautas){
         if(!pauta.mutirao){
           console.log("pauta sem mutirão");
         }else{
-          if(!pauta.procurador){
+          if(!pauta.pautista){
             // console.log("pauta sem pautista")
 
             var btnGerar = document.querySelector('.btnGerar');
@@ -438,12 +457,12 @@ $('#gerar').on( 'click', function () {
 
   var grupo = document.getElementById('grupo');
   grupo = grupo.options[grupo.selectedIndex].value; 
-  if(grupo == 'Preposto')
-    grupoInt = 2
+  // if(grupo == 'Preposto'.toUpperCase())
+  //   grupoInt = 2
 
-  if(grupo == 'Procurador')
-    grupoInt = 1
-  grupo = grupoInt
+  // if(grupo == 'Procurador')
+  //   grupoInt = 1
+  // grupo = grupoInt
 
   if(idMutirao != "Vara selecionada sem Mutirão"){
     var pautasPorMutirao= [];
@@ -505,7 +524,7 @@ $('#mutirao').on( 'click', function () {
       pautaJson.cpf = pauta.cpf;
       pautaJson.nomeAdvogado = pauta.nomeAdvogado;
       pautaJson.objeto = pauta.objeto;
-      pautaJson.procurador = pauta.procurador;
+      pautaJson.pautista = pauta.pautista;
       if(mutirao.id == idMutirao)
          pautasPorMutirao.push(pauta);
     });
@@ -545,7 +564,7 @@ $('#pesquisar').click( function () {
   }
 
   procurador.nome = document.getElementById('pautista').value;
-  pautaJson.procurador = procurador;  
+  pautaJson.pautista = procurador;  
 
   pesquisar(pautaJson);
 });

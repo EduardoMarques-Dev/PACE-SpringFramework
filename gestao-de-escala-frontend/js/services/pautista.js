@@ -18,7 +18,9 @@ var pautistaJson = {
 window.onload = function() {
   //Function getprocuradores(){...
   axios.get(url).then(response => {
+    console.log(response);
     procuradores = response.data;
+    
     procuradores.forEach(listar);
   }).catch(error => console.error(error)); 
   sessionStorage.setItem('nome', 'false');

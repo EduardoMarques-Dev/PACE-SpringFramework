@@ -28,7 +28,7 @@ var pautaJson = {
    "objeto": "",
    "vara" : "",
    "tipo": "",
-   "procurador": {},
+   "pautista": {},
    "procuradorDto": {}
 }
 
@@ -52,16 +52,16 @@ window.onload = function() {
     pautaJson = pautas.filter(item =>  item.processo == processo);
     pautaJson = pautaJson[0];
     
-    var procurador = pautaJson.procurador;
+    var procurador = pautaJson.pautista;
     if(procurador)
        pautistaId = procurador.id;
     if(procurador == null){
-      pautaJson.procurador = "";
+      pautaJson.pautista = "";
     }else{
-      pautaJson.procurador = procurador.nome;
+      pautaJson.pautista = procurador.nome;
     }
 
-    pautistaAntigo = pautaJson.procurador;
+    pautistaAntigo = pautaJson.pautista;
     console.log(procurador.nome)
     console.log(procurador.id)
 
@@ -103,7 +103,7 @@ $('#salvar-editado').click( function () {
     selectPautista = selectPautista.options[selectPautista.selectedIndex].value;
 
     var pautista = procuradores.filter(item =>  item.nome == selectPautista);
-    pautaJson.procurador = pautista[0];
+    pautaJson.pautista = pautista[0];
     pautaJson.procuradorDto = pautista[0];
 
     if(processo == ""){
