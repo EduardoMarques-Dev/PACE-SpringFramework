@@ -61,7 +61,7 @@ public class PautaDto implements Serializable {
 
 	// ATRIBUTOS DE RELACIONAMENTO
 	@JsonProperty(access = JsonProperty.Access.READ_ONLY)
-	private PautistaDto procurador;
+	private PautistaDto pautista;
 	@JsonProperty(access = JsonProperty.Access.READ_ONLY)
 	private MutiraoDTO mutirao;
 

@@ -39,8 +39,7 @@ window.onload = function() {
 
   fetch(baseURL + 'pauta/', {method : "GET"}).then(response => response.json()).then(response => 
     {
-    console.log(response)
-    pautas = response.data;
+    pautas = response;
    
     pautas = pautas.filter(item => item.pautista != null);
     console.log(pautas);

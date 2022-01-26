@@ -57,7 +57,7 @@ public class PautaService {
 
 			pauta.setMutirao(mutirao);
 
-			if (dto.getProcurador() != null)
+			if (dto.getPautista() != null)
 				inserirProcurador(dto, pauta);
 
 			if (validarCriacao(dto, pauta)) {
@@ -160,10 +160,10 @@ public class PautaService {
 
 	private void inserirProcurador(PautaDto pautaDto, Pauta pauta) {
 		// Verifica se no Repositório há um procurador com o nome passado pelo DTO
-		if (pautistaRepository.existsByNome(pautaDto.getProcurador().getNome())) {
+		if (pautistaRepository.existsByNome(pautaDto.getPautista().getNome())) {
 			// Atribui ao objeto o procurador encontrado anteriormente
 			Pautista pautista = pautistaRepository
-					.findByNome(pautaDto.getProcurador().getNome());
+					.findByNome(pautaDto.getPautista().getNome());
 			// Seta na pauta o procurador
 			pauta.setPautista(pautista);
 		} else {
