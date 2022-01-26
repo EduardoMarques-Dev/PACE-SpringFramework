@@ -1,6 +1,6 @@
 import baseURL from '../../ambiente/baseURL.js'
 
-var url = baseURL + 'advogados/'; 
+var url = baseURL + 'advogado/'; 
 
 var advogado;
 var advogados;

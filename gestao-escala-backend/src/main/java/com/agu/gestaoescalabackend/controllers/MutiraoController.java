@@ -1,33 +1,29 @@
 package com.agu.gestaoescalabackend.controllers;
 
+import com.agu.gestaoescalabackend.dto.MutiraoDTO;
+import com.agu.gestaoescalabackend.dto.PautaDto;
+import com.agu.gestaoescalabackend.entities.Pauta;
+import com.agu.gestaoescalabackend.enums.GrupoPautista;
+import com.agu.gestaoescalabackend.repositories.MutiraoRepository;
+import com.agu.gestaoescalabackend.services.MutiraoService;
+import lombok.AllArgsConstructor;
+import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
-import com.agu.gestaoescalabackend.dto.MutiraoDTO;
-import com.agu.gestaoescalabackend.dto.PautaDeAudienciaDTO;
-import com.agu.gestaoescalabackend.entities.PautaDeAudiencia;
-import com.agu.gestaoescalabackend.services.MutiraoService;
-
 @RestController
-@RequestMapping(value = "/mutiroes")
+@RequestMapping(value = "/mutirao")
+@AllArgsConstructor
 public class MutiraoController {
 
-	@Autowired
-	private MutiraoService service;
+	private MutiraoService mutiraoService;
+	private MutiraoRepository mutiraoRepository;
 
 	@GetMapping
 	public ResponseEntity<List<MutiraoDTO>> pesquisarTodos() {
-		List<MutiraoDTO> list = service.pesquisarTodos();
+		List<MutiraoDTO> list = mutiraoService.findAll();
 		return ResponseEntity.ok(list);
 	}
 	
@@ -38,14 +34,14 @@ public class MutiraoController {
 //	}
 	
 	@GetMapping("/{mutiraoId}/pautas")
-	public ResponseEntity<List<PautaDeAudienciaDTO>> pesquisarPautasDoMutirao(@PathVariable Long mutiraoId) {
-		List<PautaDeAudienciaDTO> list = service.pesquisarPautasDoMutirao(mutiraoId);
+	public ResponseEntity<List<PautaDto>> pesquisarPautasDoMutirao(@PathVariable Long mutiraoId) {
+		List<PautaDto> list = mutiraoService.findPautas(mutiraoId);
 		return ResponseEntity.ok(list);
 	}
 
 	@PostMapping
 	public ResponseEntity<MutiraoDTO> salvar(@RequestBody MutiraoDTO mutiraoDto) {
-		mutiraoDto = service.salvar(mutiraoDto);
+		mutiraoDto = mutiraoService.save(mutiraoDto);
 		if (mutiraoDto != null)
 			return ResponseEntity.ok().body(mutiraoDto);
 		else
@@ -54,7 +50,7 @@ public class MutiraoController {
 
 	@PutMapping("/{mutiraoId}")
 	public ResponseEntity<MutiraoDTO> editar(@PathVariable Long mutiraoId, @RequestBody MutiraoDTO mutiraoDto) {
-		mutiraoDto = service.editar(mutiraoId, mutiraoDto);
+		mutiraoDto = mutiraoService.update(mutiraoId, mutiraoDto);
 		if (mutiraoDto != null)
 			return ResponseEntity.ok().body(mutiraoDto);
 		else
@@ -63,25 +59,35 @@ public class MutiraoController {
 	
 	@DeleteMapping("/{mutiraoId}")
 	public ResponseEntity<Void> excluir(@PathVariable Long mutiraoId) {
-		service.excluir(mutiraoId);
+		mutiraoService.excluir(mutiraoId);
 		return ResponseEntity.noContent().build();
 	}
 
 	@PutMapping("/{pautaDeAudienciaId}/{procuradorId}")
-	public ResponseEntity<PautaDeAudienciaDTO> atualizarProcurador(@PathVariable Long pautaDeAudienciaId,
-			@PathVariable Long procuradorId) {
-		PautaDeAudienciaDTO pautaDeAudienciaDto = service.atualizarProcurador(pautaDeAudienciaId, procuradorId);
-		if (pautaDeAudienciaDto != null)
-			return ResponseEntity.ok().body(pautaDeAudienciaDto);
+	public ResponseEntity<PautaDto> atualizarProcurador(@PathVariable Long pautaDeAudienciaId,
+														@PathVariable Long procuradorId) {
+		PautaDto pautaDto = mutiraoService.atualizarProcurador(pautaDeAudienciaId, procuradorId);
+		if (pautaDto != null)
+			return ResponseEntity.ok().body(pautaDto);
 		else
 			return ResponseEntity.notFound().build();
 	}
 
 
-	//@PostMapping("/{mutiraoId}/escala")
-	@PostMapping("/{mutiraoId}/{grupo}")
-	public List<PautaDeAudiencia> gerarEscala(@PathVariable Long mutiraoId, @PathVariable String grupo) {
-		return service.gerarEscala(mutiraoId, grupo);
+	@PostMapping("/{mutiraoId}/{grupoPautista}")
+	public List<Pauta> gerarEscala(@PathVariable Long mutiraoId, @PathVariable GrupoPautista grupoPautista) {
+		return mutiraoService.gerarEscala(mutiraoId, grupoPautista);
+	}
+
+	/*------------------------------------------------
+    ACTIONS DE DESENVOLVIMENTO
+    ------------------------------------------------*/
+
+	@PutMapping("/truncate")
+	@Transactional
+	public ResponseEntity<Void> truncateMutirao() {
+		mutiraoRepository.truncateTable();
+		return ResponseEntity.noContent().build();
 	}
 
 }

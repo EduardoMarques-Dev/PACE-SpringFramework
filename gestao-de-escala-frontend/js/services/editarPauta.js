@@ -1,6 +1,6 @@
 import baseURL from '../../ambiente/baseURL.js'
 
-var url = baseURL + 'pautas/';
+var url = baseURL + 'pauta/';
 var pautas;
 var processo;
 
@@ -16,7 +16,7 @@ var pautaJson = {
   "nomeAdvogado": "",
   "objeto": "",
   "vara" : "",
-  "procurador": ""
+  "xablau": ""
 }
 
 window.onload = function() {
@@ -37,7 +37,7 @@ window.onload = function() {
     document.getElementById("objeto").value = pautaJson.objeto;
     document.getElementById("vara").value = pautaJson.vara;
     
-    document.getElementById("tipo").value = pautaJson.tipo;
+    document.getElementById("tipo").value = pautaJson.tipo.toUpperCase();
   }).catch(error => console.error(error));
 };
 

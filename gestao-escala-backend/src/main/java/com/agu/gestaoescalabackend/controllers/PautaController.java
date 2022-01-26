@@ -1,8 +1,8 @@
 package com.agu.gestaoescalabackend.controllers;
 
-import com.agu.gestaoescalabackend.dto.AdvogadoDto;
-import com.agu.gestaoescalabackend.repositories.AdvogadoRepository;
-import com.agu.gestaoescalabackend.services.AdvogadoService;
+import com.agu.gestaoescalabackend.dto.PautaDto;
+import com.agu.gestaoescalabackend.repositories.PautaRepository;
+import com.agu.gestaoescalabackend.services.PautaService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -11,44 +11,50 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping(value = "/advogado")
+@RequestMapping(value = "/pauta")
 @AllArgsConstructor
-public class AdvogadoController {
+public class PautaController {
 
-	private AdvogadoService advogadoService;
-	private AdvogadoRepository advogadoRepository;
+	private PautaService pautaService;
+	private PautaRepository pautaRepository;
 
 	@GetMapping
-	public ResponseEntity<List<AdvogadoDto>> findAll() {
-		List<AdvogadoDto> list = advogadoService.findAll();
-		return ResponseEntity.ok(list);
+	public ResponseEntity<List<PautaDto>> findAll() {
+		return ResponseEntity.ok(
+				pautaService.findAll());
 	}
 
+	@GetMapping("/{pautaDeAudienciaId}")
+	public ResponseEntity<PautaDto> findById(@PathVariable Long pautaDeAudienciaId) {
+		PautaDto pautaDto = pautaService.findById(pautaDeAudienciaId);
+		return ResponseEntity.ok(pautaDto);
+	}
+	
 	@PostMapping
-	public ResponseEntity<AdvogadoDto> save(@Valid @RequestBody AdvogadoDto advogadoDto) {
-		advogadoDto = advogadoService.save(advogadoDto);
-		if (advogadoDto != null)
-			return ResponseEntity.ok(advogadoDto);
-		return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+	public ResponseEntity<List<PautaDto>> save(@RequestBody List<PautaDto> PautaDto) {
+		List<PautaDto> listaPautaDto = pautaService.save(PautaDto);
+		if (listaPautaDto == null)
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+		return ResponseEntity.ok(listaPautaDto);
 	}
 
-	@PutMapping("/{advogadoId}")
-	public ResponseEntity<AdvogadoDto> update(@PathVariable Long advogadoId, @Valid @RequestBody AdvogadoDto advogadoDto) {
-		advogadoDto = advogadoService.update(advogadoId, advogadoDto);
-		if (advogadoDto != null)
-			return ResponseEntity.ok(advogadoDto);
-		return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+	@PutMapping("/{pautaDeAudienciaId}")
+	public ResponseEntity<PautaDto> update(@PathVariable Long pautaDeAudienciaId,
+										   @RequestBody PautaDto pautaDto) {
+		pautaDto = pautaService.editar(pautaDeAudienciaId, pautaDto);
+		if (pautaDto == null)
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+		return ResponseEntity.ok(pautaDto);
 	}
 
-	@DeleteMapping("/{advogadoId}")
-	public ResponseEntity<Void> delete(@PathVariable Long advogadoId) {
-		advogadoService.delete(advogadoId);
+	@DeleteMapping("/{pautaDeAudienciaId}")
+	public ResponseEntity<Void> delete(@PathVariable Long pautaDeAudienciaId) {
+		pautaService.excluir(pautaDeAudienciaId);
 		return ResponseEntity.noContent().build();
 	}
 
@@ -77,7 +83,8 @@ public class AdvogadoController {
 	@PutMapping("/truncate")
 	@Transactional
 	public ResponseEntity<Void> truncatePautistaTable() {
-		advogadoRepository.truncateTable();
+		pautaRepository.truncateTable();
 		return ResponseEntity.noContent().build();
 	}
+
 }

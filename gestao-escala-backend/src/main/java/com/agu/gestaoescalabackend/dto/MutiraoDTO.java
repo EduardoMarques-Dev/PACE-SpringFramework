@@ -1,16 +1,18 @@
 package com.agu.gestaoescalabackend.dto;
 
-import java.io.Serializable;
-import java.time.LocalDate;
-import java.util.List;
-
 import com.agu.gestaoescalabackend.entities.Mutirao;
-import com.agu.gestaoescalabackend.entities.TipoStatus;
-
+import com.agu.gestaoescalabackend.enums.StatusPauta;
+import com.agu.gestaoescalabackend.util.Conversor;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import javax.validation.constraints.NotNull;
+import java.io.Serializable;
+import java.time.LocalDate;
+import java.util.List;
 
 @Getter
 @Setter
@@ -19,33 +21,47 @@ import lombok.Setter;
 public class MutiraoDTO implements Serializable {
 	private static final long serialVersionUID = 1L;
 
+	// ATRIBUTOS DE IDENTIFICAÇÃO
+	@JsonProperty(access = JsonProperty.Access.READ_ONLY)
 	private Long id;
+	@JsonProperty(access = JsonProperty.Access.READ_ONLY, value = "status")
+	private StatusPauta statusPauta;
+
+	// ATRIBUTOS DE REGISTRO
+	@JsonProperty(access = JsonProperty.Access.READ_ONLY)
 	private Integer quantidaDePautas;
+
+	// ATRIBUTOS PADRÃO
+	@NotNull
 	private String vara;
+	@NotNull
 	private LocalDate dataInicial;
+	@NotNull
 	private LocalDate dataFinal;
-	private TipoStatus status;
 
-/////////////////  CONSTRUTOR  //////////////////
+	/*------------------------------------------------
+     METODOS DE CONVERSÃO
+    ------------------------------------------------*/
 
-	// BACK para FRONT (listar)
-	public MutiraoDTO(Mutirao entity) {
-		this.id = entity.getId();
-		this.vara = entity.getVara();
-		this.dataInicial = entity.getDataInicial();
-		this.dataFinal = entity.getDataFinal();
-		this.status = entity.getStatus();
-		this.quantidaDePautas = entity.getQuantidaDePautas();
+	public Mutirao toEntity(){
+		return Conversor.converter(this, Mutirao.class);
 	}
 
-	// CRIAÇÃO AUTOMÁTICA Mutirao
-	public MutiraoDTO(List<PautaDeAudienciaDTO> listDto) {
-		this.id = null;
-		this.vara = listDto.get(0).getVara();
-		this.dataInicial = listDto.get(0).getData();
-		this.dataFinal = listDto.get(listDto.size() - 1).getData();
-		this.status = null;
-		this.quantidaDePautas = null;
+	/*------------------------------------------------
+    METODOS DE CRUD
+    ------------------------------------------------*/
+
+	public MutiraoDTO forSave(List<PautaDto> pautaDtoList){
+
+		this.vara = pautaDtoList.get(0).getVara();
+		this.dataInicial = pautaDtoList.get(0).getData();
+		this.dataFinal = pautaDtoList.get(pautaDtoList.size() - 1).getData();
+
+		return this;
 	}
 
+	public MutiraoDTO forUpdate(Long id){
+		this.id = id;
+		return this;
+	}
 }

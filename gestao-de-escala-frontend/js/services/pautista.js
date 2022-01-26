@@ -1,11 +1,11 @@
 import baseURL from '../../ambiente/baseURL.js'
 
-var url = baseURL + 'procuradores/';
+var url = baseURL + 'pautista/';
 var procuradores;
 var mensagem = '';
 
 var pautistaJson = {
-  "nomeProcurador": "",
+  "nome": "",
   "status": "",
   "dataInicial":"",
   "dataFinal":"",
@@ -18,10 +18,12 @@ var pautistaJson = {
 window.onload = function() {
   //Function getprocuradores(){...
   axios.get(url).then(response => {
+    console.log(response);
     procuradores = response.data;
+    
     procuradores.forEach(listar);
   }).catch(error => console.error(error)); 
-  sessionStorage.setItem('nomeProcurador', 'false');
+  sessionStorage.setItem('nome', 'false');
 };
 
 function listar(procuradores){
@@ -31,7 +33,7 @@ function listar(procuradores){
 
   var tabela = $('#dataTable').DataTable();
     tabela.row.add( [
-      procuradores.nomeProcurador,
+      procuradores.nome,
       procuradores.grupo,
       procuradores.status,
       procuradores.dataInicial,
@@ -72,15 +74,15 @@ function pesquisar(pautistaJson){
     var pautistas = response.data;
     pautistaDaPesquisa = pautistas;
 
-    if(pautistaJson.nomeProcurador){
-      pautistaDaPesquisa = pautistas.filter(item =>  item.nomeProcurador == pautistaJson.nomeProcurador);
+    if(pautistaJson.nome){
+      pautistaDaPesquisa = pautistas.filter(item =>  item.nome == pautistaJson.nome);
     }
     if(pautistaDaPesquisa && pautistaJson.status){ 
       pautistaDaPesquisa = pautistaDaPesquisa.filter(item =>  item.status == pautistaJson.status);
     }
     if(pautistaDaPesquisa && pautistaJson.grupo){
       
-    console.log(pautistaJson.nomeProcurador);
+    console.log(pautistaJson.nome);
       pautistaDaPesquisa = pautistaDaPesquisa.filter(item =>  item.grupo == pautistaJson.grupo);
       
       
@@ -117,7 +119,7 @@ function limparCampos(){
   document.getElementById("status").value = "";
   // document.getElementById("data-inicial").value = "";
   // document.getElementById("data-final").value = "";
-  // document.getElementById("status").value = "Ativo";
+  // document.getElementById("status").value = "ATIVO";
   document.getElementById("grupo").value = "Preposto";
   document.getElementById("peso").value = "1";
 }
@@ -125,14 +127,15 @@ function limparCampos(){
 
 $('#cadastrar-pautista').on( 'click', function () {
   
-  pautistaJson.nomeProcurador= document.querySelector('#nome-pautista').value;
+  pautistaJson.nome= document.querySelector('#nome-pautista').value;
   // pautistaJson.status = document.querySelector('#status').value;
   // pautistaJson.dataInicial = document.querySelector('#data-inicial').value;
   // pautistaJson.dataFinal = document.querySelector('#data-final').value;
-  pautistaJson.grupo = document.querySelector('#grupo').value;
+  pautistaJson.grupo = document.querySelector('#grupo').value.toUpperCase();
   pautistaJson.peso = document.querySelector('#peso').value;
+  pautistaJson.status = "ATIVO";
  
-  if(pautistaJson.nomeProcurador != ""){
+  if(pautistaJson.nome != ""){
     cadastrar(pautistaJson);
   } 
 });
@@ -148,17 +151,17 @@ function campoNulo(campo){
 $('#editar').on( 'click', function () {
   var table = $('#dataTable').DataTable();
   var pautista = table.row('.selected').data();  
-  var nomeProcurador = pautista[0];
-  sessionStorage.setItem('nomeProcurador', nomeProcurador);
+  var nome = pautista[0];
+  sessionStorage.setItem('nome', nome);
 });
 
 $('#excluir').on('click', function () {
 
   var table = $('#dataTable').DataTable();
   var pautista = table.row('.selected').data();
-  var nomeProcurador = pautista[0];  
+  var nome = pautista[0];  
   //console.log(pautista[0])
-  pautistaJson = procuradores.filter(item =>  item.nomeProcurador == nomeProcurador);
+  pautistaJson = procuradores.filter(item =>  item.nome == nome);
   var id = pautistaJson[0].id;// primeira pauta com o processo pesquisado
   //console.log(id);
   deletar(id);
@@ -166,7 +169,7 @@ $('#excluir').on('click', function () {
 
 $('#pesquisar').click( function () { 
   var inputNome = document.getElementById("nome-pautista").value.trim();
-  pautistaJson.nomeProcurador = inputNome.toUpperCase()
+  pautistaJson.nome = inputNome.toUpperCase()
 
   // pautistaJson.status = document.querySelector('#status').value.trim();
   //pautistaJson.dataInicial = document.querySelector('#data-inicial').value.trim();

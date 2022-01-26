@@ -1,67 +1,51 @@
 package com.agu.gestaoescalabackend.services;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
+import com.agu.gestaoescalabackend.dto.AdvogadoDto;
+import com.agu.gestaoescalabackend.entities.Advogado;
+import com.agu.gestaoescalabackend.repositories.AdvogadoRepository;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.agu.gestaoescalabackend.dto.AdvogadoDTO;
-import com.agu.gestaoescalabackend.entities.Advogado;
-import com.agu.gestaoescalabackend.repositories.AdvogadoRepository;
-
-import lombok.AllArgsConstructor;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
 public class AdvogadoService {
 
-	private AdvogadoRepository repository;
+	private AdvogadoRepository advogadoRepository;
 
 	@Transactional(readOnly = true)
-	public List<AdvogadoDTO> pesquisarTodos() {
-		List<Advogado> list = repository.findAllByOrderByNomeAdvogadoAsc();
-		return list.stream().map(x -> new AdvogadoDTO(x)).collect(Collectors.toList());
+	public List<AdvogadoDto> findAll() {
+
+		return advogadoRepository.findAllByOrderByNomeAsc()
+				.stream()
+				.map(Advogado::toDto)
+				.collect(Collectors.toList());
 	}
 
 	@Transactional
-	public AdvogadoDTO salvar(AdvogadoDTO advogadoDto) {
-		Advogado advogado = new Advogado(advogadoDto);
+	public AdvogadoDto save(AdvogadoDto advogadoDto) {
 
-		if (!validarCriacao(advogado))
+		Advogado advogado = advogadoDto.toEntity();
+		return advogadoRepository.save(advogado).toDto();
+	}
+
+	@Transactional
+	public AdvogadoDto update(Long id, AdvogadoDto advogadoDto) {
+
+		if (!advogadoRepository.existsById(id))
 			return null;
 
-		advogado = repository.save(advogado);
-		return new AdvogadoDTO(advogado);
+		Advogado advogado = advogadoDto.toEntity().forUpdate(id);
+		return advogadoRepository.save(advogado).toDto();
 	}
 
 	@Transactional
-	public AdvogadoDTO editar(Long advogadoId, AdvogadoDTO advogadoDto) {
-		
-		if (!repository.existsById(advogadoId))
-			return null;
-
-		Advogado advogado = new Advogado(advogadoId, advogadoDto);
-		
-		advogado = repository.save(advogado);
-		return new AdvogadoDTO(advogado);
-
-	}
-
-	@Transactional
-	public void excluir(Long advogadoId) {
-		if (repository.existsById(advogadoId))
-			repository.deleteById(advogadoId);
-	}
-
-//////////////////////////////////	 MÉTODOS    ///////////////////////////////////
-
-	private boolean validarCriacao(Advogado advogado) {
-		Advogado advogadoExistente = repository.findByNomeAdvogado(advogado.getNomeAdvogado());
-		if (advogadoExistente != null && !advogadoExistente.equals(advogado)) {
-			return false;
-		}
-		return true;
+	public void delete(Long id) {
+		if (advogadoRepository.existsById(id))
+			advogadoRepository.deleteById(id);
 	}
 
 }
