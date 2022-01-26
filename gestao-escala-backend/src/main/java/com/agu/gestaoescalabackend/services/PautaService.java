@@ -16,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -57,9 +58,6 @@ public class PautaService {
 
 			pauta.setMutirao(mutirao);
 
-			if (dto.getPautista() != null)
-				inserirProcurador(dto, pauta);
-
 			if (validarCriacao(dto, pauta)) {
 
 				mutirao.setQuantidaDePautas(mutirao.getQuantidaDePautas() + 1);
@@ -77,16 +75,16 @@ public class PautaService {
 
 		List<Mutirao> mutirao = mutiraoRepository.findByVara(pautaDto.getVara());
 
-		if (!pautaRepository.existsById(pautaDeAudienciaId))
+		Optional<Pauta> pautaOptional = pautaRepository.findById(pautaDeAudienciaId);
+
+		if (pautaOptional.isEmpty())
 			return null;
 		
-		Pauta pauta = new Pauta(pautaDeAudienciaId, pautaDto);
-		inserirMutirao(pautaDto, mutirao, pauta);
-		inserirProcurador(pautaDto, pauta);
+		Pauta pauta = pautaOptional.get().forUpdate(pautaDto);
+		inserirMutirao(mutirao, pauta);
 
 		pauta = pautaRepository.save(pauta);
 		return pauta.toDto();
-
 	}
 
 	@Transactional
@@ -158,22 +156,7 @@ public class PautaService {
 		return null;
 	}
 
-	private void inserirProcurador(PautaDto pautaDto, Pauta pauta) {
-		// Verifica se no Repositório há um procurador com o nome passado pelo DTO
-		if (pautistaRepository.existsByNome(pautaDto.getPautista().getNome())) {
-			// Atribui ao objeto o procurador encontrado anteriormente
-			Pautista pautista = pautistaRepository
-					.findByNome(pautaDto.getPautista().getNome());
-			// Seta na pauta o procurador
-			pauta.setPautista(pautista);
-		} else {
-			// Seta nulo se não for encontrado referência para o nome do dto
-			pauta.setPautista(null);
-		}
-
-	}
-
-	public void inserirMutirao(PautaDto pautaDto, List<Mutirao> mutirao,
+	public void inserirMutirao(List<Mutirao> mutirao,
 							   Pauta pauta) {
 		int x = 0;
 		// Faça enquanto estiver dentro do tamanho do multirão (OU) enquanto o multirão

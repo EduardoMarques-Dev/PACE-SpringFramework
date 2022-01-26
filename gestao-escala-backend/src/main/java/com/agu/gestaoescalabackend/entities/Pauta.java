@@ -1,6 +1,7 @@
 package com.agu.gestaoescalabackend.entities;
 
 import com.agu.gestaoescalabackend.dto.PautaDto;
+import com.agu.gestaoescalabackend.dto.PautistaDto;
 import com.agu.gestaoescalabackend.enums.TipoPauta;
 import com.agu.gestaoescalabackend.enums.TurnoPauta;
 import com.agu.gestaoescalabackend.util.Conversor;
@@ -64,16 +65,42 @@ public class Pauta implements Serializable {
 		return Conversor.converter(this, PautaDto.class);
 	}
 
+
+  	/*------------------------------------------------
+    METODOS DE CRUD
+    ------------------------------------------------*/
+
+	public Pauta forSave(){
+		return this;
+	}
+
+	public Pauta forUpdate(PautaDto pautaDto) {
+
+		this.data = pautaDto.getData();
+		this.hora = pautaDto.getHora();
+		this.sala = pautaDto.getSala();
+		this.processo = pautaDto.getProcesso();
+
+		this.nomeParte = pautaDto.getNomeParte();
+		this.cpf = pautaDto.getCpf();
+		this.nomeAdvogado = pautaDto.getNomeAdvogado();
+		this.objeto = pautaDto.getObjeto();
+
+		this.vara = pautaDto.getVara();
+		this.tipoPauta = pautaDto.getTipoPauta();
+		this.turnoPauta = pautaDto.getTurnoPauta();
+
+		return this;
+	}
+
 	/*------------------------------------------------
      METODOS DE NEGÓCIO
     ------------------------------------------------*/
 
 	public boolean isTheSame(Pauta pauta){
-		if (this.sala == pauta.getSala()
-			&& this.data == pauta.getData()
-			&& this.turnoPauta == pauta.getTurnoPauta())
-			return true;
-		return false;
+		return this.sala == pauta.getSala()
+				&& this.data == pauta.getData()
+				&& this.turnoPauta == pauta.getTurnoPauta();
 	}
 
 /////////////////  CONSTRUTOR  //////////////////
