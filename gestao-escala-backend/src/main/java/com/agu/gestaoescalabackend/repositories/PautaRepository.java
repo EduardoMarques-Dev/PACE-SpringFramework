@@ -2,6 +2,7 @@ package com.agu.gestaoescalabackend.repositories;
 
 import com.agu.gestaoescalabackend.entities.Pauta;
 import com.agu.gestaoescalabackend.enums.TipoPauta;
+import com.agu.gestaoescalabackend.enums.TurnoPauta;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -16,7 +17,7 @@ public interface PautaRepository extends JpaRepository<Pauta, Long> {
 
 	Pauta findByProcessoAndTipoPauta(String processo, TipoPauta tipoPauta);
 
-	List<Pauta> findByDataAndSalaAndTurnoPauta(LocalDate data, String sala, String turno);
+	List<Pauta> findByDataAndSalaAndTurnoPauta(LocalDate data, String sala, TurnoPauta turno);
 
 	List<Pauta> findByVara(String vara);
 

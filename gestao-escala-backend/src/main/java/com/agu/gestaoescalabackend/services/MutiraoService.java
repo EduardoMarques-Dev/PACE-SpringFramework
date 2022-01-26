@@ -102,7 +102,7 @@ public class MutiraoService {
 		Pauta pauta = pautaRepository.findById(pautaDeAudienciaId).get();
 		List<Pauta> listaPautaDoProcurador =
 				pautaRepository.findByDataAndSalaAndTurnoPauta(pauta.getData(), pauta.getSala(),
-						pauta.getTurnoPauta().toString());
+						pauta.getTurnoPauta());
 		Pautista pautistaAntigo = pautistaRepository.findById(pauta.getPautista().getId()).get();
 		Pautista pautistaNovo = pautistaRepository.findById(procuradorId).get();
 
