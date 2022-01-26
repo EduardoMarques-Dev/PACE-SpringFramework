@@ -32,7 +32,7 @@ public class PautistaController {
 	}
 
 	@GetMapping("/status")
-	public ResponseEntity<List<PautistaDto>> findByStatus(@RequestBody List<StatusPautista> status) {
+	public ResponseEntity<List<PautistaDto>> findByStatus(@RequestParam List<StatusPautista> status) {
 		List<PautistaDto> pautistaDtoList = pautistaService.findByStatus(status);
 
 		if (pautistaDtoList.isEmpty())
