@@ -1,13 +1,17 @@
 package com.agu.gestaoescalabackend.services;
 
 import com.agu.gestaoescalabackend.dto.PautistaDto;
+import com.agu.gestaoescalabackend.entities.Pauta;
 import com.agu.gestaoescalabackend.entities.Pautista;
 import com.agu.gestaoescalabackend.enums.StatusPautista;
 import com.agu.gestaoescalabackend.repositories.PautistaRepository;
+import javassist.expr.NewArray;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -29,6 +33,28 @@ public class PautistaService {
     @Transactional(readOnly = true)
     public List<PautistaDto> findByStatus(List<StatusPautista> status) {
         return pautistaRepository.findAllByStatusPautistaInOrderByNomeAsc(status)
+                .stream()
+                .map(Pautista::toDto)
+                .collect(Collectors.toList());
+    }
+
+    @Transactional(readOnly = true)
+    public List<PautistaDto> findAllAvailablePautistas(LocalDate data) {
+
+        List<StatusPautista> statusPautistas = new ArrayList<>();
+        statusPautistas.add(StatusPautista.ATIVO);
+
+        // Busca todos os pautistas ativos no banco
+        List<Pautista> pautistaList = pautistaRepository.findAllByStatusPautistaInOrderByNomeAsc(statusPautistas);
+        List<Pautista> pautistaRetorno = new ArrayList<>();
+
+        for (Pautista pautista : pautistaList){
+
+            if (pautista.estaDisponivel(data))
+                pautistaRetorno.add(pautista);
+        }
+
+        return pautistaRetorno
                 .stream()
                 .map(Pautista::toDto)
                 .collect(Collectors.toList());

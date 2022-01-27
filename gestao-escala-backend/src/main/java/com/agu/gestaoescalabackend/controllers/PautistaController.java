@@ -5,6 +5,7 @@ import com.agu.gestaoescalabackend.enums.StatusPautista;
 import com.agu.gestaoescalabackend.repositories.PautistaRepository;
 import com.agu.gestaoescalabackend.services.PautistaService;
 import lombok.AllArgsConstructor;
+import org.apache.tomcat.jni.Local;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
@@ -13,6 +14,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -38,6 +40,13 @@ public class PautistaController {
 		if (pautistaDtoList.isEmpty())
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
 		return ResponseEntity.ok(pautistaDtoList);
+	}
+
+	@GetMapping("/disponiveis")
+	public ResponseEntity<List<PautistaDto>> findAllAvailablePautistas(@RequestParam String data) {
+		return ResponseEntity.ok(
+		pautistaService.findAllAvailablePautistas(LocalDate.parse(data))
+		);
 	}
 
 	@PostMapping
