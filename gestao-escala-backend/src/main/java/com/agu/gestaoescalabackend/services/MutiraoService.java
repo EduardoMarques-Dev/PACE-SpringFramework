@@ -126,7 +126,7 @@ public class MutiraoService {
 //////////////////////////////////    ESCALA    ///////////////////////////////////
 
 	@Transactional
-	public List<Pauta> gerarEscala(Long mutiraoId, GrupoPautista grupoPautista) { // 24 linhas
+	public List<PautaDto> gerarEscala(Long mutiraoId, GrupoPautista grupoPautista) { // 24 linhas
 
 		// INSTANCIA A LISTA DE OBJETOS
 		List<Pauta> pautaList = pautaRepository.findAllByMutiraoId(mutiraoId);
@@ -207,7 +207,10 @@ public class MutiraoService {
 			}
 		}
 
-		return pautaRepository.findAllByMutiraoId(mutiraoId);
+		return pautaRepository.findAllByMutiraoId(mutiraoId)
+				.stream()
+				.map(Pauta::toDto)
+				.collect(Collectors.toList());
 	}
 
 //////////////////////////////////    MÉTODOS    ///////////////////////////////////

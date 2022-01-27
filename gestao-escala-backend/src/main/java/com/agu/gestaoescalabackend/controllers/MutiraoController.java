@@ -75,7 +75,7 @@ public class MutiraoController {
 
 
 	@PostMapping("/{mutiraoId}/{grupoPautista}")
-	public List<Pauta> gerarEscala(@PathVariable Long mutiraoId, @PathVariable GrupoPautista grupoPautista) {
+	public List<PautaDto> gerarEscala(@PathVariable Long mutiraoId, @PathVariable GrupoPautista grupoPautista) {
 		return mutiraoService.gerarEscala(mutiraoId, grupoPautista);
 	}
 
