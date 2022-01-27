@@ -71,7 +71,7 @@ window.onload = function() {
     document.getElementById("processo").value = pautaJson.processo;
     document.getElementById("pautista").value = procurador.nome;
 
-    axios.get(baseURL + 'pautista/status?status=ATIVO,INATIVO').then(response => {
+    axios.get(baseURL + 'pautista/disponiveis?data=' + pautaJson.data).then(response => {
       var lista = response.data;
       lista.forEach(function(procurador){
           procuradores.push(procurador);
