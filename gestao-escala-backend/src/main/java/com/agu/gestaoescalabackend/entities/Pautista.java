@@ -89,4 +89,11 @@ public class Pautista implements Serializable, Comparable<Pautista> {
         return 0;
     }
 
+    public boolean estaDisponivel(LocalDate dataPassada){
+        for (Pauta pauta : this.getPautas())
+            if(pauta.getData().equals(dataPassada))
+                return false;
+        return true;
+    }
+
 }
