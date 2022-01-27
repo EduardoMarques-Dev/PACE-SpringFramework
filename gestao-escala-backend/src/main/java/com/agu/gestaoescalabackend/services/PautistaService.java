@@ -43,6 +43,7 @@ public class PautistaService {
 
         List<StatusPautista> statusPautistas = new ArrayList<>();
         statusPautistas.add(StatusPautista.ATIVO);
+        statusPautistas.add(StatusPautista.INATIVO);
 
         // Busca todos os pautistas ativos no banco
         List<Pautista> pautistaList = pautistaRepository.findAllByStatusPautistaInOrderByNomeAsc(statusPautistas);
