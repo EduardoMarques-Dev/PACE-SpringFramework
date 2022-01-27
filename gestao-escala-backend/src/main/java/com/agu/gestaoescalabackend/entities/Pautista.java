@@ -12,12 +12,12 @@ import lombok.ToString;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.List;
 
 @Entity
 @Table(name = "tb_pautista")
 @Getter
 @Setter
-@ToString
 @NoArgsConstructor
 public class Pautista implements Serializable, Comparable<Pautista> {
     private static final long serialVersionUID = 1L;
@@ -41,6 +41,10 @@ public class Pautista implements Serializable, Comparable<Pautista> {
     private Integer saldo;
     private Integer peso;
     private Integer saldoPeso;
+
+    // ATRIBUTOS DE RELACIONAMENTO
+    @OneToMany(mappedBy = "pautista")
+    private List<Pauta> pautas;
 
     /*------------------------------------------------
      METODOS DE CONVERSÃO

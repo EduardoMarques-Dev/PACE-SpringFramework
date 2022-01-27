@@ -4,6 +4,8 @@ import com.agu.gestaoescalabackend.entities.Pautista;
 import com.agu.gestaoescalabackend.enums.GrupoPautista;
 import com.agu.gestaoescalabackend.enums.StatusPautista;
 import com.agu.gestaoescalabackend.util.Conversor;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -14,6 +16,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.List;
 
 
 @Getter
@@ -45,6 +48,10 @@ public class PautistaDto implements Serializable {
     @NotNull
     private Integer peso;
     private Integer saldoPeso;
+
+    // ATRIBUTOS DE RELACIONAMENTO
+    @JsonBackReference
+    private List<PautaDto> pautas;
 
     /*------------------------------------------------
      METODOS DE CONVERSÃO

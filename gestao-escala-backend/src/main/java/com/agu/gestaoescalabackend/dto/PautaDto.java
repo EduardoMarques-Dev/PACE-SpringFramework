@@ -4,6 +4,7 @@ import com.agu.gestaoescalabackend.entities.Pauta;
 import com.agu.gestaoescalabackend.enums.TipoPauta;
 import com.agu.gestaoescalabackend.enums.TurnoPauta;
 import com.agu.gestaoescalabackend.util.Conversor;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -59,6 +60,7 @@ public class PautaDto implements Serializable {
 
 	// ATRIBUTOS DE RELACIONAMENTO
 	@JsonProperty(access = JsonProperty.Access.READ_ONLY)
+	@JsonManagedReference
 	private PautistaDto pautista;
 	@JsonProperty(access = JsonProperty.Access.READ_ONLY)
 	private MutiraoDTO mutirao;
