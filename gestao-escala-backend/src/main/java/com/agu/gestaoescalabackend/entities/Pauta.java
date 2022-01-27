@@ -13,6 +13,7 @@ import lombok.Setter;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.Objects;
 
 @Entity
 @Table(name = "tb_pauta")
@@ -98,8 +99,8 @@ public class Pauta implements Serializable {
     ------------------------------------------------*/
 
 	public boolean isTheSame(Pauta pauta){
-		return this.sala == pauta.getSala()
-				&& this.data == pauta.getData()
+		return this.sala.equals(pauta.getSala())
+				&& this.data.equals(pauta.getData())
 				&& this.turnoPauta == pauta.getTurnoPauta();
 	}
 
