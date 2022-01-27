@@ -30,6 +30,7 @@ public class PautaService {
 
 //////////////////////////////////   SERVIÇOS   ///////////////////////////////////
 
+	@Transactional(readOnly = true)
 	public List<PautaDto> findAll() {
 
 		return pautaRepository.findAllByOrderByIdAsc()
@@ -38,6 +39,7 @@ public class PautaService {
 				.collect(Collectors.toList());
 	}
 
+	@Transactional(readOnly = true)
 	public PautaDto findById(Long id) {
 
 		return pautaRepository.findById(id)
