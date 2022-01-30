@@ -17,13 +17,9 @@ public interface PautaRepository extends JpaRepository<Pauta, Long> {
 
 	Pauta findByProcessoAndTipoPauta(String processo, TipoPauta tipoPauta);
 
-	List<Pauta> findByDataAndSalaAndTurnoPauta(LocalDate data, String sala, TurnoPauta turno);
-
-	List<Pauta> findByVara(String vara);
+	List<Pauta> findByDataAndSalaAndTurnoPautaAndVara(LocalDate data, String sala, TurnoPauta turno, String vara);
 
 	List<Pauta> findAllByMutiraoId(Long mutirao_id);
-
-	Optional<Pauta> findById(Long id);
 
 	List<Pauta> findAllByOrderByIdAsc();
 
