@@ -94,32 +94,33 @@ public class MutiraoService {
     ------------------------------------------------*/
 
 	@Transactional
-	public PautaDto atualizarProcurador(Long pautaDeAudienciaId, Long procuradorId) {
+	public List<PautaDto> atualizarProcurador(Long pautaDeAudienciaId, Long procuradorId) {
 
 		if ((!pautaRepository.existsById(pautaDeAudienciaId)) || (!pautistaRepository.existsById(procuradorId)))
 			return null;
 
-		Pauta pauta = pautaRepository.findById(pautaDeAudienciaId).get();
-		List<Pauta> listaPautaDoProcurador =
-				pautaRepository.findByDataAndSalaAndTurnoPauta(pauta.getData(), pauta.getSala(),
-						pauta.getTurnoPauta());
-		Pautista pautistaAntigo = pautistaRepository.findById(pauta.getPautista().getId()).get();
+		Pauta pautaDoPautista = pautaRepository.findById(pautaDeAudienciaId).get();
+		List<Pauta> listaPautaDoPautista =
+				pautaRepository.findByDataAndSalaAndTurnoPautaAndVara(pautaDoPautista.getData(), pautaDoPautista.getSala(),
+						pautaDoPautista.getTurnoPauta(), pautaDoPautista.getVara());
+
+		Pautista pautistaAntigo = pautistaRepository.findById(pautaDoPautista.getPautista().getId()).get();
 		Pautista pautistaNovo = pautistaRepository.findById(procuradorId).get();
 
-		for (Pauta value : listaPautaDoProcurador) {
-			pauta = pautaRepository.findById(value.getId()).get();
-			pautistaAntigo.setSaldo(pautistaAntigo.getSaldo() - 1);
-			pautistaAntigo.setSaldoPeso(pautistaAntigo.getSaldo() * pautistaAntigo.getPeso());
-			pautistaNovo.setSaldo(pautistaNovo.getSaldo() + 1);
-			pautistaNovo.setSaldoPeso(pautistaNovo.getSaldo() * pautistaNovo.getPeso());
+		for (Pauta pauta : listaPautaDoPautista) {
+			pautistaAntigo.atualizarSaldo(-1);
+			pautistaNovo.atualizarSaldo(1);
 			pauta.setPautista(pautistaNovo);
 
-			pautistaRepository.save(pautistaNovo);
-			pautistaRepository.save(pautistaAntigo);
-			pauta = pautaRepository.save(pauta);
+			pautaRepository.save(pauta);
 		}
+		pautistaRepository.save(pautistaNovo);
+		pautistaRepository.save(pautistaAntigo);
 
-		return pauta.toDto();
+		return listaPautaDoPautista
+				.stream()
+				.map(Pauta::toDto)
+				.collect(Collectors.toList());
 
 	}
 

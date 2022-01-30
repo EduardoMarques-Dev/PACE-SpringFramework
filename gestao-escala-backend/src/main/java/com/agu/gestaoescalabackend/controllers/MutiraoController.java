@@ -64,11 +64,11 @@ public class MutiraoController {
 	}
 
 	@PutMapping("/{pautaDeAudienciaId}/{procuradorId}")
-	public ResponseEntity<PautaDto> atualizarProcurador(@PathVariable Long pautaDeAudienciaId,
+	public ResponseEntity<List<PautaDto>> atualizarProcurador(@PathVariable Long pautaDeAudienciaId,
 														@PathVariable Long procuradorId) {
-		PautaDto pautaDto = mutiraoService.atualizarProcurador(pautaDeAudienciaId, procuradorId);
-		if (pautaDto != null)
-			return ResponseEntity.ok().body(pautaDto);
+		List<PautaDto> pautaDtoList = mutiraoService.atualizarProcurador(pautaDeAudienciaId, procuradorId);
+		if (pautaDtoList != null)
+			return ResponseEntity.ok().body(pautaDtoList);
 		else
 			return ResponseEntity.notFound().build();
 	}
