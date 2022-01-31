@@ -120,14 +120,26 @@ function pesquisar(advogadoJson){
     }
   });
 
+
+
+  $('#excluirAdvogado').click( function () {
+    var tabela = $('#dataTable').DataTable();
+    var advogado = tabela.row('.selected').data();
+    advogadoJson = advogados.filter(item =>  item.nomeAdvogado == advogado[0]);
+    advogadoJson = advogadoJson[0];
+    var id = advogadoJson.id;
+    deletar(id);  
+    tabela.row('.selected').remove().draw( false );
+  } );
+
+
+
 $('#excluir').click( function () {
   var tabela = $('#dataTable').DataTable();
   var advogado = tabela.row('.selected').data();
-  advogadoJson = advogados.filter(item =>  item.nomeAdvogado == advogado[0]);
-  advogadoJson = advogadoJson[0];
-  var id = advogadoJson.id;
-  deletar(id);  
-  tabela.row('.selected').remove().draw( false );
+  if (advogado) {
+    $("#popupExcluir").modal();
+  }
 } );
 
 function delayRefreshPage(mileSeconds) {
