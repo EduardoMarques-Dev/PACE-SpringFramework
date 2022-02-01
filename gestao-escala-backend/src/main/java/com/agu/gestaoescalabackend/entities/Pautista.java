@@ -7,7 +7,7 @@ import com.agu.gestaoescalabackend.util.Conversor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.ToString;
+import org.hibernate.annotations.Formula;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -38,6 +38,7 @@ public class Pautista implements Serializable, Comparable<Pautista> {
     private LocalDate dataFinal;
 
     // ATRIBUTOS DE ESCALA
+    @Formula("(select count(*) FROM tb_pauta s WHERE s.pautista_id = id)")
     private Integer saldo;
     private Integer peso;
     private Integer saldoPeso;
