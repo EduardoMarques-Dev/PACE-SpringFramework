@@ -5,7 +5,6 @@ import com.agu.gestaoescalabackend.enums.GrupoPautista;
 import com.agu.gestaoescalabackend.enums.StatusPautista;
 import com.agu.gestaoescalabackend.util.Conversor;
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -52,6 +51,7 @@ public class PautistaDto implements Serializable {
     // ATRIBUTOS DE RELACIONAMENTO
     @JsonBackReference
     private List<PautaDto> pautas;
+    private Integer saldo2;
 
     /*------------------------------------------------
      METODOS DE CONVERSÃO
