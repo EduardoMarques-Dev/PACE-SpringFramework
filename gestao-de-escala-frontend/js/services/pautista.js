@@ -155,17 +155,28 @@ $('#editar').on( 'click', function () {
   sessionStorage.setItem('nome', nome);
 });
 
+
+
+
+
+
 $('#excluir').on('click', function () {
 
   var table = $('#dataTable').DataTable();
   var pautista = table.row('.selected').data();
+  if (pautista){
+    $('#popupExcluir').modal();
+  }
+});
+
+$('#excluirPautista').click(() => {
+  var table = $('#dataTable').DataTable();
+  var pautista = table.row('.selected').data();
   var nome = pautista[0];  
-  //console.log(pautista[0])
   pautistaJson = procuradores.filter(item =>  item.nome == nome);
   var id = pautistaJson[0].id;// primeira pauta com o processo pesquisado
-  //console.log(id);
   deletar(id);
-});
+})
 
 $('#pesquisar').click( function () { 
   var inputNome = document.getElementById("nome-pautista").value.trim();
