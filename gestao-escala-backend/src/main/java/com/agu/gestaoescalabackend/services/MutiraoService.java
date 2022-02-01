@@ -104,24 +104,17 @@ public class MutiraoService {
 				pautaRepository.findByDataAndSalaAndTurnoPautaAndVara(pautaDoPautista.getData(), pautaDoPautista.getSala(),
 						pautaDoPautista.getTurnoPauta(), pautaDoPautista.getVara());
 
-		Pautista pautistaAntigo = pautistaRepository.findById(pautaDoPautista.getPautista().getId()).get();
 		Pautista pautistaNovo = pautistaRepository.findById(procuradorId).get();
 
 		for (Pauta pauta : listaPautaDoPautista) {
-			pautistaAntigo.atualizarSaldo(-1);
-			pautistaNovo.atualizarSaldo(1);
 			pauta.setPautista(pautistaNovo);
-
 			pautaRepository.save(pauta);
 		}
-		pautistaRepository.save(pautistaNovo);
-		pautistaRepository.save(pautistaAntigo);
 
 		return listaPautaDoPautista
 				.stream()
 				.map(Pauta::toDto)
 				.collect(Collectors.toList());
-
 	}
 
 //////////////////////////////////    ESCALA    ///////////////////////////////////
@@ -137,11 +130,6 @@ public class MutiraoService {
 				GrupoPautista.PREPOSTO);
 		List<Pautista> pautistaList = pautistaRepository.findAllByStatusPautistaOrderBySaldoPesoAsc(
 				StatusPautista.ATIVO);
-
-		// ---------------
-		String salaDaPautaAtual;
-		LocalDate diaDaPautaAtual;
-		TurnoPauta turnoPautaDaPautaAtual;
 
 		// ----------------
 		String tipoDoUltimoPautistaInserido = "Nenhum";
