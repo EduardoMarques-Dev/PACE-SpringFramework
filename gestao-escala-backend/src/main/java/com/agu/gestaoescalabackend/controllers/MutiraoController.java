@@ -2,7 +2,6 @@ package com.agu.gestaoescalabackend.controllers;
 
 import com.agu.gestaoescalabackend.dto.MutiraoDTO;
 import com.agu.gestaoescalabackend.dto.PautaDto;
-import com.agu.gestaoescalabackend.entities.Pauta;
 import com.agu.gestaoescalabackend.enums.GrupoPautista;
 import com.agu.gestaoescalabackend.repositories.MutiraoRepository;
 import com.agu.gestaoescalabackend.services.MutiraoService;

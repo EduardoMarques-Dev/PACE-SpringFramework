@@ -1,7 +1,6 @@
 package com.agu.gestaoescalabackend.entities;
 
 import com.agu.gestaoescalabackend.dto.PautaDto;
-import com.agu.gestaoescalabackend.dto.PautistaDto;
 import com.agu.gestaoescalabackend.enums.TipoPauta;
 import com.agu.gestaoescalabackend.enums.TurnoPauta;
 import com.agu.gestaoescalabackend.util.Conversor;
@@ -13,7 +12,6 @@ import lombok.Setter;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDate;
-import java.util.Objects;
 
 @Entity
 @Table(name = "tb_pauta")
