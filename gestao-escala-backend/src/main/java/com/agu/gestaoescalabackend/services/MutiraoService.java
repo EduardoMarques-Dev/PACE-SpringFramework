@@ -131,15 +131,18 @@ public class MutiraoService {
 		List<Pautista> pautistaList = pautistaRepository.findAllByStatusPautistaOrderBySaldoPesoAsc(
 				StatusPautista.ATIVO);
 
+		System.out.println("--------------");
+		System.out.println();
+
+		pautistaList
+				.forEach(pautista -> {
+
+					System.out.println("Pautista - "+pautista.getNome()+" "+pautista.getSaldoPeso());
+				});
+
 		// ----------------
 		String tipoDoUltimoPautistaInserido = "Nenhum";
 		boolean repetiuPautista = false;
-
-		// CHECA O SALDO PESO
-		System.out.println("CHECAR SALDO PESO");
-		for(Pautista lista : pautistaList) {
-			System.out.println(lista.getNome()+": "+lista.getSaldoPeso());
-		}
 
 		definirStatusMutiraoParaSemEscala(mutiraoId);
 
@@ -154,45 +157,28 @@ public class MutiraoService {
 
 				tipoDoUltimoPautistaInserido = validarInserçãoDePautista(pautaAtual, procuradorList,
 						prepostoList, pautistaList, repetiuPautista, grupoPautista);
-
 			} else {
-
-				System.out.println("----------------------------------------");
 
 				// Ordena apenas a lista dos procuradores
 				switch (tipoDoUltimoPautistaInserido) {
 					case "Procurador":
-						System.out.println("Else Procurador");
 						repetiuPautista = reordenarPautista(procuradorList, repetiuPautista, grupoPautista);
 
 						// Ordena apenas a lista dos prepostos
 						break;
 					case "Preposto":
-						System.out.println("Else Preposto");
 						repetiuPautista = reordenarPautista(prepostoList, repetiuPautista, grupoPautista);
 
 						break;
 					case "Todos":
-						System.out.println("Else Todos");
 						repetiuPautista = reordenarPautista(pautistaList, repetiuPautista, grupoPautista);
-						System.out.println("Voltou para Else Todos: repetiu pautista: " + repetiuPautista);
 						break;
 				}
-
-				System.out.println("----------------------------------- ");
 
 				// Atribui para a salaLista a sala corrente
 				pautaVerificada = pautaAtual;
 
-
 				validarInserçãoDePautista(pautaAtual, procuradorList, prepostoList, pautistaList, repetiuPautista, grupoPautista);
-
-				if (repetiuPautista) {
-					System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-				} else {
-					System.out.println("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx");
-				}
-
 			}
 		}
 
@@ -213,15 +199,9 @@ public class MutiraoService {
 		}
 
 		nomeAntigo = listaPautista.get(marcador).getNome();
-		for (Pautista value : listaPautista) {
-			System.out.println("Antigo: " + value.getNome() + ": " + value.getSaldoPeso());
-		}
 
 		// Reordena a lista
 		Collections.sort(listaPautista);
-		for (Pautista pautista : listaPautista) {
-			System.out.println("Novo: " + pautista.getNome() + ": " + pautista.getSaldoPeso());
-		}
 
 		// Verifica se o novo pautista é igual ao último antes da reordenação
 		return (nomeAntigo.equals(listaPautista.get(0).getNome()));
@@ -282,9 +262,6 @@ public class MutiraoService {
 		pautaAtual.setPautista(pautistaAtual);
 		pautistaAtual.setSaldo(pautistaAtual.getSaldo() + 1);
 		pautistaAtual.setSaldoPeso(pautistaAtual.getSaldo() * pautistaAtual.getPeso());
-
-		System.out.println(pautistaAtual.getNome()+"= "+pautistaAtual.getSaldo()+"  "+
-				pautistaAtual.getSaldoPeso());
 
 		// Salva a pauta e o procurador com o saldo atualizado no banco
 		pautistaRepository.save(pautistaAtual);
