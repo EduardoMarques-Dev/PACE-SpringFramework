@@ -51,7 +51,6 @@ public class PautistaDto implements Serializable {
     // ATRIBUTOS DE RELACIONAMENTO
     @JsonBackReference
     private List<PautaDto> pautas;
-    private Integer saldo2;
 
     /*------------------------------------------------
      METODOS DE CONVERSÃO
