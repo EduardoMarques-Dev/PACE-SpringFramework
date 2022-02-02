@@ -41,6 +41,7 @@ public class Pautista implements Serializable, Comparable<Pautista> {
     @Formula("(select count(*) FROM tb_pauta s WHERE s.pautista_id = id)")
     private Integer saldo;
     private Integer peso;
+    @Formula("(select count(*) FROM tb_pauta s WHERE s.pautista_id = id) * peso")
     private Integer saldoPeso;
 
     // ATRIBUTOS DE RELACIONAMENTO
