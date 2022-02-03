@@ -1,7 +1,7 @@
 # PACE: Programa Automatizado de Controle de Escala.
 > 🌎 _(ASCP: Automated Scale Control Program)_
 
-> ✔️ Status: version 1.0 finished
+> ✔️ Status: version 2.0 finished
 
 > ⚠️ I worked on the backend development only.
 
